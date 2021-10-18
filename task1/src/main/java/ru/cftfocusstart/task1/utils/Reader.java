@@ -1,4 +1,4 @@
-package ru.cftfocusstart.task1;
+package ru.cftfocusstart.task1.utils;
 
 
 import java.io.BufferedReader;
