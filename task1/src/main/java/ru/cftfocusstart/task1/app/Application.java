@@ -9,11 +9,12 @@ public class Application implements Runnable{
         int sizeOfTable = Reader.read();
         try {
             ArgumentsChecker.checkSizeOfTableAndCell(sizeOfTable);
-            int sizeOfCell = SizeOfCellCounter.countSizeOfCell(sizeOfTable);
-            TableBuilder tableBuilder = new TableBuilder(sizeOfCell, sizeOfTable);
-            TablePrinter.printTable(tableBuilder.buildTable());
         } catch (IllegalArgumentException e){
             System.err.println(e.getMessage());
+            return;
         }
+        int sizeOfCell = SizeOfCellCounter.countSizeOfCell(sizeOfTable);
+        TableBuilder tableBuilder = new TableBuilder(sizeOfCell, sizeOfTable);
+        TablePrinter.printTable(tableBuilder.buildTable());
     }
 }

@@ -1,10 +1,10 @@
 package ru.cftfocusstart.task1.utils;
 
 public final class TableBuilder {
-    public static final String PIPE = "|";
-    public static final String MINUS = "-";
-    public static final String PLUS = "+";
-    public static final String WHITESPACE = " ";
+    private static final String PIPE = "|";
+    private static final String MINUS = "-";
+    private static final String PLUS = "+";
+    private static final String WHITESPACE = " ";
 
     private final String line;
 
@@ -22,22 +22,6 @@ public final class TableBuilder {
     }
 
 
-    public int getSizeOfCell() {
-        return sizeOfCell;
-    }
-
-
-    public int getSizeOfTable(){
-        return sizeOfTable;
-    }
-
-
-    private String buildLine(){
-        String lineForTheFirstColumn = MINUS.repeat(sizeOfFirstColumn);
-        return lineForTheFirstColumn + (PLUS + MINUS.repeat(sizeOfCell)).repeat(sizeOfTable) + '\n';
-    }
-
-
     private int countSpacesForCell(int i){
         return sizeOfCell - Integer.toString(i).length();
     }
@@ -49,6 +33,12 @@ public final class TableBuilder {
             stringBuilder.append(PIPE).append(WHITESPACE.repeat(countSpacesForCell(i))).append(i);
         }
         return stringBuilder.toString() + '\n';
+    }
+
+
+    private String buildLine(){
+        String lineForTheFirstColumn = MINUS.repeat(sizeOfFirstColumn);
+        return lineForTheFirstColumn + (PLUS + MINUS.repeat(sizeOfCell)).repeat(sizeOfTable) + '\n';
     }
 
 
