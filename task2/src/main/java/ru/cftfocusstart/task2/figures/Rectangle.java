@@ -1,6 +1,9 @@
 package ru.cftfocusstart.task2.figures;
 
 
+import ru.cftfocusstart.task2.utils.LogMessages;
+
+
 import java.util.logging.Logger;
 
 public final class Rectangle extends Figure {
@@ -9,15 +12,18 @@ public final class Rectangle extends Figure {
     private final double secondSideLength;
 
 
-    public Rectangle(double firstSideLength, double secondSideLength){
+    public Rectangle(double[] params){
         super(TypesOfFigures.RECTANGLE);
-        this.firstSideLength = firstSideLength;
-        this.secondSideLength = secondSideLength;
+        firstSideLength = params[0];
+        secondSideLength = params[1];
     }
 
     @Override
     public void getInfo(Logger logger) {
-
+        super.getInfo(logger);
+        logger.info( LogMessages.DIAGONAL.msg + getLengthDiagonal());
+        logger.info( LogMessages.LONG_SIDE.msg + getLongSide());
+        logger.info(LogMessages.SHORT_SIDE.msg + getShortSide());
     }
 
     @Override

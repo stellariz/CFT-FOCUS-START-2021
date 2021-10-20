@@ -1,5 +1,9 @@
 package ru.cftfocusstart.task2.figures;
 
+
+import ru.cftfocusstart.task2.utils.LogMessages;
+
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class Figure {
@@ -9,7 +13,12 @@ public abstract class Figure {
         this.type = type;
     }
 
-    public abstract void getInfo(Logger logger);
+
+    public void getInfo(Logger logger){
+        logger.log(Level.FINEST, LogMessages.FIGURE_TYPE.msg + type.name);
+        logger.log(Level.FINEST, LogMessages.AREA.msg + getArea());
+        logger.log( Level.FINEST, LogMessages.PERIMETER.msg + getPerimeter());
+    }
 
     protected abstract double getArea();
 

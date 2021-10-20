@@ -1,24 +1,32 @@
 package ru.cftfocusstart.task2.figures;
 
 
+import ru.cftfocusstart.task2.utils.LogMessages;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public final class Triangle extends Figure {
 
     private final double[] sides;
     private final Map<Double, Double> sideAndAngle = new HashMap<>();
 
-    public Triangle(double[] sides){
+    public Triangle(double[] params){
         super(TypesOfFigures.TRIANGLE);
-        this.sides = Arrays.copyOf(sides, sides.length);
+        sides = Arrays.copyOf(params, params.length);
+        countAngles();
     }
 
     @Override
     public void getInfo(Logger logger) {
-
+        super.getInfo(logger);
+        for (var k : sideAndAngle.entrySet()){
+            logger.info( LogMessages.SIDE.msg + k.getKey() + LogMessages.ANGLE + k.getValue());
+        }
     }
 
     @Override
@@ -39,7 +47,7 @@ public final class Triangle extends Figure {
     }
 
     private double theoremCos(double a, double b, double c){
-        return Math.acos((b * b + c * c - a * a) / (2 * b * c));
+        return Math.toDegrees(Math.acos((b * b + c * c - a * a) / (2 * b * c)));
     }
 
 }

@@ -1,18 +1,23 @@
 package ru.cftfocusstart.task2.figures;
 
+
+import ru.cftfocusstart.task2.utils.LogMessages;
+
 import java.util.logging.Logger;
 
 public final class Circle extends Figure {
     private final double radius;
 
-    public Circle(double radius){
+    public Circle(double[] params){
         super(TypesOfFigures.CIRCLE);
-        this.radius = radius;
+        radius = params[0];
     }
 
     @Override
     public void getInfo(Logger logger) {
-
+        super.getInfo(logger);
+        logger.info(LogMessages.RADIUS.msg + radius);
+        logger.info(LogMessages.DIAMETER.msg + getDiameter());
     }
 
     @Override
