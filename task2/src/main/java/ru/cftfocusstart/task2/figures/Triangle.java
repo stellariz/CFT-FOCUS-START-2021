@@ -6,7 +6,6 @@ import ru.cftfocusstart.task2.utils.LogMessages;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -18,14 +17,14 @@ public final class Triangle extends Figure {
     public Triangle(double[] params){
         super(TypesOfFigures.TRIANGLE);
         sides = Arrays.copyOf(params, params.length);
-        countAngles();
     }
 
     @Override
     public void getInfo(Logger logger) {
         super.getInfo(logger);
+        countAngles();
         for (var k : sideAndAngle.entrySet()){
-            logger.info( LogMessages.SIDE.msg + k.getKey() + LogMessages.ANGLE + k.getValue());
+            logger.info( LogMessages.SIDE.msg + k.getKey() + LogMessages.ANGLE.msg + k.getValue());
         }
     }
 

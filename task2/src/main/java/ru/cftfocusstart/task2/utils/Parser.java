@@ -6,20 +6,27 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class Parser {
+public final class Parser {
 
     public static Figure getFigure(List<String> args){
+        Figure figure;
+        CheckerArguments.checkNumberOfStrings(args);
         double[] params = Arrays.stream(args.get(1).split(" ")).mapToDouble(Double::parseDouble).toArray();
         switch (args.get(0)){
             case "CIRCLE":
-                return new Circle(params);
+                figure = new Circle(params);
+                break;
             case "TRIANGLE":
-                return new Triangle(params);
+                figure = new Triangle(params);
+                break;
             case "RECTANGLE":
-                return new Rectangle(params);
+                figure = new Rectangle(params);
+                break;
             default:
                 throw new IllegalArgumentException("There is no figure!");
         }
+        CheckerArguments.checkArgs(figure.getType(), params);
+        return figure;
     }
 
 }

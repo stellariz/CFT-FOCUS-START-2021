@@ -24,7 +24,7 @@ public abstract class Figure {
 
     protected abstract double getPerimeter();
 
-    public String getName(){
-        return type.name;
+    public TypesOfFigures getType(){
+        return type;
     }
 }
