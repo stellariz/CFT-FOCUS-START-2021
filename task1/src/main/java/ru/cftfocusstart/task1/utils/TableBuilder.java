@@ -19,7 +19,7 @@ public final class TableBuilder {
         checkTableDimension(tableDimension);
         this.tableDimension = tableDimension;
         this.cellSize = countCellSize(tableDimension);
-        line = buildLine();
+        this.line = buildLine();
     }
 
 
