@@ -2,19 +2,18 @@ package ru.cftfocusstart.task1.app;
 
 import ru.cftfocusstart.task1.utils.*;
 
-public class Application implements Runnable{
+import java.io.IOException;
 
-    @Override
+public class Application {
+
     public void run() {
-        int sizeOfTable = Reader.read();
         try {
-            ArgumentsChecker.checkSizeOfTableAndCell(sizeOfTable);
-        } catch (IllegalArgumentException e){
+            int sizeOfTable = Reader.read();
+            ArgumentsChecker.checkTableSize(sizeOfTable);
+            TableBuilder tableBuilder = new TableBuilder(sizeOfTable);
+            TablePrinter.printTable(tableBuilder.buildTable());
+        } catch (IllegalArgumentException  e) {
             System.err.println(e.getMessage());
-            return;
         }
-        int sizeOfCell = SizeOfCellCounter.countSizeOfCell(sizeOfTable);
-        TableBuilder tableBuilder = new TableBuilder(sizeOfCell, sizeOfTable);
-        TablePrinter.printTable(tableBuilder.buildTable());
     }
 }

@@ -17,7 +17,7 @@ public final class Reader {
         } catch (IOException e){
             System.err.println("Can't read from keyboard: " + e.getMessage());
         } catch (NumberFormatException e){
-            System.err.println("\"" + line + "\" is not a number!");
+            System.out.println("\"" + line + "\" is not a number!");
         }
         return sizeOfTable;
     }
