@@ -12,13 +12,13 @@ public final class TableBuilder {
     private final String line;
 
     private final int cellSize;
-    private final int tableSize;
+    private final int tableDimension;
 
 
-    public TableBuilder(int tableSize) {
-        checkTableSize(tableSize);
-        this.tableSize = tableSize;
-        this.cellSize = countCellSize(tableSize);
+    public TableBuilder(int tableDimension) {
+        checkTableDimension(tableDimension);
+        this.tableDimension = tableDimension;
+        this.cellSize = countCellSize(tableDimension);
         line = buildLine();
     }
 
@@ -29,8 +29,9 @@ public final class TableBuilder {
 
 
     private String buildHead() {
-        StringBuilder stringBuilder = new StringBuilder(WHITESPACE.repeat(getFirsColumnSize()));
-        for (int i = 1; i <= tableSize; ++i) {
+        StringBuilder stringBuilder = new StringBuilder(getTableLength());
+        stringBuilder.append(WHITESPACE.repeat(getFirstColumnSize()));
+        for (int i = 1; i <= tableDimension; ++i) {
             stringBuilder.append(VERTICAL_SEPARATOR).
                     append(WHITESPACE.repeat(countSpacesForCell(i))).
                     append(i);
@@ -40,16 +41,18 @@ public final class TableBuilder {
 
 
     private String buildLine() {
-        String lineForTheFirstColumn = HORIZONTAL_SEPARATOR.repeat(getFirsColumnSize());
-        return lineForTheFirstColumn + (INTERSECTION + HORIZONTAL_SEPARATOR.repeat(cellSize)).repeat(tableSize) +
-                System.lineSeparator();
+        String lineForTheFirstColumn = HORIZONTAL_SEPARATOR.repeat(getFirstColumnSize());
+        return lineForTheFirstColumn + (INTERSECTION + HORIZONTAL_SEPARATOR.repeat(cellSize)).
+                repeat(tableDimension) + System.lineSeparator();
     }
 
 
     private String buildRow(int coefficient) {
-        int numSpacesInFirstCol = getFirsColumnSize() - Integer.toString(coefficient).length();
-        StringBuilder stringBuilder = new StringBuilder(WHITESPACE.repeat(numSpacesInFirstCol)).append(coefficient);
-        for (int i = 1; i <= tableSize; ++i) {
+        int numSpacesInFirstCol = getFirstColumnSize() - Integer.toString(coefficient).length();
+        StringBuilder stringBuilder = new StringBuilder(getTableLength());
+        stringBuilder.append(WHITESPACE.repeat(numSpacesInFirstCol)).
+                append(coefficient);
+        for (int i = 1; i <= tableDimension; ++i) {
             stringBuilder.append(VERTICAL_SEPARATOR).
                     append(WHITESPACE.repeat(countSpacesForCell(i * coefficient))).
                     append(i * coefficient);
@@ -60,8 +63,9 @@ public final class TableBuilder {
 
     public String buildTable() {
         int coefficient = 1;
-        StringBuilder stringBuilder = new StringBuilder(buildHead());
-        for (int i = 0; i < tableSize; ++i) {
+        StringBuilder stringBuilder = new StringBuilder(getTableSize());
+        stringBuilder.append(buildHead());
+        for (int i = 0; i < tableDimension; ++i) {
             stringBuilder.append(line).
                     append(buildRow(coefficient++));
         }
@@ -75,13 +79,23 @@ public final class TableBuilder {
     }
 
 
-    private int getFirsColumnSize() {
-        return Integer.toString(tableSize).length();
+    private int getFirstColumnSize() {
+        return Integer.toString(tableDimension).length();
     }
 
 
-    private void checkTableSize(int tableSize) throws IllegalArgumentException {
-        if (tableSize < MIN_TABLE_SIZE || tableSize > MAX_TABLE_SIZE) {
+    private int getTableLength() {
+        return getFirstColumnSize() + (cellSize + 1) * tableDimension + 1;
+    }
+
+
+    private int getTableSize() {
+        return (tableDimension + 1) * (getTableLength() + line.length());
+    }
+
+
+    private void checkTableDimension(int tableDimension) {
+        if (tableDimension < MIN_TABLE_SIZE || tableDimension > MAX_TABLE_SIZE) {
             throw new IllegalArgumentException("Incorrect size of table. Please re-enter.");
         }
     }
