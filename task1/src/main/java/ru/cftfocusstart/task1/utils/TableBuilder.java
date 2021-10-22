@@ -1,6 +1,9 @@
 package ru.cftfocusstart.task1.utils;
 
 public final class TableBuilder {
+    private static final int MIN_TABLE_SIZE = 1;
+    private static final int MAX_TABLE_SIZE = 32;
+
     private static final String VERTICAL_SEPARATOR = "|";
     private static final String HORIZONTAL_SEPARATOR = "-";
     private static final String INTERSECTION = "+";
@@ -11,9 +14,9 @@ public final class TableBuilder {
     private final int cellSize;
     private final int tableSize;
 
-    private int coefficient = 1;
 
     public TableBuilder(int tableSize) {
+        checkTableSize(tableSize);
         this.tableSize = tableSize;
         this.cellSize = countCellSize(tableSize);
         line = buildLine();
@@ -43,7 +46,7 @@ public final class TableBuilder {
     }
 
 
-    private String buildRow() {
+    private String buildRow(int coefficient) {
         int numSpacesInFirstCol = getFirsColumnSize() - Integer.toString(coefficient).length();
         StringBuilder stringBuilder = new StringBuilder(WHITESPACE.repeat(numSpacesInFirstCol)).append(coefficient);
         for (int i = 1; i <= tableSize; ++i) {
@@ -51,19 +54,18 @@ public final class TableBuilder {
                     append(WHITESPACE.repeat(countSpacesForCell(i * coefficient))).
                     append(i * coefficient);
         }
-        ++coefficient;
         return stringBuilder.append(System.lineSeparator()).toString();
     }
 
 
     public String buildTable() {
+        int coefficient = 1;
         StringBuilder stringBuilder = new StringBuilder(buildHead());
         for (int i = 0; i < tableSize; ++i) {
             stringBuilder.append(line).
-                    append(buildRow());
+                    append(buildRow(coefficient++));
         }
-        stringBuilder.append(line);
-        return stringBuilder.toString();
+        return stringBuilder.append(line).toString();
     }
 
 
@@ -72,7 +74,15 @@ public final class TableBuilder {
         return Integer.toString(maxNumber).length();
     }
 
-    private int getFirsColumnSize(){
+
+    private int getFirsColumnSize() {
         return Integer.toString(tableSize).length();
+    }
+
+
+    private void checkTableSize(int tableSize) throws IllegalArgumentException {
+        if (tableSize < MIN_TABLE_SIZE || tableSize > MAX_TABLE_SIZE) {
+            throw new IllegalArgumentException("Incorrect size of table. Please re-enter.");
+        }
     }
 }
