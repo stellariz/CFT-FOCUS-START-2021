@@ -10,7 +10,8 @@ public abstract class Figure {
 
     protected final TypesOfFigures type;
 
-    protected Figure(TypesOfFigures type) {
+    protected Figure(TypesOfFigures type, double[] args) {
+        checkArgs(args);
         this.type = type;
     }
 
@@ -27,5 +28,20 @@ public abstract class Figure {
 
     public TypesOfFigures getType() {
         return type;
+    }
+
+    protected void checkArgs(double[] args) {
+        checkParamsSize(args);
+        checkPosParams(args);
+    }
+
+    protected abstract void checkParamsSize(double[] args);
+
+    private void checkPosParams(double[] args) {
+        for (double param : args) {
+            if (param < 0.0) {
+                throw new IllegalArgumentException("Parameter " + param + " is negative!");
+            }
+        }
     }
 }

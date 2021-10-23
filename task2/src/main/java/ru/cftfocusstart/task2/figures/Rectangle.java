@@ -13,7 +13,7 @@ public final class Rectangle extends Figure {
 
 
     public Rectangle(double[] params) {
-        super(TypesOfFigures.RECTANGLE);
+        super(TypesOfFigures.RECTANGLE, params);
         firstSideLength = params[0];
         secondSideLength = params[1];
     }
@@ -34,6 +34,14 @@ public final class Rectangle extends Figure {
     @Override
     public double getPerimeter() {
         return (firstSideLength + secondSideLength) * 2;
+    }
+
+    @Override
+    protected void checkParamsSize(double[] args) {
+        if (args.length != 2) {
+            throw new IllegalArgumentException("Incorrect number of parameters for rectangle: " + args.length
+                    + ", but should be only two!");
+        }
     }
 
     public double getShortSide() {

@@ -10,7 +10,7 @@ public final class Circle extends Figure {
     private final double radius;
 
     public Circle(double[] params) {
-        super(TypesOfFigures.CIRCLE);
+        super(TypesOfFigures.CIRCLE, params);
         radius = params[0];
     }
 
@@ -29,6 +29,14 @@ public final class Circle extends Figure {
     @Override
     public double getPerimeter() {
         return 2 * Math.PI * radius;
+    }
+
+    @Override
+    protected void checkParamsSize(double[] args) {
+        if (args.length != 1) {
+            throw new IllegalArgumentException("Incorrect number of parameters for circle: " + args.length
+                    + ", but should be only one!");
+        }
     }
 
     public double getDiameter() {
