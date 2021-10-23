@@ -6,6 +6,7 @@ import ru.cftfocusstart.task2.utils.LogMessages;
 import java.util.logging.Logger;
 
 public final class Circle extends Figure {
+
     private final double radius;
 
     public Circle(double[] params) {
@@ -30,7 +31,7 @@ public final class Circle extends Figure {
         return 2 * Math.PI * radius;
     }
 
-    private double getDiameter() {
+    public double getDiameter() {
         return 2 * radius;
     }
 }

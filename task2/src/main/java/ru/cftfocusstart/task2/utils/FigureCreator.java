@@ -12,50 +12,46 @@ import java.util.Scanner;
 
 public final class FigureCreator {
 
+    private FigureCreator() {
+    }
+
+
+    public static Figure getFigure(String fileName) throws FileNotFoundException {
+        List<String> args = getFigureParams(fileName);
+        double[] params = Arrays.stream(args.get(1).split(" ")).mapToDouble(Double::parseDouble).toArray();
+        switch (args.get(0)) {
+            case "CIRCLE":
+                checkArgs(TypesOfFigures.CIRCLE, params);
+                return new Circle(params);
+            case "TRIANGLE":
+                checkArgs(TypesOfFigures.TRIANGLE, params);
+                return new Triangle(params);
+            case "RECTANGLE":
+                checkArgs(TypesOfFigures.RECTANGLE, params);
+                return new Rectangle(params);
+            default:
+                throw new IllegalArgumentException("There is no figure: \"" + args.get(0) + "\"");
+        }
+    }
+
+
     private static List<String> getFigureParams(String filename) throws FileNotFoundException {
         List<String> args = new LinkedList<>();
         Scanner scanner = new Scanner(new FileInputStream(filename));
         while (scanner.hasNextLine()) {
             args.add(scanner.nextLine());
         }
+        if (args.size() != 2) {
+            throw new IllegalArgumentException("Should be two strings in file!");
+        }
         return args;
     }
 
 
-    public static Figure getFigure(String fileName) throws FileNotFoundException {
-        Figure figure;
-        List<String> args = getFigureParams(fileName);
-        checkNumberOfStrings(args);
-        double[] params = Arrays.stream(args.get(1).split(" ")).mapToDouble(Double::parseDouble).toArray();
-        switch (args.get(0)) {
-            case "CIRCLE":
-                figure = new Circle(params);
-                break;
-            case "TRIANGLE":
-                figure = new Triangle(params);
-                break;
-            case "RECTANGLE":
-                figure = new Rectangle(params);
-                break;
-            default:
-                throw new IllegalArgumentException("There is no figure: \"" + args.get(0) + "\"");
-        }
-        checkArgs(figure.getType(), params);
-        return figure;
-    }
-
-
-    private static void checkNumberOfStrings(List<String> args) {
-        if (args.size() > 2 || args.isEmpty()) {
-            throw new IllegalArgumentException("Should be only two strings in file!");
-        }
-    }
-
-
-    private static void checkPosValue(double[] args) {
+    private static void checkPosParams(double[] args) {
         for (double param : args) {
             if (param < 0.0) {
-                throw new IllegalArgumentException("Parameters should be positive. Please re-enter.");
+                throw new IllegalArgumentException("Parameter " + param + " is negative!");
             }
         }
     }
@@ -65,31 +61,33 @@ public final class FigureCreator {
         switch (type) {
             case CIRCLE:
                 if (args.length != 1) {
-                    throw new IllegalArgumentException("Incorrect number of parameters for circle.");
+                    throw new IllegalArgumentException("Incorrect number of parameters for circle: " + args.length
+                            + ", but should be only one!");
                 }
                 break;
             case RECTANGLE:
                 if (args.length != 2) {
-                    throw new IllegalArgumentException("Incorrect number of parameters for rectangle.");
+                    throw new IllegalArgumentException("Incorrect number of parameters for rectangle: " + args.length
+                            + ", but should be only two!");
                 }
                 break;
             case TRIANGLE:
                 if (args.length != 3) {
-                    throw new IllegalArgumentException("Incorrect number of parameters for triangle.");
+                    throw new IllegalArgumentException("Incorrect number of parameters for for triangle: " + args.length
+                            + ", but should be only three!");
                 }
                 checkTriangleSides(args);
                 break;
         }
-        checkPosValue(args);
+        checkPosParams(args);
     }
 
 
     private static void checkTriangleSides(double[] args) {
         for (int i = 0; i < args.length; ++i) {
-            if (args[i] >= args[(i + 1) % 3] + args[(i + 1) % 3]) {
-                throw new IllegalArgumentException("Triangle with incorrect sides.");
+            if (Double.compare(args[i], args[(i + 1) % 3] + args[(i + 2) % 3]) == 1) {
+                throw new IllegalArgumentException("No such triangle exists!");
             }
         }
     }
-
 }

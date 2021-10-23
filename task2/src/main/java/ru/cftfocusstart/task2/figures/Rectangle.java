@@ -36,15 +36,15 @@ public final class Rectangle extends Figure {
         return (firstSideLength + secondSideLength) * 2;
     }
 
-    private double getShortSide() {
+    public double getShortSide() {
         return Math.min(firstSideLength, secondSideLength);
     }
 
-    private double getLongSide() {
+    public double getLongSide() {
         return Math.max(firstSideLength, secondSideLength);
     }
 
-    private double getLengthDiagonal() {
+    public double getLengthDiagonal() {
         return Math.sqrt(firstSideLength * firstSideLength + secondSideLength * secondSideLength);
     }
 }

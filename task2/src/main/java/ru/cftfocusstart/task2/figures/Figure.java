@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class Figure {
+
     protected final TypesOfFigures type;
 
     protected Figure(TypesOfFigures type) {

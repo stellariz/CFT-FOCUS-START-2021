@@ -14,7 +14,7 @@ public class Main {
         try {
             Figure a = FigureCreator.getFigure(args[0]);
             a.getInfo(logger);
-        } catch (IOException e) {
+        } catch (IOException | IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }
     }
