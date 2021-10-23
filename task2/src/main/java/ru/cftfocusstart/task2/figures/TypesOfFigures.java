@@ -6,7 +6,8 @@ public enum TypesOfFigures {
     TRIANGLE("Треугольник");
 
     public final String name;
-    TypesOfFigures(String name){
+
+    TypesOfFigures(String name) {
         this.name = name;
     }
 }

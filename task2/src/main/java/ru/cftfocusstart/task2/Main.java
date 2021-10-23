@@ -2,11 +2,9 @@ package ru.cftfocusstart.task2;
 
 
 import ru.cftfocusstart.task2.figures.Figure;
-import ru.cftfocusstart.task2.utils.Parser;
-import ru.cftfocusstart.task2.utils.Reader;
+import ru.cftfocusstart.task2.utils.FigureCreator;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -14,10 +12,9 @@ public class Main {
     public static void main(String[] args) {
         Logger logger = Logger.getLogger("myLogger");
         try {
-            List<String> tmp = Reader.read();
-            Figure a =  Parser.getFigure(tmp);
+            Figure a = FigureCreator.getFigure(args[0]);
             a.getInfo(logger);
-        } catch (IOException e){
+        } catch (IOException e) {
             System.err.println(e.getMessage());
         }
     }

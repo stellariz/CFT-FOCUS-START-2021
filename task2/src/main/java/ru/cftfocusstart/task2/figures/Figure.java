@@ -14,17 +14,17 @@ public abstract class Figure {
     }
 
 
-    public void getInfo(Logger logger){
-        logger.log(Level.FINEST, LogMessages.FIGURE_TYPE.msg + type.name);
-        logger.log(Level.FINEST, LogMessages.AREA.msg + getArea());
-        logger.log( Level.FINEST, LogMessages.PERIMETER.msg + getPerimeter());
+    public void getInfo(Logger logger) {
+        logger.log(Level.INFO, LogMessages.FIGURE_TYPE.msg + type.name);
+        logger.log(Level.INFO, LogMessages.AREA.msg + getArea());
+        logger.log(Level.INFO, LogMessages.PERIMETER.msg + getPerimeter());
     }
 
     protected abstract double getArea();
 
     protected abstract double getPerimeter();
 
-    public TypesOfFigures getType(){
+    public TypesOfFigures getType() {
         return type;
     }
 }

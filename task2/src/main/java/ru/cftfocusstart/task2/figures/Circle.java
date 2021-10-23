@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 public final class Circle extends Figure {
     private final double radius;
 
-    public Circle(double[] params){
+    public Circle(double[] params) {
         super(TypesOfFigures.CIRCLE);
         radius = params[0];
     }
@@ -21,16 +21,16 @@ public final class Circle extends Figure {
     }
 
     @Override
-    protected double getArea() {
+    public double getArea() {
         return Math.PI * radius * radius;
     }
 
     @Override
-    protected double getPerimeter() {
+    public double getPerimeter() {
         return 2 * Math.PI * radius;
     }
 
-    private double getDiameter(){
-        return  2 * radius;
+    private double getDiameter() {
+        return 2 * radius;
     }
 }

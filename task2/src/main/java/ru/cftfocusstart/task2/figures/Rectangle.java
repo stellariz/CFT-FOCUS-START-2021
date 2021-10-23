@@ -12,7 +12,7 @@ public final class Rectangle extends Figure {
     private final double secondSideLength;
 
 
-    public Rectangle(double[] params){
+    public Rectangle(double[] params) {
         super(TypesOfFigures.RECTANGLE);
         firstSideLength = params[0];
         secondSideLength = params[1];
@@ -21,30 +21,30 @@ public final class Rectangle extends Figure {
     @Override
     public void getInfo(Logger logger) {
         super.getInfo(logger);
-        logger.info( LogMessages.DIAGONAL.msg + getLengthDiagonal());
-        logger.info( LogMessages.LONG_SIDE.msg + getLongSide());
+        logger.info(LogMessages.DIAGONAL.msg + getLengthDiagonal());
+        logger.info(LogMessages.LONG_SIDE.msg + getLongSide());
         logger.info(LogMessages.SHORT_SIDE.msg + getShortSide());
     }
 
     @Override
-    protected double getArea() {
+    public double getArea() {
         return firstSideLength * secondSideLength;
     }
 
     @Override
-    protected double getPerimeter() {
+    public double getPerimeter() {
         return (firstSideLength + secondSideLength) * 2;
     }
 
-    private double getShortSide(){
+    private double getShortSide() {
         return Math.min(firstSideLength, secondSideLength);
     }
 
-    private double getLongSide(){
+    private double getLongSide() {
         return Math.max(firstSideLength, secondSideLength);
     }
 
-    private double getLengthDiagonal(){
+    private double getLengthDiagonal() {
         return Math.sqrt(firstSideLength * firstSideLength + secondSideLength * secondSideLength);
     }
 }
