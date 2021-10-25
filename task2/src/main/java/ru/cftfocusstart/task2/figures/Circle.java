@@ -33,13 +33,20 @@ public final class Circle extends Figure {
 
     @Override
     protected void checkParamsSize(double[] args) {
+        if (args == null) {
+            throw new IllegalArgumentException("Null cannot be passed in arguments!");
+        }
         if (args.length != 1) {
-            throw new IllegalArgumentException("Incorrect number of parameters for circle: " + args.length
+            throw new IllegalArgumentException("Incorrect number of parameters for rectangle: " + args.length
                     + ", but should be only one!");
         }
     }
 
+    public double getRadius() {
+        return radius;
+    }
+
     public double getDiameter() {
-        return 2 * radius;
+        return 2 * getRadius();
     }
 }

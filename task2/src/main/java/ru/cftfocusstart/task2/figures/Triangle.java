@@ -13,6 +13,7 @@ public final class Triangle extends Figure {
 
     public Triangle(double[] params) {
         super(TypesOfFigures.TRIANGLE, params);
+        countZeroSides(params);
         checkTriangleRule(params);
         sides = Arrays.copyOf(params, params.length);
     }
@@ -29,19 +30,28 @@ public final class Triangle extends Figure {
 
     @Override
     public double getArea() {
+        if (degenerate) {
+            return 0.0;
+        }
         double p = getPerimeter() / 2;
         return Math.sqrt(p * (p - sides[0]) * (p - sides[1]) * (p - sides[2]));
     }
 
     @Override
     public double getPerimeter() {
+        if (degenerate) {
+            return Arrays.stream(sides).max().getAsDouble();
+        }
         return sides[0] + sides[1] + sides[2];
     }
 
     @Override
     protected void checkParamsSize(double[] args) {
+        if (args == null) {
+            throw new IllegalArgumentException("Null cannot be passed in arguments!");
+        }
         if (args.length != 3) {
-            throw new IllegalArgumentException("Incorrect number of parameters for for triangle: " + args.length
+            throw new IllegalArgumentException("Incorrect number of parameters for rectangle: " + args.length
                     + ", but should be only three!");
         }
     }
@@ -65,6 +75,22 @@ public final class Triangle extends Figure {
             if (Double.compare(args[i], args[(i + 1) % 3] + args[(i + 2) % 3]) == 1) {
                 throw new IllegalArgumentException("No such triangle exists!");
             }
+            if (Double.compare(args[i], args[(i + 1) % 3] + args[(i + 2) % 3]) == 0) {
+                degenerate = true;
+            }
+        }
+    }
+
+
+    private void countZeroSides(double[] args) {
+        int counter = 0;
+        for (double side : args) {
+            if (side == 0.0) {
+                ++counter;
+            }
+        }
+        if (counter == 1) {
+            throw new IllegalArgumentException("Angle is not a triangle!");
         }
     }
 }

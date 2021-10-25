@@ -33,11 +33,17 @@ public final class Rectangle extends Figure {
 
     @Override
     public double getPerimeter() {
+        if (degenerate) {
+            return getLongSide();
+        }
         return (firstSideLength + secondSideLength) * 2;
     }
 
     @Override
     protected void checkParamsSize(double[] args) {
+        if (args == null) {
+            throw new IllegalArgumentException("Null cannot be passed in arguments!");
+        }
         if (args.length != 2) {
             throw new IllegalArgumentException("Incorrect number of parameters for rectangle: " + args.length
                     + ", but should be only two!");
@@ -53,6 +59,9 @@ public final class Rectangle extends Figure {
     }
 
     public double getLengthDiagonal() {
+        if (degenerate) {
+            return 0.0;
+        }
         return Math.sqrt(firstSideLength * firstSideLength + secondSideLength * secondSideLength);
     }
 }

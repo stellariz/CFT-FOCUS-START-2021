@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 public abstract class Figure {
 
     protected final TypesOfFigures type;
+    protected boolean degenerate = false;
 
     protected Figure(TypesOfFigures type, double[] args) {
         checkArgs(args);
@@ -17,7 +18,7 @@ public abstract class Figure {
 
 
     public void getInfo(Logger logger) {
-        logger.log(Level.INFO, LogMessages.FIGURE_TYPE.msg + type.name);
+        logger.log(Level.INFO, LogMessages.FIGURE_TYPE.msg + getType());
         logger.log(Level.INFO, LogMessages.AREA.msg + getArea());
         logger.log(Level.INFO, LogMessages.PERIMETER.msg + getPerimeter());
     }
@@ -41,6 +42,9 @@ public abstract class Figure {
         for (double param : args) {
             if (param < 0.0) {
                 throw new IllegalArgumentException("Parameter " + param + " is negative!");
+            }
+            if (param == 0.0){
+                degenerate = true;
             }
         }
     }
