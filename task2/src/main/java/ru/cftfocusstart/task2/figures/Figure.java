@@ -10,6 +10,7 @@ public abstract class Figure {
 
     protected final TypesOfFigures type;
     protected boolean degenerate = false;
+    protected boolean point = false;
 
     protected Figure(TypesOfFigures type, double[] args) {
         checkArgs(args);
@@ -33,19 +34,24 @@ public abstract class Figure {
 
     protected void checkArgs(double[] args) {
         checkParamsSize(args);
-        checkPosParams(args);
+        checkNegativeAndZeroesParams(args);
     }
 
     protected abstract void checkParamsSize(double[] args);
 
-    private void checkPosParams(double[] args) {
+    private void checkNegativeAndZeroesParams(double[] args) {
+        int counter = 0;
         for (double param : args) {
             if (param < 0.0) {
                 throw new IllegalArgumentException("Parameter " + param + " is negative!");
             }
-            if (param == 0.0){
+            if (param == 0.0) {
                 degenerate = true;
+                ++counter;
             }
+        }
+        if (counter == args.length) {
+            point = true;
         }
     }
 }

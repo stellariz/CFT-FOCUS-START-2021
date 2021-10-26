@@ -22,7 +22,7 @@ public final class Triangle extends Figure {
     @Override
     public void getInfo(Logger logger) {
         super.getInfo(logger);
-        double[] angles = countAngles();
+        double[] angles = getAngles();
         for (int i = 0; i < 3; ++i) {
             logger.info(LogMessages.SIDE.msg + sides[i] + LogMessages.ANGLE.msg + angles[i]);
         }
@@ -40,7 +40,11 @@ public final class Triangle extends Figure {
     @Override
     public double getPerimeter() {
         if (degenerate) {
-            return Arrays.stream(sides).max().getAsDouble();
+            if (Arrays.stream(sides).max().isPresent()) {
+                return Arrays.stream(sides).max().getAsDouble();
+            } else {
+                throw new IllegalArgumentException("Max side doesn't exist!");
+            }
         }
         return sides[0] + sides[1] + sides[2];
     }
@@ -56,8 +60,11 @@ public final class Triangle extends Figure {
         }
     }
 
-    private double[] countAngles() {
-        double[] angles = new double[3];
+    public double[] getAngles() {
+        double[] angles = new double[]{0.0, 0.0, 0.0};
+        if (point) {
+            return angles;
+        }
         for (int i = 0; i < 3; ++i) {
             angles[i] = cosTheorem(sides[i], sides[(i + 1) % 3], sides[(i + 2) % 3]);
         }

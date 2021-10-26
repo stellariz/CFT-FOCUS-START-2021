@@ -1,11 +1,14 @@
 package ru.cftfocusstart.task2.utils;
 
-import ru.cftfocusstart.task2.figures.*;
+import ru.cftfocusstart.task2.figures.Circle;
+import ru.cftfocusstart.task2.figures.Figure;
+import ru.cftfocusstart.task2.figures.Rectangle;
+import ru.cftfocusstart.task2.figures.Triangle;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,7 +20,7 @@ public final class FigureCreator {
 
 
     public static Figure getFigure(String fileName) throws FileNotFoundException {
-        List<String> args = getFigureParamsFromFile(fileName);
+        List<String> args = getFigureParamsFromFile(new FileInputStream(fileName));
         double[] params = Arrays.stream(args.get(1).split(" ")).mapToDouble(Double::parseDouble).toArray();
         switch (args.get(0)) {
             case "CIRCLE":
@@ -32,9 +35,9 @@ public final class FigureCreator {
     }
 
 
-    private static List<String> getFigureParamsFromFile(String filename) throws FileNotFoundException {
-        List<String> args = new LinkedList<>();
-        Scanner scanner = new Scanner(new FileInputStream(filename));
+    static List<String> getFigureParamsFromFile(FileInputStream fileInputStream) {
+        List<String> args = new ArrayList<>();
+        Scanner scanner = new Scanner(fileInputStream);
         while (scanner.hasNextLine()) {
             args.add(scanner.nextLine());
         }
