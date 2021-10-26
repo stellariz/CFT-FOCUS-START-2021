@@ -18,13 +18,13 @@ public final class TableBuilder {
     public TableBuilder(int tableDimension) {
         checkTableDimension(tableDimension);
         this.tableDimension = tableDimension;
-        this.cellSize = countCellSize(tableDimension);
+        this.cellSize = getCellSize();
         this.line = buildLine();
     }
 
 
-    private int countSpacesForCell(int i) {
-        return cellSize - Integer.toString(i).length();
+    private int countSpacesForCell(int number) {
+        return cellSize - countCharsInNumber(number);
     }
 
 
@@ -48,7 +48,7 @@ public final class TableBuilder {
 
 
     private String buildRow(int coefficient) {
-        int numSpacesInFirstCol = getFirstColumnSize() - Integer.toString(coefficient).length();
+        int numSpacesInFirstCol = getFirstColumnSize() - countCharsInNumber(coefficient);
         StringBuilder stringBuilder = new StringBuilder(getTableLength());
         stringBuilder.append(WHITESPACE.repeat(numSpacesInFirstCol)).
                 append(coefficient);
@@ -73,14 +73,18 @@ public final class TableBuilder {
     }
 
 
-    private int countCellSize(int tableSize) {
-        int maxNumber = tableSize * tableSize;
-        return Integer.toString(maxNumber).length();
+    private static int countCharsInNumber(int number) {
+        return Integer.toString(number).length();
+    }
+
+
+    private int getCellSize() {
+        return countCharsInNumber(tableDimension * tableDimension);
     }
 
 
     private int getFirstColumnSize() {
-        return Integer.toString(tableDimension).length();
+        return countCharsInNumber(tableDimension);
     }
 
 

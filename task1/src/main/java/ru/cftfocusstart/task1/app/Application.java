@@ -1,10 +1,9 @@
 package ru.cftfocusstart.task1.app;
 
 import ru.cftfocusstart.task1.utils.TableBuilder;
-import ru.cftfocusstart.task1.utils.TablePrinter;
 import ru.cftfocusstart.task1.utils.TableSizeReader;
 
-import java.util.NoSuchElementException;
+import java.io.PrintWriter;
 
 
 public class Application {
@@ -13,8 +12,9 @@ public class Application {
         try {
             int sizeOfTable = TableSizeReader.readSize(System.in);
             TableBuilder tableBuilder = new TableBuilder(sizeOfTable);
-            TablePrinter.printTable(tableBuilder.buildTable(), System.out);
-        } catch (IllegalArgumentException | NoSuchElementException | IllegalStateException e) {
+            PrintWriter printWriter = new PrintWriter(System.out, true);
+            printWriter.println(tableBuilder.buildTable());
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
