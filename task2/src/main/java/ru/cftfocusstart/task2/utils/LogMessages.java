@@ -2,7 +2,7 @@ package ru.cftfocusstart.task2.utils;
 
 public enum LogMessages {
 
-    FIGURE_TYPE("Типы фигуры: "),
+    FIGURE_TYPE("Тип фигуры: "),
     AREA("Площадь: "),
     PERIMETER("Периметр: "),
     RADIUS("Радиус: "),

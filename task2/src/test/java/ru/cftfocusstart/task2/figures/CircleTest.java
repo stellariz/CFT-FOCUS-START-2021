@@ -43,12 +43,12 @@ public class CircleTest {
         );
     }
 
+
     @ParameterizedTest
     @MethodSource("methodDataForAreaProvider")
     void getCircleArea(double[] args, double area) {
         assertEquals(area, new Circle(args).getArea());
     }
-
 
     static Stream<Arguments> methodDataForAreaProvider() {
         return Stream.of(
@@ -59,12 +59,12 @@ public class CircleTest {
         );
     }
 
+
     @ParameterizedTest
     @MethodSource("methodDataForPerimeterProvider")
     void getCirclePerimeter(double[] args, double perimeter) {
         assertEquals(perimeter, new Circle(args).getPerimeter());
     }
-
 
     static Stream<Arguments> methodDataForPerimeterProvider() {
         return Stream.of(
@@ -83,7 +83,6 @@ public class CircleTest {
         assertEquals(radius, circle.getRadius());
         assertEquals(diameter, circle.getDiameter());
     }
-
 
     static Stream<Arguments> methodDataForRadiusAndDiameterProvider() {
         return Stream.of(

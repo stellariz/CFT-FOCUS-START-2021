@@ -50,7 +50,6 @@ class RectangleTest {
         assertEquals(area, new Rectangle(args).getArea());
     }
 
-
     static Stream<Arguments> methodDataForAreaProvider() {
         return Stream.of(
                 Arguments.of(rectangleSides[0], 20.0),
@@ -61,12 +60,12 @@ class RectangleTest {
         );
     }
 
+
     @ParameterizedTest
     @MethodSource("methodDataForPerimeterProvider")
     void getRectanglePerimeter(double[] args, double perimeter) {
         assertEquals(perimeter, new Rectangle(args).getPerimeter());
     }
-
 
     static Stream<Arguments> methodDataForPerimeterProvider() {
         return Stream.of(
@@ -87,7 +86,6 @@ class RectangleTest {
         assertEquals(shortSide, rectangle.getShortSide());
     }
 
-
     static Stream<Arguments> methodDataForShortAndLongSideProvider() {
         return Stream.of(
                 Arguments.of(rectangleSides[0], 5.0, 4.0),
@@ -104,7 +102,6 @@ class RectangleTest {
     void getRectangleDiagonalLength(double[] args, double diagonalLength) {
         assertEquals(diagonalLength, new Rectangle(args).getLengthDiagonal());
     }
-
 
     static Stream<Arguments> methodDataForDiagonalLengthProvider() {
         return Stream.of(

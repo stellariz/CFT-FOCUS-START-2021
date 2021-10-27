@@ -7,6 +7,7 @@ import ru.cftfocusstart.task2.figures.Triangle;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +21,7 @@ public final class FigureCreator {
 
 
     public static Figure getFigure(String fileName) throws FileNotFoundException {
-        List<String> args = getFigureParamsFromFile(new FileInputStream(fileName));
+        List<String> args = getFigureParams(new FileInputStream(fileName));
         double[] params = Arrays.stream(args.get(1).split(" ")).mapToDouble(Double::parseDouble).toArray();
         switch (args.get(0)) {
             case "CIRCLE":
@@ -35,9 +36,9 @@ public final class FigureCreator {
     }
 
 
-    static List<String> getFigureParamsFromFile(FileInputStream fileInputStream) {
+    private static List<String> getFigureParams(InputStream inputStream) {
         List<String> args = new ArrayList<>();
-        Scanner scanner = new Scanner(fileInputStream);
+        Scanner scanner = new Scanner(inputStream);
         while (scanner.hasNextLine()) {
             args.add(scanner.nextLine());
         }

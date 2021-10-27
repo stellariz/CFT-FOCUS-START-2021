@@ -1,11 +1,10 @@
 package ru.cftfocusstart.task2.figures;
 
 
+import org.apache.commons.math3.util.Precision;
 import ru.cftfocusstart.task2.utils.LogMessages;
 
 import java.util.Arrays;
-import java.util.logging.Logger;
-
 
 public final class Triangle extends Figure {
 
@@ -13,19 +12,21 @@ public final class Triangle extends Figure {
 
     public Triangle(double[] params) {
         super(TypesOfFigures.TRIANGLE, params);
-        countZeroSides(params);
+        checkIfAngle(params);
         checkTriangleRule(params);
         sides = Arrays.copyOf(params, params.length);
     }
 
 
     @Override
-    public void getInfo(Logger logger) {
-        super.getInfo(logger);
+    protected String getUniqueInfo() {
         double[] angles = getAngles();
+        StringBuilder sb = new StringBuilder(200).append(System.lineSeparator());
         for (int i = 0; i < 3; ++i) {
-            logger.info(LogMessages.SIDE.msg + sides[i] + LogMessages.ANGLE.msg + angles[i]);
+            sb.append(LogMessages.SIDE.msg).append(Precision.round(sides[i], 2)).
+                    append(LogMessages.ANGLE.msg).append(Precision.round(angles[i], 2)).append(System.lineSeparator());
         }
+        return sb.toString();
     }
 
     @Override
@@ -89,7 +90,7 @@ public final class Triangle extends Figure {
     }
 
 
-    private void countZeroSides(double[] args) {
+    private void checkIfAngle(double[] args) {
         int counter = 0;
         for (double side : args) {
             if (side == 0.0) {

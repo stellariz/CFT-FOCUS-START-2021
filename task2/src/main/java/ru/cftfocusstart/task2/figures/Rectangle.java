@@ -1,10 +1,8 @@
 package ru.cftfocusstart.task2.figures;
 
 
+import org.apache.commons.math3.util.Precision;
 import ru.cftfocusstart.task2.utils.LogMessages;
-
-
-import java.util.logging.Logger;
 
 public final class Rectangle extends Figure {
 
@@ -18,12 +16,15 @@ public final class Rectangle extends Figure {
         secondSideLength = params[1];
     }
 
+
     @Override
-    public void getInfo(Logger logger) {
-        super.getInfo(logger);
-        logger.info(LogMessages.DIAGONAL.msg + getLengthDiagonal());
-        logger.info(LogMessages.LONG_SIDE.msg + getLongSide());
-        logger.info(LogMessages.SHORT_SIDE.msg + getShortSide());
+    protected String getUniqueInfo() {
+        StringBuilder sb = new StringBuilder(200).append(System.lineSeparator());
+        return sb.append(LogMessages.DIAGONAL.msg).append(Precision.round(getLengthDiagonal(), 2)).
+                append(System.lineSeparator()).
+                append(LogMessages.LONG_SIDE.msg).append(Precision.round(getLongSide(), 2)).
+                append(System.lineSeparator()).
+                append(LogMessages.SHORT_SIDE.msg).append(Precision.round(getShortSide(), 2)).toString();
     }
 
     @Override

@@ -1,11 +1,12 @@
 package ru.cftfocusstart.task2.figures;
 
 
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.math3.util.Precision;
+import org.apache.logging.log4j.Level;
 import ru.cftfocusstart.task2.utils.LogMessages;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+@Log4j2
 public abstract class Figure {
 
     protected final TypesOfFigures type;
@@ -18,11 +19,18 @@ public abstract class Figure {
     }
 
 
-    public void getInfo(Logger logger) {
-        logger.log(Level.INFO, LogMessages.FIGURE_TYPE.msg + getType());
-        logger.log(Level.INFO, LogMessages.AREA.msg + getArea());
-        logger.log(Level.INFO, LogMessages.PERIMETER.msg + getPerimeter());
+    public void logInfo() {
+        log.log(Level.INFO, getCommonInfo() + getUniqueInfo());
     }
+
+    private String getCommonInfo() {
+        StringBuilder sb = new StringBuilder(100).append(System.lineSeparator());
+        return sb.append(LogMessages.FIGURE_TYPE.msg).append(getType().name).append(System.lineSeparator()).
+                append(LogMessages.AREA.msg).append(Precision.round(getArea(), 2)).append(System.lineSeparator()).
+                append(LogMessages.PERIMETER.msg).append(Precision.round(getPerimeter(), 2)).toString();
+    }
+
+    protected abstract String getUniqueInfo();
 
     protected abstract double getArea();
 
@@ -34,12 +42,12 @@ public abstract class Figure {
 
     protected void checkArgs(double[] args) {
         checkParamsSize(args);
-        checkNegativeAndZeroesParams(args);
+        countNegativeAndZeroesParams(args);
     }
 
     protected abstract void checkParamsSize(double[] args);
 
-    private void checkNegativeAndZeroesParams(double[] args) {
+    private void countNegativeAndZeroesParams(double[] args) {
         int counter = 0;
         for (double param : args) {
             if (param < 0.0) {

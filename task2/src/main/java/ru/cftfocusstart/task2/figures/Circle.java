@@ -1,9 +1,7 @@
 package ru.cftfocusstart.task2.figures;
 
-
+import org.apache.commons.math3.util.Precision;
 import ru.cftfocusstart.task2.utils.LogMessages;
-
-import java.util.logging.Logger;
 
 public final class Circle extends Figure {
 
@@ -15,10 +13,11 @@ public final class Circle extends Figure {
     }
 
     @Override
-    public void getInfo(Logger logger) {
-        super.getInfo(logger);
-        logger.info(LogMessages.RADIUS.msg + radius);
-        logger.info(LogMessages.DIAMETER.msg + getDiameter());
+    protected String getUniqueInfo() {
+        StringBuilder sb = new StringBuilder(150).append(System.lineSeparator());
+        return sb.append(LogMessages.RADIUS.msg).append(Precision.round(getRadius(), 2)).
+                append(System.lineSeparator()).
+                append(LogMessages.DIAMETER.msg).append(Precision.round(getDiameter(), 2)).toString();
     }
 
     @Override

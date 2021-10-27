@@ -46,6 +46,7 @@ public class TriangleTest {
         );
     }
 
+
     @ParameterizedTest
     @MethodSource("methodIncorrectSidesProvider")
     void createTriangle_throwsIllegalArgumentException_ifNotDoneTriangleRule(double[] args) {
@@ -59,6 +60,7 @@ public class TriangleTest {
                 Arguments.of(new double[]{0.0, 0.0, 5.0})
         );
     }
+
 
     @ParameterizedTest
     @MethodSource("methodAngleParamsProvider")
@@ -81,7 +83,6 @@ public class TriangleTest {
         assertEquals(area, new Triangle(args).getArea());
     }
 
-
     static Stream<Arguments> methodDataForAreaProvider() {
         return Stream.of(
                 Arguments.of(triangleSides[0], 6.0),
@@ -91,12 +92,12 @@ public class TriangleTest {
         );
     }
 
+
     @ParameterizedTest
     @MethodSource("methodDataForPerimeterProvider")
     void getTrianglePerimeter(double[] args, double perimeter) {
         assertEquals(perimeter, new Triangle(args).getPerimeter());
     }
-
 
     static Stream<Arguments> methodDataForPerimeterProvider() {
         return Stream.of(
@@ -116,7 +117,6 @@ public class TriangleTest {
             assertEquals(angles[i], myAngles[i]);
         }
     }
-
 
     static Stream<Arguments> methodDataForAnglesProvider() {
         return Stream.of(
