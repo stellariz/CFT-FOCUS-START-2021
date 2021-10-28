@@ -1,11 +1,13 @@
 package ru.cftfocusstart.task2.figures;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.util.Precision;
 import ru.cftfocusstart.task2.utils.LogMessages;
 
 import java.util.Arrays;
 
+@Slf4j
 public final class Triangle extends Figure {
 
     private final double[] sides;
@@ -20,17 +22,20 @@ public final class Triangle extends Figure {
 
     @Override
     protected String getUniqueInfo() {
+        log.info("Getting unique info about triangle");
         double[] angles = getAngles();
-        StringBuilder sb = new StringBuilder(200).append(System.lineSeparator());
+        StringBuilder sb = new StringBuilder(200);
         for (int i = 0; i < 3; ++i) {
             sb.append(LogMessages.SIDE.msg).append(Precision.round(sides[i], 2)).
-                    append(LogMessages.ANGLE.msg).append(Precision.round(angles[i], 2)).append(System.lineSeparator());
+                    append(LogMessages.ANGLE.msg).append(Precision.round(angles[i], 2)).
+                    append(System.lineSeparator());
         }
         return sb.toString();
     }
 
     @Override
     public double getArea() {
+        log.info("Getting area of triangle");
         if (degenerate) {
             return 0.0;
         }
@@ -40,6 +45,7 @@ public final class Triangle extends Figure {
 
     @Override
     public double getPerimeter() {
+        log.info("Getting perimeter of triangle");
         if (degenerate) {
             if (Arrays.stream(sides).max().isPresent()) {
                 return Arrays.stream(sides).max().getAsDouble();
@@ -62,6 +68,7 @@ public final class Triangle extends Figure {
     }
 
     public double[] getAngles() {
+        log.info("Getting angles of triangle");
         double[] angles = new double[]{0.0, 0.0, 0.0};
         if (point) {
             return angles;
@@ -79,6 +86,7 @@ public final class Triangle extends Figure {
 
 
     private void checkTriangleRule(double[] args) {
+        log.info("Checking triangle rule");
         for (int i = 0; i < args.length; ++i) {
             if (Double.compare(args[i], args[(i + 1) % 3] + args[(i + 2) % 3]) == 1) {
                 throw new IllegalArgumentException("No such triangle exists!");

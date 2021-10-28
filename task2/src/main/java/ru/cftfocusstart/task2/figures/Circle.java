@@ -1,8 +1,10 @@
 package ru.cftfocusstart.task2.figures;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.util.Precision;
 import ru.cftfocusstart.task2.utils.LogMessages;
 
+@Slf4j
 public final class Circle extends Figure {
 
     private final double radius;
@@ -14,24 +16,29 @@ public final class Circle extends Figure {
 
     @Override
     protected String getUniqueInfo() {
-        StringBuilder sb = new StringBuilder(150).append(System.lineSeparator());
+        log.info("Getting unique info about circle");
+        StringBuilder sb = new StringBuilder(150);
         return sb.append(LogMessages.RADIUS.msg).append(Precision.round(getRadius(), 2)).
                 append(System.lineSeparator()).
-                append(LogMessages.DIAMETER.msg).append(Precision.round(getDiameter(), 2)).toString();
+                append(LogMessages.DIAMETER.msg).append(Precision.round(getDiameter(), 2)).
+                append(System.lineSeparator()).toString();
     }
 
     @Override
     public double getArea() {
+        log.info("Getting area of circle");
         return Math.PI * radius * radius;
     }
 
     @Override
     public double getPerimeter() {
-        return 2 * Math.PI * radius;
+        log.info("Getting perimeter of circle");
+        return 2 * Math.PI * getRadius();
     }
 
     @Override
     protected void checkParamsSize(double[] args) {
+        log.info("Checking parameters of circle");
         if (args == null) {
             throw new IllegalArgumentException("Null cannot be passed in arguments!");
         }
@@ -42,10 +49,12 @@ public final class Circle extends Figure {
     }
 
     public double getRadius() {
+        log.info("Getting radius of circle");
         return radius;
     }
 
     public double getDiameter() {
+        log.info("Getting diameter of circle");
         return 2 * getRadius();
     }
 }

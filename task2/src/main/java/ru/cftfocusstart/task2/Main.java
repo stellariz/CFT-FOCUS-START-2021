@@ -5,6 +5,6 @@ import ru.cftfocusstart.task2.app.Application;
 
 public class Main {
     public static void main(String[] args) {
-        Application.run(args[0]);
+        Application.run(args);
     }
 }

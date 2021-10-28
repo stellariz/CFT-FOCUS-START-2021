@@ -1,12 +1,11 @@
 package ru.cftfocusstart.task2.figures;
 
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.util.Precision;
-import org.apache.logging.log4j.Level;
 import ru.cftfocusstart.task2.utils.LogMessages;
 
-@Log4j2
+@Slf4j
 public abstract class Figure {
 
     protected final TypesOfFigures type;
@@ -19,15 +18,20 @@ public abstract class Figure {
     }
 
 
-    public void logInfo() {
-        log.log(Level.INFO, getCommonInfo() + getUniqueInfo());
+    public void logInfo(boolean doesDisplayInfo) {
+        log.info("Getting info about figure");
+        if (doesDisplayInfo) {
+            System.out.printf("%s%s", getCommonInfo(), getUniqueInfo());
+        }
     }
 
     private String getCommonInfo() {
-        StringBuilder sb = new StringBuilder(100).append(System.lineSeparator());
+        log.info("Getting common info");
+        StringBuilder sb = new StringBuilder(100);
         return sb.append(LogMessages.FIGURE_TYPE.msg).append(getType().name).append(System.lineSeparator()).
                 append(LogMessages.AREA.msg).append(Precision.round(getArea(), 2)).append(System.lineSeparator()).
-                append(LogMessages.PERIMETER.msg).append(Precision.round(getPerimeter(), 2)).toString();
+                append(LogMessages.PERIMETER.msg).append(Precision.round(getPerimeter(), 2)).
+                append(System.lineSeparator()).toString();
     }
 
     protected abstract String getUniqueInfo();
