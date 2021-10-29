@@ -13,11 +13,28 @@ public final class Rectangle extends Figure {
 
 
     public Rectangle(double[] params) {
-        super(TypesOfFigures.RECTANGLE, params);
+        super(TypeOfFigure.RECTANGLE, params);
         firstSideLength = params[0];
         secondSideLength = params[1];
     }
 
+    public double getShortSide() {
+        log.info("Getting short side of rectangle");
+        return Math.min(firstSideLength, secondSideLength);
+    }
+
+    public double getLongSide() {
+        log.info("Getting long side of rectangle");
+        return Math.max(firstSideLength, secondSideLength);
+    }
+
+    public double getLengthDiagonal() {
+        log.info("Getting diagonal's length of rectangle");
+        if (degenerate) {
+            return 0.0;
+        }
+        return Math.sqrt(firstSideLength * firstSideLength + secondSideLength * secondSideLength);
+    }
 
     @Override
     protected String getUniqueInfo() {
@@ -47,8 +64,8 @@ public final class Rectangle extends Figure {
     }
 
     @Override
-    protected void checkParamsSize(double[] args) {
-        log.info("Checking size of parameters");
+    protected void checkArgsNumberForFigure(double[] args) {
+        log.info("Checking number of parameters for rectangle");
         if (args == null) {
             throw new IllegalArgumentException("Null cannot be passed in arguments!");
         }
@@ -56,23 +73,5 @@ public final class Rectangle extends Figure {
             throw new IllegalArgumentException("Incorrect number of parameters for rectangle: " + args.length
                     + ", but should be only two!");
         }
-    }
-
-    public double getShortSide() {
-        log.info("Getting shot side of rectangle");
-        return Math.min(firstSideLength, secondSideLength);
-    }
-
-    public double getLongSide() {
-        log.info("Getting long side of rectangle");
-        return Math.max(firstSideLength, secondSideLength);
-    }
-
-    public double getLengthDiagonal() {
-        log.info("Getting diagonal's length of rectangle");
-        if (degenerate) {
-            return 0.0;
-        }
-        return Math.sqrt(firstSideLength * firstSideLength + secondSideLength * secondSideLength);
     }
 }

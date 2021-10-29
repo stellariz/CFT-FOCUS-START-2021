@@ -8,20 +8,25 @@ import ru.cftfocusstart.task2.utils.LogMessages;
 @Slf4j
 public abstract class Figure {
 
-    protected final TypesOfFigures type;
+    protected final TypeOfFigure type;
     protected boolean degenerate = false;
     protected boolean point = false;
 
-    protected Figure(TypesOfFigures type, double[] args) {
+    protected Figure(TypeOfFigure type, double[] args) {
         checkArgs(args);
         this.type = type;
     }
 
+    public TypeOfFigure getType() {
+        log.info("Getting type of figure");
+        return type;
+    }
 
-    public void logInfo(boolean doesDisplayInfo) {
-        log.info("Getting info about figure");
+    public void getInfo(boolean doesDisplayInfo) {
+        String commonInfo = getCommonInfo();
+        String uniqueInfo = getUniqueInfo();
         if (doesDisplayInfo) {
-            System.out.printf("%s%s", getCommonInfo(), getUniqueInfo());
+            System.out.printf("%s%s", commonInfo, uniqueInfo);
         }
     }
 
@@ -34,24 +39,13 @@ public abstract class Figure {
                 append(System.lineSeparator()).toString();
     }
 
-    protected abstract String getUniqueInfo();
-
-    protected abstract double getArea();
-
-    protected abstract double getPerimeter();
-
-    public TypesOfFigures getType() {
-        return type;
+    private void checkArgs(double[] args) {
+        checkArgsNumberForFigure(args);
+        checkNegativeParamsAndFigureDegeneracy(args);
     }
 
-    protected void checkArgs(double[] args) {
-        checkParamsSize(args);
-        countNegativeAndZeroesParams(args);
-    }
-
-    protected abstract void checkParamsSize(double[] args);
-
-    private void countNegativeAndZeroesParams(double[] args) {
+    private void checkNegativeParamsAndFigureDegeneracy(double[] args) {
+        log.info("Counting negative and zero parameters");
         int counter = 0;
         for (double param : args) {
             if (param < 0.0) {
@@ -66,4 +60,12 @@ public abstract class Figure {
             point = true;
         }
     }
+
+    protected abstract double getArea();
+
+    protected abstract double getPerimeter();
+
+    protected abstract String getUniqueInfo();
+
+    protected abstract void checkArgsNumberForFigure(double[] args);
 }

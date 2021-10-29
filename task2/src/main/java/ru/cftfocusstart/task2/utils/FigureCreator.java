@@ -22,9 +22,10 @@ public final class FigureCreator {
 
 
     public static Figure getFigure(String fileName) throws IOException {
-        FileInputStream fis = new FileInputStream(fileName);
-        List<String> args = getFigureParams(fis);
-        fis.close();
+        List<String> args;
+        try (FileInputStream fis = new FileInputStream(fileName)) {
+            args = getFigureParams(fis);
+        }
         double[] params = Arrays.stream(args.get(1).split(" ")).mapToDouble(Double::parseDouble).toArray();
         switch (args.get(0)) {
             case "CIRCLE":
@@ -40,7 +41,6 @@ public final class FigureCreator {
                 throw new IllegalArgumentException("There is no figure: \"" + args.get(0) + "\"");
         }
     }
-
 
     private static List<String> getFigureParams(InputStream inputStream) {
         log.info("Reading file");

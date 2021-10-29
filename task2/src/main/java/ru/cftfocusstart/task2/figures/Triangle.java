@@ -13,12 +13,45 @@ public final class Triangle extends Figure {
     private final double[] sides;
 
     public Triangle(double[] params) {
-        super(TypesOfFigures.TRIANGLE, params);
-        checkIfAngle(params);
-        checkTriangleRule(params);
+        super(TypeOfFigure.TRIANGLE, params);
+        checkTriangleRuleAndIsAngle(params);
         sides = Arrays.copyOf(params, params.length);
     }
 
+    private void checkTriangleRuleAndIsAngle(double[] args) {
+        log.info("Checking triangle rule and is the figure and angle");
+        int counter = 0;
+        for (int i = 0; i < args.length; ++i) {
+            if (Double.compare(args[i], args[(i + 1) % 3] + args[(i + 2) % 3]) == 1) {
+                throw new IllegalArgumentException("No such triangle exists!");
+            }
+            if (Double.compare(args[i], args[(i + 1) % 3] + args[(i + 2) % 3]) == 0) {
+                degenerate = true;
+            }
+            if (args[i] == 0.0) {
+                ++counter;
+            }
+        }
+        if (counter == 1) {
+            throw new IllegalArgumentException("Angle is not a triangle!");
+        }
+    }
+
+    public double[] getAngles() {
+        log.info("Getting angles of triangle");
+        double[] angles = new double[]{0.0, 0.0, 0.0};
+        if (point) {
+            return angles;
+        }
+        for (int i = 0; i < 3; ++i) {
+            angles[i] = cosTheorem(sides[i], sides[(i + 1) % 3], sides[(i + 2) % 3]);
+        }
+        return angles;
+    }
+
+    private double cosTheorem(double a, double b, double c) {
+        return Math.toDegrees(Math.acos((b * b + c * c - a * a) / (2 * b * c)));
+    }
 
     @Override
     protected String getUniqueInfo() {
@@ -57,56 +90,14 @@ public final class Triangle extends Figure {
     }
 
     @Override
-    protected void checkParamsSize(double[] args) {
+    protected void checkArgsNumberForFigure(double[] args) {
+        log.info("Checking number of parameters for triangle");
         if (args == null) {
             throw new IllegalArgumentException("Null cannot be passed in arguments!");
         }
         if (args.length != 3) {
             throw new IllegalArgumentException("Incorrect number of parameters for rectangle: " + args.length
                     + ", but should be only three!");
-        }
-    }
-
-    public double[] getAngles() {
-        log.info("Getting angles of triangle");
-        double[] angles = new double[]{0.0, 0.0, 0.0};
-        if (point) {
-            return angles;
-        }
-        for (int i = 0; i < 3; ++i) {
-            angles[i] = cosTheorem(sides[i], sides[(i + 1) % 3], sides[(i + 2) % 3]);
-        }
-        return angles;
-    }
-
-
-    private double cosTheorem(double a, double b, double c) {
-        return Math.toDegrees(Math.acos((b * b + c * c - a * a) / (2 * b * c)));
-    }
-
-
-    private void checkTriangleRule(double[] args) {
-        log.info("Checking triangle rule");
-        for (int i = 0; i < args.length; ++i) {
-            if (Double.compare(args[i], args[(i + 1) % 3] + args[(i + 2) % 3]) == 1) {
-                throw new IllegalArgumentException("No such triangle exists!");
-            }
-            if (Double.compare(args[i], args[(i + 1) % 3] + args[(i + 2) % 3]) == 0) {
-                degenerate = true;
-            }
-        }
-    }
-
-
-    private void checkIfAngle(double[] args) {
-        int counter = 0;
-        for (double side : args) {
-            if (side == 0.0) {
-                ++counter;
-            }
-        }
-        if (counter == 1) {
-            throw new IllegalArgumentException("Angle is not a triangle!");
         }
     }
 }

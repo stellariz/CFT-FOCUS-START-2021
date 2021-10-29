@@ -10,8 +10,18 @@ public final class Circle extends Figure {
     private final double radius;
 
     public Circle(double[] params) {
-        super(TypesOfFigures.CIRCLE, params);
+        super(TypeOfFigure.CIRCLE, params);
         radius = params[0];
+    }
+
+    public double getRadius() {
+        log.info("Getting radius of circle");
+        return radius;
+    }
+
+    public double getDiameter() {
+        log.info("Getting diameter of circle");
+        return 2 * getRadius();
     }
 
     @Override
@@ -37,8 +47,8 @@ public final class Circle extends Figure {
     }
 
     @Override
-    protected void checkParamsSize(double[] args) {
-        log.info("Checking parameters of circle");
+    protected void checkArgsNumberForFigure(double[] args) {
+        log.info("Checking number of parameters for circle");
         if (args == null) {
             throw new IllegalArgumentException("Null cannot be passed in arguments!");
         }
@@ -46,15 +56,5 @@ public final class Circle extends Figure {
             throw new IllegalArgumentException("Incorrect number of parameters for rectangle: " + args.length
                     + ", but should be only one!");
         }
-    }
-
-    public double getRadius() {
-        log.info("Getting radius of circle");
-        return radius;
-    }
-
-    public double getDiameter() {
-        log.info("Getting diameter of circle");
-        return 2 * getRadius();
     }
 }

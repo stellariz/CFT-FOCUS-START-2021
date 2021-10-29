@@ -5,10 +5,13 @@ import ru.cftfocusstart.task2.figures.Figure;
 import ru.cftfocusstart.task2.utils.FigureCreator;
 
 @Slf4j
-public class Application {
+public final class Application {
 
-    private static boolean doesPrintInConsole(String printKey) {
-        log.info("Reading user's arguments");
+    static boolean doesPrintInConsole(String printKey) {
+        log.info("Checking print key");
+        if (printKey == null){
+            throw new IllegalArgumentException("Print key is null");
+        }
         switch (printKey) {
             case "-c":
                 return true;
@@ -19,13 +22,13 @@ public class Application {
         }
     }
 
-    private static void checkLengthUserArguments(String[] args) {
+    static void checkNumberUserArguments(String[] args) {
         log.info("Checking number of arguments");
         if (args == null) {
             throw new IllegalArgumentException("Null cannot be passed in program's arguments");
         }
         if (args.length != 2) {
-            throw new IllegalArgumentException("Incorrect number of parameters for rectangle: " + args.length
+            throw new IllegalArgumentException("Incorrect number of program's arguments:  " + args.length
                     + ", but should be only two!");
         }
     }
@@ -33,11 +36,12 @@ public class Application {
     public static void run(String[] args) {
         log.info("Running app");
         try {
-            checkLengthUserArguments(args);
+            checkNumberUserArguments(args);
             String printKey = args[0];
             String fileName = args[1];
+            boolean print = doesPrintInConsole(printKey);
             Figure a = FigureCreator.getFigure(fileName);
-            a.logInfo(doesPrintInConsole(printKey));
+            a.getInfo(print);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

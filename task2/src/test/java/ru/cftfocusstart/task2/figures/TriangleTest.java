@@ -12,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TriangleTest {
 
-    private static final double[][] triangleSides = new double[][]{{3.0, 4.0, 5.0}, {2.0, 3.0, 5.0}, {5.0, 5.0, 5.0},
-                                                                    {0.0, 0.0, 0.0}};
+    private static final double[][] normalTriangleSides = new double[][]{{3.0, 4.0, 5.0}, {2.0, 3.0, 5.0}, {5.0, 5.0, 5.0},
+            {0.0, 0.0, 0.0}};
 
 
     @ParameterizedTest
@@ -34,7 +34,7 @@ public class TriangleTest {
     @ParameterizedTest
     @NullAndEmptySource
     @MethodSource("methodIncorrectParamsSizeProvider")
-    void createTriangle_throwsIllegalArgumentException_ifIncorrectParamsSize(double[] args) {
+    void createTriangle_throwsIllegalArgumentException_ifIncorrectParamsNumber(double[] args) {
         assertThrows(IllegalArgumentException.class, () -> new Triangle(args));
     }
 
@@ -85,10 +85,10 @@ public class TriangleTest {
 
     static Stream<Arguments> methodDataForAreaProvider() {
         return Stream.of(
-                Arguments.of(triangleSides[0], 6.0),
-                Arguments.of(triangleSides[1], 0.0),
-                Arguments.of(triangleSides[2], 25. / 4 * Math.sqrt(3)),
-                Arguments.of(triangleSides[3], 0.0)
+                Arguments.of(normalTriangleSides[0], 6.0),
+                Arguments.of(normalTriangleSides[1], 0.0),
+                Arguments.of(normalTriangleSides[2], 25. / 4 * Math.sqrt(3)),
+                Arguments.of(normalTriangleSides[3], 0.0)
         );
     }
 
@@ -101,10 +101,10 @@ public class TriangleTest {
 
     static Stream<Arguments> methodDataForPerimeterProvider() {
         return Stream.of(
-                Arguments.of(triangleSides[0], 12.0),
-                Arguments.of(triangleSides[1], 5.0),
-                Arguments.of(triangleSides[2], 15.0),
-                Arguments.of(triangleSides[3], 0.0)
+                Arguments.of(normalTriangleSides[0], 12.0),
+                Arguments.of(normalTriangleSides[1], 5.0),
+                Arguments.of(normalTriangleSides[2], 15.0),
+                Arguments.of(normalTriangleSides[3], 0.0)
         );
     }
 
@@ -113,21 +113,21 @@ public class TriangleTest {
     @MethodSource("methodDataForAnglesProvider")
     void getTriangleAngles(double[] args, double[] angles) {
         double[] myAngles = new Triangle(args).getAngles();
-        for (int i = 0; i < 3; ++i){
+        for (int i = 0; i < 3; ++i) {
             assertEquals(angles[i], myAngles[i]);
         }
     }
 
     static Stream<Arguments> methodDataForAnglesProvider() {
         return Stream.of(
-                Arguments.of(triangleSides[0], new double[]{Math.toDegrees(Math.acos(4.0 / 5.0)),
-                                                            Math.toDegrees(Math.acos(3.0 / 5.0)),
-                                                            90.0}),
-                Arguments.of(triangleSides[1], new double[]{0.0, 0.0, 180.0}),
-                Arguments.of(triangleSides[2], new double[]{Math.toDegrees(Math.acos(1.5 / 3)),
-                                                            Math.toDegrees(Math.acos(1.5 / 3)),
-                                                            Math.toDegrees(Math.acos(1.5 / 3))}),
-                Arguments.of(triangleSides[3], new double[]{0.0, 0.0, 0.0})
+                Arguments.of(normalTriangleSides[0], new double[]{Math.toDegrees(Math.acos(4.0 / 5.0)),
+                        Math.toDegrees(Math.acos(3.0 / 5.0)),
+                        90.0}),
+                Arguments.of(normalTriangleSides[1], new double[]{0.0, 0.0, 180.0}),
+                Arguments.of(normalTriangleSides[2], new double[]{Math.toDegrees(Math.acos(1.5 / 3)),
+                        Math.toDegrees(Math.acos(1.5 / 3)),
+                        Math.toDegrees(Math.acos(1.5 / 3))}),
+                Arguments.of(normalTriangleSides[3], new double[]{0.0, 0.0, 0.0})
         );
     }
 }
