@@ -3,7 +3,7 @@
 
     <Properties>
         <Property name="LOG_PATTERN">%d{HH:mm:ss.SSS} [%t] %-5level %logger{40} - %msg%n</Property>
-        <Property name="APP_LOG_ROOT">src/main/resources</Property>
+        <Property name="APP_LOG_ROOT">task2/src/main/resources</Property>
     </Properties>
 
     <Appenders>

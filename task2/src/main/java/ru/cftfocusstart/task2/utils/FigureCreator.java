@@ -23,10 +23,13 @@ public final class FigureCreator {
 
     public static Figure getFigure(String fileName) throws IOException {
         List<String> args;
+        double[] params;
         try (FileInputStream fis = new FileInputStream(fileName)) {
             args = getFigureParams(fis);
+            params = Arrays.stream(args.get(1).split(" ")).mapToDouble(Double::parseDouble).toArray();
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Incorrect parameter input format");
         }
-        double[] params = Arrays.stream(args.get(1).split(" ")).mapToDouble(Double::parseDouble).toArray();
         switch (args.get(0)) {
             case "CIRCLE":
                 log.info("Creating circle");

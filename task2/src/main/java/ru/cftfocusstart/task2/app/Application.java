@@ -10,7 +10,7 @@ public final class Application {
     static boolean doesPrintInConsole(String printKey) {
         log.info("Checking print key");
         if (printKey == null){
-            throw new IllegalArgumentException("Print key is null");
+            throw new IllegalArgumentException("Print key cannot be null");
         }
         switch (printKey) {
             case "-c":
