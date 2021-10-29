@@ -3,7 +3,7 @@ package ru.cftfocusstart.task2.figures;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.util.Precision;
-import ru.cftfocusstart.task2.utils.LogMessages;
+import ru.cftfocusstart.task2.utils.DisplayMessages;
 
 @Slf4j
 public final class Rectangle extends Figure {
@@ -40,11 +40,11 @@ public final class Rectangle extends Figure {
     protected String getUniqueInfo() {
         log.info("Getting unique info about rectangle");
         StringBuilder sb = new StringBuilder(200);
-        return sb.append(LogMessages.DIAGONAL.msg).append(Precision.round(getLengthDiagonal(), 2)).
+        return sb.append(DisplayMessages.DIAGONAL.msg).append(Precision.round(getLengthDiagonal(), 2)).
                 append(System.lineSeparator()).
-                append(LogMessages.LONG_SIDE.msg).append(Precision.round(getLongSide(), 2)).
+                append(DisplayMessages.LONG_SIDE.msg).append(Precision.round(getLongSide(), 2)).
                 append(System.lineSeparator()).
-                append(LogMessages.SHORT_SIDE.msg).append(Precision.round(getShortSide(), 2)).
+                append(DisplayMessages.SHORT_SIDE.msg).append(Precision.round(getShortSide(), 2)).
                 append(System.lineSeparator()).toString();
     }
 

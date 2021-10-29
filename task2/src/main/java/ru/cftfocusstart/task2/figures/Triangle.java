@@ -3,7 +3,7 @@ package ru.cftfocusstart.task2.figures;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.util.Precision;
-import ru.cftfocusstart.task2.utils.LogMessages;
+import ru.cftfocusstart.task2.utils.DisplayMessages;
 
 import java.util.Arrays;
 
@@ -59,8 +59,8 @@ public final class Triangle extends Figure {
         double[] angles = getAngles();
         StringBuilder sb = new StringBuilder(200);
         for (int i = 0; i < 3; ++i) {
-            sb.append(LogMessages.SIDE.msg).append(Precision.round(sides[i], 2)).
-                    append(LogMessages.ANGLE.msg).append(Precision.round(angles[i], 2)).
+            sb.append(DisplayMessages.SIDE.msg).append(Precision.round(sides[i], 2)).
+                    append(DisplayMessages.ANGLE.msg).append(Precision.round(angles[i], 2)).
                     append(System.lineSeparator());
         }
         return sb.toString();

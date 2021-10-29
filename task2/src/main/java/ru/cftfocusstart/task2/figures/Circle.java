@@ -2,7 +2,7 @@ package ru.cftfocusstart.task2.figures;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.util.Precision;
-import ru.cftfocusstart.task2.utils.LogMessages;
+import ru.cftfocusstart.task2.utils.DisplayMessages;
 
 @Slf4j
 public final class Circle extends Figure {
@@ -28,9 +28,9 @@ public final class Circle extends Figure {
     protected String getUniqueInfo() {
         log.info("Getting unique info about circle");
         StringBuilder sb = new StringBuilder(150);
-        return sb.append(LogMessages.RADIUS.msg).append(Precision.round(getRadius(), 2)).
+        return sb.append(DisplayMessages.RADIUS.msg).append(Precision.round(getRadius(), 2)).
                 append(System.lineSeparator()).
-                append(LogMessages.DIAMETER.msg).append(Precision.round(getDiameter(), 2)).
+                append(DisplayMessages.DIAMETER.msg).append(Precision.round(getDiameter(), 2)).
                 append(System.lineSeparator()).toString();
     }
 

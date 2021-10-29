@@ -3,7 +3,7 @@ package ru.cftfocusstart.task2.figures;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.util.Precision;
-import ru.cftfocusstart.task2.utils.LogMessages;
+import ru.cftfocusstart.task2.utils.DisplayMessages;
 
 @Slf4j
 public abstract class Figure {
@@ -33,9 +33,9 @@ public abstract class Figure {
     private String getCommonInfo() {
         log.info("Getting common info");
         StringBuilder sb = new StringBuilder(100);
-        return sb.append(LogMessages.FIGURE_TYPE.msg).append(getType().name).append(System.lineSeparator()).
-                append(LogMessages.AREA.msg).append(Precision.round(getArea(), 2)).append(System.lineSeparator()).
-                append(LogMessages.PERIMETER.msg).append(Precision.round(getPerimeter(), 2)).
+        return sb.append(DisplayMessages.FIGURE_TYPE.msg).append(getType().name).append(System.lineSeparator()).
+                append(DisplayMessages.AREA.msg).append(Precision.round(getArea(), 2)).append(System.lineSeparator()).
+                append(DisplayMessages.PERIMETER.msg).append(Precision.round(getPerimeter(), 2)).
                 append(System.lineSeparator()).toString();
     }
 
