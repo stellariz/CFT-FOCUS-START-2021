@@ -28,9 +28,9 @@ public final class CheckerInputData {
         }
     }
 
-    private static void checkDoesExistConfigFile(String fileName) {
-        if (!new File(fileName).exists()) {
-            throw new IllegalArgumentException("Config file with name: " + fileName + " doesn't exist!");
+    private static void checkDoesExistConfigFile(String cfgFileName) {
+        if (!new File(cfgFileName).exists()) {
+            throw new IllegalArgumentException("Config file with name: " + cfgFileName + " doesn't exist!");
         }
     }
 

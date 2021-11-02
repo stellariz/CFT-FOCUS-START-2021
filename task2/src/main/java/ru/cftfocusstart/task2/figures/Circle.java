@@ -40,7 +40,7 @@ public final class Circle extends Figure {
     @Override
     public double getArea() {
         log.info("Getting area of circle");
-        return Math.PI * radius * radius;
+        return Math.PI * getRadius() * getRadius();
     }
 
     @Override

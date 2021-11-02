@@ -55,19 +55,19 @@ public abstract class Figure {
     }
 
     private void checkArgs(double[] args, int expectedParamsNumber) {
-        log.info("Checking negative and zero parameters");
         if (args == null) {
             throw new IllegalArgumentException("Null cannot be passed in parameters of figure!");
-        }
-        for (double param : args) {
-            if (param <= 0.0) {
-                throw new IllegalArgumentException("Parameter " + param + " less than or equal to zero!");
-            }
         }
         log.info("Checking number of parameters");
         if (args.length != expectedParamsNumber) {
             throw new IllegalArgumentException("Incorrect number of parameters for " + getType() + ": " +
                     args.length + ", but expected: " + expectedParamsNumber);
+        }
+        log.info("Checking negative and zero parameters");
+        for (double param : args) {
+            if (param <= 0.0) {
+                throw new IllegalArgumentException("Parameter " + param + " less than or equal to zero!");
+            }
         }
     }
 
