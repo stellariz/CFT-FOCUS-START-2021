@@ -2,15 +2,16 @@ package ru.cftfocusstart.task2.figures;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.util.Precision;
-import ru.cftfocusstart.task2.utils.DisplayMessages;
+import ru.cftfocusstart.task2.utils.DisplayedMessages;
 
 @Slf4j
 public final class Circle extends Figure {
 
+    private static final int PARAMETERS_NUMBER = 1;
     private final double radius;
 
     public Circle(double[] params) {
-        super(TypeOfFigure.CIRCLE, params);
+        super(TypeOfFigure.CIRCLE, params, PARAMETERS_NUMBER);
         radius = params[0];
     }
 
@@ -28,9 +29,11 @@ public final class Circle extends Figure {
     protected String getUniqueInfo() {
         log.info("Getting unique info about circle");
         StringBuilder sb = new StringBuilder(150);
-        return sb.append(DisplayMessages.RADIUS.msg).append(Precision.round(getRadius(), 2)).
+        return sb.append(DisplayedMessages.RADIUS.getMsg()).
+                append(Precision.round(getRadius(), 2)).
                 append(System.lineSeparator()).
-                append(DisplayMessages.DIAMETER.msg).append(Precision.round(getDiameter(), 2)).
+                append(DisplayedMessages.DIAMETER.getMsg()).
+                append(Precision.round(getDiameter(), 2)).
                 append(System.lineSeparator()).toString();
     }
 
@@ -44,17 +47,5 @@ public final class Circle extends Figure {
     public double getPerimeter() {
         log.info("Getting perimeter of circle");
         return 2 * Math.PI * getRadius();
-    }
-
-    @Override
-    protected void checkArgsNumberForFigure(double[] args) {
-        log.info("Checking number of parameters for circle");
-        if (args == null) {
-            throw new IllegalArgumentException("Null cannot be passed in arguments!");
-        }
-        if (args.length != 1) {
-            throw new IllegalArgumentException("Incorrect number of parameters for rectangle: " + args.length
-                    + ", but should be only one!");
-        }
     }
 }

@@ -1,10 +1,7 @@
 package ru.cftfocusstart.task2.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.cftfocusstart.task2.figures.Circle;
-import ru.cftfocusstart.task2.figures.Figure;
-import ru.cftfocusstart.task2.figures.Rectangle;
-import ru.cftfocusstart.task2.figures.Triangle;
+import ru.cftfocusstart.task2.figures.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,31 +14,38 @@ import java.util.Scanner;
 @Slf4j
 public final class FigureCreator {
 
+    private static final String SEPARATOR = " ";
+    private static final int STRINGS_NUMBER_IN_FILE = 2;
+
     private FigureCreator() {
     }
 
-
     public static Figure getFigure(String fileName) throws IOException {
-        List<String> args;
+        List<String> args = null;
         double[] params;
+        TypeOfFigure readType;
         try (FileInputStream fis = new FileInputStream(fileName)) {
             args = getFigureParams(fis);
-            params = Arrays.stream(args.get(1).split(" ")).mapToDouble(Double::parseDouble).toArray();
+            params = Arrays.stream(args.get(1).split(SEPARATOR)).mapToDouble(Double::parseDouble).toArray();
+            readType = TypeOfFigure.valueOf(args.get(0));
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Incorrect parameter input format");
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("There is no figure: \"" + args.get(0) + "\"");
         }
-        switch (args.get(0)) {
-            case "CIRCLE":
+        switch (readType) {
+            case CIRCLE:
                 log.info("Creating circle");
                 return new Circle(params);
-            case "TRIANGLE":
+            case TRIANGLE:
                 log.info("Creating triangle");
                 return new Triangle(params);
-            case "RECTANGLE":
+            case RECTANGLE:
                 log.info("Creating rectangle");
                 return new Rectangle(params);
             default:
-                throw new IllegalArgumentException("There is no figure: \"" + args.get(0) + "\"");
+                assert false;
+                return null;
         }
     }
 
@@ -49,10 +53,13 @@ public final class FigureCreator {
         log.info("Reading file");
         List<String> args = new ArrayList<>();
         Scanner scanner = new Scanner(inputStream);
-        while (scanner.hasNextLine()) {
-            args.add(scanner.nextLine());
+        for (int i = 0; i < STRINGS_NUMBER_IN_FILE; ++i) {
+            if (scanner.hasNextLine()) {
+                args.add(scanner.nextLine());
+            } else
+                break;
         }
-        if (args.size() != 2) {
+        if (args.size() != STRINGS_NUMBER_IN_FILE) {
             throw new IllegalArgumentException("Should be two strings in file!");
         }
         return args;

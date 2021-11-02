@@ -1,6 +1,6 @@
 package ru.cftfocusstart.task2.utils;
 
-public enum DisplayMessages {
+public enum DisplayedMessages {
 
     FIGURE_TYPE("Тип фигуры: "),
     AREA("Площадь: "),
@@ -13,8 +13,13 @@ public enum DisplayMessages {
     SIDE("Сторона: "),
     ANGLE(", противолежащий угол: ");
 
-    public final String msg;
-    DisplayMessages(String msg){
+    private final String msg;
+
+    DisplayedMessages(String msg) {
         this.msg = msg;
+    }
+
+    public String getMsg() {
+        return msg;
     }
 }

@@ -12,24 +12,24 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TriangleTest {
 
-    private static final double[][] normalTriangleSides = new double[][]{{3.0, 4.0, 5.0}, {2.0, 3.0, 5.0}, {5.0, 5.0, 5.0},
-            {0.0, 0.0, 0.0}};
+    private static final double[][] normalTriangleSides = new double[][]{{3.0, 4.0, 5.0}, {2.0, 3.0, 5.0}, {5.0, 5.0, 5.0}};
 
 
     @ParameterizedTest
-    @MethodSource("methodNegativeParamsProvider")
-    void createTriangle_throwsIllegalArgumentException_ifNegativeSide(double[] args) {
+    @MethodSource("methodNegativeAndZeroParamsProvider")
+    void createTriangle_throwsIllegalArgumentException_ifNegativeOrZeroSides(double[] args) {
         assertThrows(IllegalArgumentException.class, () -> new Circle(args));
     }
 
-    static Stream<Arguments> methodNegativeParamsProvider() {
+    static Stream<Arguments> methodNegativeAndZeroParamsProvider() {
         return Stream.of(
                 Arguments.of(new double[]{-1.0, 2.0, 4.0}),
                 Arguments.of(new double[]{-1.0, -2.0, 4.0}),
-                Arguments.of(new double[]{-1.0, -2.0, -4.0})
+                Arguments.of(new double[]{-1.0, -2.0, -4.0}),
+                Arguments.of(new double[]{0.0, 1.0, 5.0}),
+                Arguments.of(new double[]{0.0, 0.0, 0.0})
         );
     }
-
 
     @ParameterizedTest
     @NullAndEmptySource
@@ -46,7 +46,6 @@ public class TriangleTest {
         );
     }
 
-
     @ParameterizedTest
     @MethodSource("methodIncorrectSidesProvider")
     void createTriangle_throwsIllegalArgumentException_ifNotDoneTriangleRule(double[] args) {
@@ -61,22 +60,6 @@ public class TriangleTest {
         );
     }
 
-
-    @ParameterizedTest
-    @MethodSource("methodAngleParamsProvider")
-    void createTriangle_throwsIllegalArgumentException_ifAngle(double[] args) {
-        assertThrows(IllegalArgumentException.class, () -> new Triangle(args));
-    }
-
-    static Stream<Arguments> methodAngleParamsProvider() {
-        return Stream.of(
-                Arguments.of(new double[]{0.0, 20.0, 500.0}),
-                Arguments.of(new double[]{1.0, 0.0, 5.0}),
-                Arguments.of(new double[]{1.0, 20.0, 0.0})
-        );
-    }
-
-
     @ParameterizedTest
     @MethodSource("methodDataForAreaProvider")
     void getTriangleArea(double[] args, double area) {
@@ -87,11 +70,9 @@ public class TriangleTest {
         return Stream.of(
                 Arguments.of(normalTriangleSides[0], 6.0),
                 Arguments.of(normalTriangleSides[1], 0.0),
-                Arguments.of(normalTriangleSides[2], 25. / 4 * Math.sqrt(3)),
-                Arguments.of(normalTriangleSides[3], 0.0)
+                Arguments.of(normalTriangleSides[2], 25. / 4 * Math.sqrt(3))
         );
     }
-
 
     @ParameterizedTest
     @MethodSource("methodDataForPerimeterProvider")
@@ -103,11 +84,9 @@ public class TriangleTest {
         return Stream.of(
                 Arguments.of(normalTriangleSides[0], 12.0),
                 Arguments.of(normalTriangleSides[1], 5.0),
-                Arguments.of(normalTriangleSides[2], 15.0),
-                Arguments.of(normalTriangleSides[3], 0.0)
+                Arguments.of(normalTriangleSides[2], 15.0)
         );
     }
-
 
     @ParameterizedTest
     @MethodSource("methodDataForAnglesProvider")
@@ -126,8 +105,7 @@ public class TriangleTest {
                 Arguments.of(normalTriangleSides[1], new double[]{0.0, 0.0, 180.0}),
                 Arguments.of(normalTriangleSides[2], new double[]{Math.toDegrees(Math.acos(1.5 / 3)),
                         Math.toDegrees(Math.acos(1.5 / 3)),
-                        Math.toDegrees(Math.acos(1.5 / 3))}),
-                Arguments.of(normalTriangleSides[3], new double[]{0.0, 0.0, 0.0})
+                        Math.toDegrees(Math.acos(1.5 / 3))})
         );
     }
 }

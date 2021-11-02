@@ -12,22 +12,24 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RectangleTest {
 
-    private static final double[][] normalRectangleSides = {{4.0, 5.0}, {5.0, 4.0}, {4.0, 4.0}, {5.0, 0.0}, {0.0, 0.0}};
+    private static final double[][] normalRectangleSides = {{4.0, 5.0}, {5.0, 4.0}, {4.0, 4.0}};
 
     @ParameterizedTest
-    @MethodSource("methodNegativeParamsProvider")
-    void createRectangle_throwsIllegalArgumentException_ifNegativeSides(double[] args) {
+    @MethodSource("methodNegativeAndZeroParamsProvider")
+    void createRectangle_throwsIllegalArgumentException_ifNegativeOrZeroSides(double[] args) {
         assertThrows(IllegalArgumentException.class, () -> new Rectangle(args));
     }
 
-    static Stream<Arguments> methodNegativeParamsProvider() {
+    static Stream<Arguments> methodNegativeAndZeroParamsProvider() {
         return Stream.of(
                 Arguments.of(new double[]{-3.0, 1.0}),
                 Arguments.of(new double[]{3.0, -1.0}),
-                Arguments.of(new double[]{-3.0, -1.0})
+                Arguments.of(new double[]{-3.0, -1.0}),
+                Arguments.of(new double[]{0.0, 5.0}),
+                Arguments.of(new double[]{5.0, 0.0}),
+                Arguments.of(new double[]{0.0, 0.0})
         );
     }
-
 
     @ParameterizedTest
     @NullAndEmptySource
@@ -43,7 +45,6 @@ class RectangleTest {
         );
     }
 
-
     @ParameterizedTest
     @MethodSource("methodDataForAreaProvider")
     void getRectangleArea(double[] args, double area) {
@@ -54,12 +55,9 @@ class RectangleTest {
         return Stream.of(
                 Arguments.of(normalRectangleSides[0], 20.0),
                 Arguments.of(normalRectangleSides[1], 20.0),
-                Arguments.of(normalRectangleSides[2], 16.0),
-                Arguments.of(normalRectangleSides[3], 0.0),
-                Arguments.of(normalRectangleSides[4], 0.0)
+                Arguments.of(normalRectangleSides[2], 16.0)
         );
     }
-
 
     @ParameterizedTest
     @MethodSource("methodDataForPerimeterProvider")
@@ -71,12 +69,9 @@ class RectangleTest {
         return Stream.of(
                 Arguments.of(normalRectangleSides[0], 18.0),
                 Arguments.of(normalRectangleSides[1], 18.0),
-                Arguments.of(normalRectangleSides[2], 16.0),
-                Arguments.of(normalRectangleSides[3], 5.0),
-                Arguments.of(normalRectangleSides[4], 0.0)
+                Arguments.of(normalRectangleSides[2], 16.0)
         );
     }
-
 
     @ParameterizedTest
     @MethodSource("methodDataForShortAndLongSideProvider")
@@ -90,12 +85,9 @@ class RectangleTest {
         return Stream.of(
                 Arguments.of(normalRectangleSides[0], 5.0, 4.0),
                 Arguments.of(normalRectangleSides[1], 5.0, 4.0),
-                Arguments.of(normalRectangleSides[2], 4.0, 4.0),
-                Arguments.of(normalRectangleSides[3], 5.0, 0.0),
-                Arguments.of(normalRectangleSides[4], 0.0, 0.0)
+                Arguments.of(normalRectangleSides[2], 4.0, 4.0)
         );
     }
-
 
     @ParameterizedTest
     @MethodSource("methodDataForDiagonalLengthProvider")
@@ -107,9 +99,7 @@ class RectangleTest {
         return Stream.of(
                 Arguments.of(normalRectangleSides[0], Math.sqrt(41)),
                 Arguments.of(normalRectangleSides[1], Math.sqrt(41)),
-                Arguments.of(normalRectangleSides[2], Math.sqrt(32)),
-                Arguments.of(normalRectangleSides[3], 0.0),
-                Arguments.of(normalRectangleSides[4], 0.0)
+                Arguments.of(normalRectangleSides[2], Math.sqrt(32))
         );
     }
 }

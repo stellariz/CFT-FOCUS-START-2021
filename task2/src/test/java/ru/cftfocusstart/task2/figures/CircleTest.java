@@ -16,18 +16,18 @@ public class CircleTest {
 
 
     @ParameterizedTest
-    @MethodSource("methodNegativeParamsProvider")
-    void createCircle_throwsIllegalArgumentException_ifNegativeRadius(double[] args) {
+    @MethodSource("methodNegativeAndZeroParamsProvider")
+    void createCircle_throwsIllegalArgumentException_ifNegativeOrZeroRadius(double[] args) {
         assertThrows(IllegalArgumentException.class, () -> new Circle(args));
     }
 
-    static Stream<Arguments> methodNegativeParamsProvider() {
+    static Stream<Arguments> methodNegativeAndZeroParamsProvider() {
         return Stream.of(
                 Arguments.of(new double[]{-10.0}),
-                Arguments.of(new double[]{-1.0})
+                Arguments.of(new double[]{-1.0}),
+                Arguments.of(new double[]{0.0})
         );
     }
-
 
     @ParameterizedTest
     @NullAndEmptySource
@@ -42,7 +42,6 @@ public class CircleTest {
                 Arguments.of(new double[]{4.0, 5.0})
         );
     }
-
 
     @ParameterizedTest
     @MethodSource("methodDataForAreaProvider")
@@ -59,7 +58,6 @@ public class CircleTest {
         );
     }
 
-
     @ParameterizedTest
     @MethodSource("methodDataForPerimeterProvider")
     void getCirclePerimeter(double[] args, double perimeter) {
@@ -74,7 +72,6 @@ public class CircleTest {
                 Arguments.of(normalCircleRadius[3], 10 * Math.PI)
         );
     }
-
 
     @ParameterizedTest
     @MethodSource("methodDataForRadiusAndDiameterProvider")

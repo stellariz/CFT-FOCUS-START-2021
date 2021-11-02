@@ -6,9 +6,13 @@ public enum TypeOfFigure {
     RECTANGLE("Прямоугольник"),
     TRIANGLE("Треугольник");
 
-    public final String name;
+    private final String name;
 
     TypeOfFigure(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

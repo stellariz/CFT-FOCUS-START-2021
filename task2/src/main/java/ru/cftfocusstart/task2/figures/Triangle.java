@@ -3,24 +3,25 @@ package ru.cftfocusstart.task2.figures;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.util.Precision;
-import ru.cftfocusstart.task2.utils.DisplayMessages;
+import ru.cftfocusstart.task2.utils.DisplayedMessages;
 
 import java.util.Arrays;
 
 @Slf4j
 public final class Triangle extends Figure {
 
+    private static final int PARAMETERS_NUMBER = 3;
     private final double[] sides;
+    private boolean degenerate = false;
 
     public Triangle(double[] params) {
-        super(TypeOfFigure.TRIANGLE, params);
-        checkTriangleRuleAndIsAngle(params);
+        super(TypeOfFigure.TRIANGLE, params, PARAMETERS_NUMBER);
+        checkTriangleRule(params);
         sides = Arrays.copyOf(params, params.length);
     }
 
-    private void checkTriangleRuleAndIsAngle(double[] args) {
+    private void checkTriangleRule(double[] args) {
         log.info("Checking triangle rule and is the figure and angle");
-        int counter = 0;
         for (int i = 0; i < args.length; ++i) {
             if (Double.compare(args[i], args[(i + 1) % 3] + args[(i + 2) % 3]) == 1) {
                 throw new IllegalArgumentException("No such triangle exists!");
@@ -28,21 +29,12 @@ public final class Triangle extends Figure {
             if (Double.compare(args[i], args[(i + 1) % 3] + args[(i + 2) % 3]) == 0) {
                 degenerate = true;
             }
-            if (args[i] == 0.0) {
-                ++counter;
-            }
-        }
-        if (counter == 1) {
-            throw new IllegalArgumentException("Angle is not a triangle!");
         }
     }
 
     public double[] getAngles() {
         log.info("Getting angles of triangle");
         double[] angles = new double[]{0.0, 0.0, 0.0};
-        if (point) {
-            return angles;
-        }
         for (int i = 0; i < 3; ++i) {
             angles[i] = cosTheorem(sides[i], sides[(i + 1) % 3], sides[(i + 2) % 3]);
         }
@@ -59,8 +51,10 @@ public final class Triangle extends Figure {
         double[] angles = getAngles();
         StringBuilder sb = new StringBuilder(200);
         for (int i = 0; i < 3; ++i) {
-            sb.append(DisplayMessages.SIDE.msg).append(Precision.round(sides[i], 2)).
-                    append(DisplayMessages.ANGLE.msg).append(Precision.round(angles[i], 2)).
+            sb.append(DisplayedMessages.SIDE.getMsg()).
+                    append(Precision.round(sides[i], 2)).
+                    append(DisplayedMessages.ANGLE.getMsg()).
+                    append(Precision.round(angles[i], 2)).
                     append(System.lineSeparator());
         }
         return sb.toString();
@@ -87,17 +81,5 @@ public final class Triangle extends Figure {
             }
         }
         return sides[0] + sides[1] + sides[2];
-    }
-
-    @Override
-    protected void checkArgsNumberForFigure(double[] args) {
-        log.info("Checking number of parameters for triangle");
-        if (args == null) {
-            throw new IllegalArgumentException("Null cannot be passed in arguments!");
-        }
-        if (args.length != 3) {
-            throw new IllegalArgumentException("Incorrect number of parameters for rectangle: " + args.length
-                    + ", but should be only three!");
-        }
     }
 }
