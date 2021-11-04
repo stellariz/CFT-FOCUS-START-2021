@@ -20,7 +20,7 @@ public final class CheckerInputData {
         if (args == null) {
             throw new IllegalArgumentException("Null cannot be passed in program's arguments");
         }
-        if (args.length == 0){
+        if (args.length == 0) {
             throw new IllegalArgumentException("There is no program's arguments");
         }
         Optional<PrintMode> printMode = PrintMode.get(args[0]);
