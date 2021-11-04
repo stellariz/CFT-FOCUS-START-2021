@@ -1,6 +1,5 @@
 package ru.cftfocusstart.task2.figures;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.util.Precision;
 import ru.cftfocusstart.task2.utils.DisplayedMessages;
@@ -51,11 +50,11 @@ public final class Triangle extends Figure {
         double[] angles = getAngles();
         StringBuilder sb = new StringBuilder(200);
         for (int i = 0; i < 3; ++i) {
-            sb.append(DisplayedMessages.SIDE.getMsg()).
-                    append(Precision.round(sides[i], 2)).
-                    append(DisplayedMessages.ANGLE.getMsg()).
-                    append(Precision.round(angles[i], 2)).
-                    append(System.lineSeparator());
+            sb.append(DisplayedMessages.SIDE.getMsg())
+                    .append(Precision.round(sides[i], 2))
+                    .append(DisplayedMessages.ANGLE.getMsg())
+                    .append(Precision.round(angles[i], 2))
+                    .append(System.lineSeparator());
         }
         return sb.toString();
     }

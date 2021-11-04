@@ -29,12 +29,13 @@ public final class Circle extends Figure {
     protected String getUniqueInfo() {
         log.info("Getting unique info about circle");
         StringBuilder sb = new StringBuilder(150);
-        return sb.append(DisplayedMessages.RADIUS.getMsg()).
-                append(Precision.round(getRadius(), 2)).
-                append(System.lineSeparator()).
-                append(DisplayedMessages.DIAMETER.getMsg()).
-                append(Precision.round(getDiameter(), 2)).
-                append(System.lineSeparator()).toString();
+        return sb.append(DisplayedMessages.RADIUS.getMsg())
+                .append(Precision.round(getRadius(), 2))
+                .append(System.lineSeparator())
+                .append(DisplayedMessages.DIAMETER.getMsg())
+                .append(Precision.round(getDiameter(), 2))
+                .append(System.lineSeparator())
+                .toString();
     }
 
     @Override

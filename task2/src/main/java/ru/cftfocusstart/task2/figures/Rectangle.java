@@ -1,6 +1,5 @@
 package ru.cftfocusstart.task2.figures;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.util.Precision;
 import ru.cftfocusstart.task2.utils.DisplayedMessages;
@@ -37,15 +36,16 @@ public final class Rectangle extends Figure {
     protected String getUniqueInfo() {
         log.info("Getting unique info about rectangle");
         StringBuilder sb = new StringBuilder(200);
-        return sb.append(DisplayedMessages.DIAGONAL.getMsg()).
-                append(Precision.round(getLengthDiagonal(), 2)).
-                append(System.lineSeparator()).
-                append(DisplayedMessages.LONG_SIDE.getMsg()).
-                append(Precision.round(getLongSide(), 2)).
-                append(System.lineSeparator()).
-                append(DisplayedMessages.SHORT_SIDE.getMsg()).
-                append(Precision.round(getShortSide(), 2)).
-                append(System.lineSeparator()).toString();
+        return sb.append(DisplayedMessages.DIAGONAL.getMsg())
+                .append(Precision.round(getLengthDiagonal(), 2))
+                .append(System.lineSeparator())
+                .append(DisplayedMessages.LONG_SIDE.getMsg())
+                .append(Precision.round(getLongSide(), 2))
+                .append(System.lineSeparator())
+                .append(DisplayedMessages.SHORT_SIDE.getMsg())
+                .append(Precision.round(getShortSide(), 2))
+                .append(System.lineSeparator())
+                .toString();
     }
 
     @Override

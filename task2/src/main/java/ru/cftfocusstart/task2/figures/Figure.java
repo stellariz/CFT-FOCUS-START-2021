@@ -1,13 +1,8 @@
 package ru.cftfocusstart.task2.figures;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.util.Precision;
 import ru.cftfocusstart.task2.utils.DisplayedMessages;
-import ru.cftfocusstart.task2.utils.PrintMode;
-
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 
 @Slf4j
 public abstract class Figure {
@@ -24,34 +19,23 @@ public abstract class Figure {
         return type;
     }
 
-    public void getInfo(PrintMode printMode, String[] fileNames) throws FileNotFoundException {
-        String commonInfo = getCommonInfo();
-        String uniqueInfo = getUniqueInfo();
-        switch (printMode) {
-            case OFF:
-                break;
-            case CONSOLE_MODE:
-                System.out.printf("%s%s", commonInfo, uniqueInfo);
-                break;
-            case FILE_MODE:
-                try (PrintWriter printWriter = new PrintWriter(fileNames[1])) {
-                    printWriter.printf("%s%s", commonInfo, uniqueInfo);
-                }
-                break;
-        }
+    public String getInfo() {
+        return getCommonInfo() + getUniqueInfo();
     }
 
     private String getCommonInfo() {
         log.info("Getting common info");
         StringBuilder sb = new StringBuilder(100);
-        return sb.append(DisplayedMessages.FIGURE_TYPE.getMsg()).
-                append(getType().getName()).append(System.lineSeparator()).
-                append(DisplayedMessages.AREA.getMsg()).
-                append(Precision.round(getArea(), 2)).
-                append(System.lineSeparator()).
-                append(DisplayedMessages.PERIMETER.getMsg()).
-                append(Precision.round(getPerimeter(), 2)).
-                append(System.lineSeparator()).toString();
+        return sb.append(DisplayedMessages.FIGURE_TYPE.getMsg())
+                .append(getType().getName())
+                .append(System.lineSeparator())
+                .append(DisplayedMessages.AREA.getMsg())
+                .append(Precision.round(getArea(), 2))
+                .append(System.lineSeparator())
+                .append(DisplayedMessages.PERIMETER.getMsg())
+                .append(Precision.round(getPerimeter(), 2))
+                .append(System.lineSeparator())
+                .toString();
     }
 
     private void checkArgs(double[] args, int expectedParamsNumber) {

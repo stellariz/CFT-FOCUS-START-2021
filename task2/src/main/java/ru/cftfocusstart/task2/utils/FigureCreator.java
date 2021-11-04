@@ -56,8 +56,9 @@ public final class FigureCreator {
         for (int i = 0; i < STRINGS_NUMBER_IN_FILE; ++i) {
             if (scanner.hasNextLine()) {
                 args.add(scanner.nextLine());
-            } else
+            } else {
                 break;
+            }
         }
         if (args.size() != STRINGS_NUMBER_IN_FILE) {
             throw new IllegalArgumentException("Should be two strings in file!");
