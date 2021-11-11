@@ -11,7 +11,6 @@ public enum CellState {
     SEVEN(7),
     EIGHT(8),
     BOMB(-1),
-    FLAGGED(-1),
     ;
 
     private final int value;

@@ -13,11 +13,10 @@ public class Field {
     private int totalFlags;
 
     public Field(int totalBombs) {
-        if (!checkIncorrectBombsNumber(totalBombs)) {
+        if (!isCorrectBombsNumber(totalBombs)) {
             throw new IllegalArgumentException("Number of bomber incorrect with number of columns and rows");
         }
         this.totalBombs = totalBombs;
-        this.totalFlags = totalBombs;
         initField();
     }
 
@@ -35,7 +34,7 @@ public class Field {
         return totalBombs;
     }
 
-    private boolean checkIncorrectBombsNumber(int totalBombs) {
+    private boolean isCorrectBombsNumber(int totalBombs) {
         return totalBombs <= ConfigField.getLength() * ConfigField.getWidth() && totalBombs > 0;
     }
 
@@ -56,7 +55,7 @@ public class Field {
 
     private void plantBomb(Cell bombCell) {
         bombCell.setCellState(CellState.BOMB);
-        for (Cell cell : cellMatrix.getCellsAround(bombCell)) {
+        for (Cell cell : cellMatrix.getCellsAroundWithoutBombs(bombCell)) {
             if (cell.getCellState() != CellState.BOMB) {
                 cell.setCellState(cell.getCellState().getNextState());
             }
@@ -64,24 +63,38 @@ public class Field {
     }
 
     public void markCell(Cell cell) {
-        if (totalFlags > 0) {
-            cell.setFlag(true);
-            totalFlags--;
+        if (cell.getViewCellState() == ViewCellState.CLOSED && totalFlags < totalBombs) {
+            cell.setViewCellState(ViewCellState.FLAGGED);
+            totalFlags++;
             fieldListener.updateMarkCellView(cell);
         }
     }
 
     public void unmarkCell(Cell cell) {
-        cell.setFlag(false);
-        totalFlags++;
-        fieldListener.updateUnmarkCellView(cell);
+        if (cell.getViewCellState() == ViewCellState.FLAGGED) {
+            cell.setViewCellState(ViewCellState.CLOSED);
+            totalFlags--;
+            fieldListener.updateUnmarkCellView(cell);
+        }
     }
 
-    public void openCell(Cell cell){
-        fieldListener.openCell(cell);
+    public void openCell(Cell cell) {
+        if (cell.getViewCellState() == ViewCellState.CLOSED) {
+            cell.setViewCellState(ViewCellState.OPENED);
+            fieldListener.openCell(cell);
+            if (cell.getCellState() == CellState.ZERO) {
+                for (Cell curCell : cellMatrix.getCellsAroundWithoutBombs(cell)) {
+                    openCell(curCell);
+                }
+            }
+        }
     }
 
     public void setFieldListener(FieldListener fieldListener) {
         this.fieldListener = fieldListener;
+    }
+
+    public int getBombsWithFlags() {
+        return totalBombs - totalFlags;
     }
 }

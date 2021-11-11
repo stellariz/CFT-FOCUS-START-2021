@@ -12,6 +12,7 @@ public class CellMatrix {
             for (int i = 0; i < ConfigField.getLength(); ++i) {
                 matrix[j][i] = new Cell(i, j);
                 matrix[j][i].setCellState(CellState.ZERO);
+                matrix[j][i].setViewCellState(ViewCellState.CLOSED);
             }
         }
     }
@@ -24,7 +25,7 @@ public class CellMatrix {
         matrix[x][y].setCellState(cellState);
     }
 
-    public List<Cell> getCellsAround(Cell centerCell) {
+    public List<Cell> getCellsAroundWithoutBombs(Cell centerCell) {
         List<Cell> list = new ArrayList<>();
         for (int j = centerCell.getY() - 1; j <= centerCell.getY() + 1; ++j) {
             for (int i = centerCell.getX() - 1; i <= centerCell.getX() + 1; ++i) {

@@ -1,6 +1,7 @@
 package ru.cftfocusstart.task3.view;
 
 import ru.cftfocusstart.task3.model.ConfigField;
+import ru.cftfocusstart.task3.model.Field;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,13 +19,15 @@ public class MainWindow extends JFrame {
     private JMenuItem exitMenu;
 
     private CellEventListener listener;
+    private final Field field;
 
     private JButton[][] cellButtons;
     private JLabel timerLabel;
     private JLabel bombsCounterLabel;
 
-    public MainWindow() {
+    public MainWindow(Field field) {
         super("Miner");
+        this.field = field;
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
@@ -112,22 +115,20 @@ public class MainWindow extends JFrame {
                 cellButtons[y][x].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseReleased(MouseEvent e) {
-                        if (listener == null) {
-                            return;
-                        }
-
                         switch (e.getButton()) {
                             case MouseEvent.BUTTON1:
+                                setCellListener(new LeftClickCellEventListener(field));
                                 listener.onMouseClick(x, y, ButtonType.LEFT_BUTTON);
                                 break;
                             case MouseEvent.BUTTON2:
                                 listener.onMouseClick(x, y, ButtonType.RIGHT_BUTTON);
                                 break;
                             case MouseEvent.BUTTON3:
+                                setCellListener(new RightClickCellEventListener(field));
                                 listener.onMouseClick(x, y, ButtonType.MIDDLE_BUTTON);
                                 break;
                             default:
-                                // Other mouse buttons are ignored
+                                break;
                         }
                     }
                 });
@@ -181,6 +182,7 @@ public class MainWindow extends JFrame {
         gbc.insets = new Insets(0, 0, 0, 0);
         gbc.weightx = 0.7;
         mainLayout.setConstraints(bombsCounterLabel, gbc);
+        bombsCounterLabel.setText(String.valueOf(field.getTotalBombs()));
         contentPane.add(bombsCounterLabel);
     }
 
@@ -195,7 +197,7 @@ public class MainWindow extends JFrame {
         contentPane.add(label);
     }
 
-    public void setImageCell(int x, int y, GameImage image) {
-        cellButtons[y][x].setIcon(image.getImageIcon());
+    public void updateBombCounter(){
+        bombsCounterLabel.setText(String.valueOf(field.getBombsWithFlags()));
     }
 }

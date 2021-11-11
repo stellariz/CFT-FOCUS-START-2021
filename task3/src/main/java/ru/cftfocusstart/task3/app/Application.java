@@ -9,16 +9,17 @@ import ru.cftfocusstart.task3.view.*;
 public class Application {
     public static void main(String[] args) {
         log.debug("Running app");
-        MainWindow mainWindow = new MainWindow();
+        log.debug("Configuration field");
+        ConfigField.setSizeOfField(9, 9);
+
+        log.debug("Generating field");
+        Game game = new Game(5);
+
+        log.debug("Creating windows");
+        MainWindow mainWindow = new MainWindow(game.getField());
         SettingsWindow settingsWindow = new SettingsWindow(mainWindow);
         HighScoresWindow highScoresWindow = new HighScoresWindow(mainWindow);
 
-
-        log.debug("Configuration field");
-        ConfigField.setSizeOfField(9, 9);
-        log.debug("Generating field");
-        Game game = new Game(5);
-        ViewUpdater viewUpdater = new ViewUpdater(game.getField(), mainWindow);
         game.getField().setFieldListener(new FieldListener(mainWindow));
 
         for (int j = 0; j < ConfigField.getWidth(); ++j){
@@ -32,7 +33,6 @@ public class Application {
         mainWindow.setSettingsMenuAction(e -> settingsWindow.setVisible(true));
         mainWindow.setHighScoresMenuAction(e -> highScoresWindow.setVisible(true));
         mainWindow.setExitMenuAction(e -> mainWindow.dispose());
-        mainWindow.setCellListener(viewUpdater);
 
         mainWindow.createGameField(10, 10);
         mainWindow.setVisible(true);

@@ -3,8 +3,8 @@ package ru.cftfocusstart.task3.model;
 public class Cell {
     private final int x;
     private final int y;
-    boolean flagged;
     private CellState cellState;
+    private ViewCellState viewCellState;
 
     public Cell(int x, int y) {
         this.x = x;
@@ -27,11 +27,11 @@ public class Cell {
         return y;
     }
 
-    public void setFlag(boolean state) {
-        flagged = state;
+    public void setViewCellState(ViewCellState newViewCellState) {
+        viewCellState = newViewCellState;
     }
 
-    public boolean getFlag() {
-        return flagged;
+    public ViewCellState getViewCellState() {
+        return viewCellState;
     }
 }
