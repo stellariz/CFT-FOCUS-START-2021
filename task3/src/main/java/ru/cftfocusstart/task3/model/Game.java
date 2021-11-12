@@ -1,12 +1,21 @@
 package ru.cftfocusstart.task3.model;
 
+import lombok.extern.slf4j.Slf4j;
+import ru.cftfocusstart.task3.view.GameType;
+
+@Slf4j
 public class Game {
     private GameState gameState;
+    private GameType gameType;
     private final Field field;
 
-    public Game(int totalBomb) {
-        field = new Field(totalBomb);
+    public Game() {
+        log.debug("Configuration field");
+        ConfigField.setSizeOfField(9, 9);
+        ConfigField.setTotalBombs(16);
+        field = new Field();
         this.gameState = GameState.PLAYING;
+        this.gameType = GameType.NOVICE;
         field.setGameState(gameState);
     }
 
@@ -21,5 +30,21 @@ public class Game {
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
         field.setGameState(gameState);
+    }
+
+    public GameType getGameType() {
+        return gameType;
+    }
+
+    public void setGameType(GameType gameType) {
+        this.gameType = gameType;
+    }
+
+    public void restartGame() {
+        field.generateNewField();
+    }
+
+    public void startNewGame(int totalBombs) {
+        ConfigField.setTotalBombs(totalBombs);
     }
 }

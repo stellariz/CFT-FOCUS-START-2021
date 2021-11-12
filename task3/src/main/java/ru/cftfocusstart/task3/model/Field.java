@@ -16,32 +16,32 @@ public class Field {
 
     private GameState gameState;
 
-    private final int totalBombs;
     private int totalFlags;
     private int numberOfOpenCells;
 
-    public Field(int totalBombs) {
-        if (!isCorrectBombsNumber(totalBombs)) {
-            throw new IllegalArgumentException("Number of bombs is incorrect with number of columns and rows");
-        }
-        this.totalBombs = totalBombs;
-        initField();
+    public Field() {
+        cellMatrix = new CellMatrix();
     }
 
-    private void initField() {
+    public void generateNewField() {
         cellMatrix = new CellMatrix();
+        numberOfOpenCells = 0;
+    }
+
+    public FieldEventListener getFieldListener() {
+        return fieldListener;
+    }
+
+    public GameStateListener getGameStateListener() {
+        return gameStateListener;
     }
 
     public Cell getCell(int x, int y) {
         return cellMatrix.getCell(x, y);
     }
 
-    public int getTotalBombs() {
-        return totalBombs;
-    }
-
     public int getBombsWithFlags() {
-        return totalBombs - totalFlags;
+        return ConfigField.getTotalBombs() - totalFlags;
     }
 
     public void setFieldListener(FieldEventListener fieldListener) {
@@ -56,14 +56,10 @@ public class Field {
         this.gameState = gameState;
     }
 
-    private boolean isCorrectBombsNumber(int totalBombs) {
-        return totalBombs <= ConfigField.getLength() * ConfigField.getWidth() && totalBombs > 0;
-    }
-
     private void generateBombsExcludingCell(Cell firstOpenedCell) {
         log.debug("Generating bombs");
         Random random = new Random();
-        for (int i = 0; i < totalBombs; ++i) {
+        for (int i = 0; i < ConfigField.getTotalBombs(); ++i) {
             while (true) {
                 int x = random.nextInt(ConfigField.getLength());
                 int y = random.nextInt(ConfigField.getWidth());
@@ -94,7 +90,7 @@ public class Field {
 
     public void markCell(Cell cell) {
         if (gameState == GameState.PLAYING) {
-            if (cell.getViewCellState() == ViewCellState.CLOSED && totalFlags < totalBombs) {
+            if (cell.getViewCellState() == ViewCellState.CLOSED && totalFlags < ConfigField.getTotalBombs()) {
                 cell.setViewCellState(ViewCellState.FLAGGED);
                 ++totalFlags;
                 fieldListener.updateMarkCellView(cell);
@@ -167,6 +163,6 @@ public class Field {
     }
 
     private boolean checkWinCondition() {
-        return numberOfOpenCells + totalBombs == ConfigField.getWidth() * ConfigField.getLength();
+        return numberOfOpenCells + ConfigField.getTotalBombs() == ConfigField.getWidth() * ConfigField.getLength();
     }
 }

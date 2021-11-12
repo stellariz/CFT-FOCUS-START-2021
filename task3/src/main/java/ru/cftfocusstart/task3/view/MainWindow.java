@@ -55,6 +55,10 @@ public class MainWindow extends JFrame {
         setJMenuBar(menuBar);
     }
 
+    public CellEventListener getListener() {
+        return listener;
+    }
+
     public void setNewGameMenuAction(ActionListener listener) {
         newGameMenu.addActionListener(listener);
     }
@@ -87,9 +91,9 @@ public class MainWindow extends JFrame {
         timerLabel.setText(String.valueOf(value));
     }
 
-    public void createGameField(int rowsCount, int colsCount) {
+    public void createGameField() {
         contentPane.removeAll();
-        setPreferredSize(new Dimension(20 * colsCount + 70, 20 * rowsCount + 110));
+        setPreferredSize(new Dimension(20 * ConfigField.getLength() + 70, 20 * ConfigField.getWidth() + 110));
 
         addButtonsPanel(createButtonsPanel());
         addTimerImage();
@@ -183,7 +187,7 @@ public class MainWindow extends JFrame {
         gbc.insets = new Insets(0, 0, 0, 0);
         gbc.weightx = 0.7;
         mainLayout.setConstraints(bombsCounterLabel, gbc);
-        bombsCounterLabel.setText(String.valueOf(field.getTotalBombs()));
+        bombsCounterLabel.setText(String.valueOf(ConfigField.getTotalBombs()));
         contentPane.add(bombsCounterLabel);
     }
 
@@ -196,5 +200,15 @@ public class MainWindow extends JFrame {
         gbc.weightx = 0.1;
         mainLayout.setConstraints(label, gbc);
         contentPane.add(label);
+    }
+
+    public void closeCells(){
+        for (int i = 0; i < ConfigField.getWidth(); ++i){
+            for (int j = 0; j < ConfigField.getLength(); ++j){
+                if (cellButtons[i][j].getIcon() != GameImage.CLOSED.getImageIcon()){
+                    cellButtons[i][j].setIcon(GameImage.CLOSED.getImageIcon());
+                }
+            }
+        }
     }
 }
