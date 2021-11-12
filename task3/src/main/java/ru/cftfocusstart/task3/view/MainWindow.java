@@ -202,10 +202,10 @@ public class MainWindow extends JFrame {
         contentPane.add(label);
     }
 
-    public void closeCells(){
-        for (int i = 0; i < ConfigField.getWidth(); ++i){
-            for (int j = 0; j < ConfigField.getLength(); ++j){
-                if (cellButtons[i][j].getIcon() != GameImage.CLOSED.getImageIcon()){
+    public void closeCells() {
+        for (int i = 0; i < ConfigField.getWidth(); ++i) {
+            for (int j = 0; j < ConfigField.getLength(); ++j) {
+                if (cellButtons[i][j].getIcon() != GameImage.CLOSED.getImageIcon()) {
                     cellButtons[i][j].setIcon(GameImage.CLOSED.getImageIcon());
                 }
             }

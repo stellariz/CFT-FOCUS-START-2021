@@ -29,8 +29,8 @@ public class CellMatrix {
         List<Cell> list = new ArrayList<>();
         for (int j = centerCell.getY() - 1; j <= centerCell.getY() + 1; ++j) {
             for (int i = centerCell.getX() - 1; i <= centerCell.getX() + 1; ++i) {
-                if (checkInRange(i,j)) {
-                    list.add(getCell(i,j));
+                if (checkInRange(i, j)) {
+                    list.add(getCell(i, j));
                 }
             }
         }
@@ -39,6 +39,6 @@ public class CellMatrix {
 
     private boolean checkInRange(int x, int y) {
         return x >= 0 && x < ConfigField.getLength() &&
-               y >= 0 &&y < ConfigField.getWidth();
+                y >= 0 && y < ConfigField.getWidth();
     }
 }

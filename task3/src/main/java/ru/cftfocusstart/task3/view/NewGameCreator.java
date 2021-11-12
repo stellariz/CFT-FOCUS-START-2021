@@ -2,7 +2,6 @@ package ru.cftfocusstart.task3.view;
 
 import ru.cftfocusstart.task3.model.ConfigField;
 import ru.cftfocusstart.task3.model.Game;
-import ru.cftfocusstart.task3.model.GameState;
 
 public class NewGameCreator {
     private final Game game;
@@ -14,11 +13,10 @@ public class NewGameCreator {
     }
 
     public void restartGame() {
-        game.setGameState(GameState.PLAYING);
         game.restartGame();
-        mainWindow.setVisible(false);
         mainWindow.createGameField();
-        mainWindow.setVisible(true);
+        mainWindow.repaint();
+        mainWindow.pack();
     }
 
     public void startNoviceGame() {

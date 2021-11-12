@@ -22,8 +22,8 @@ public class ConfigField {
         return width;
     }
 
-    public static int getTotalBombs(){
-        if (totalBombs == 0){
+    public static int getTotalBombs() {
+        if (totalBombs == 0) {
             throw new IllegalArgumentException("Number of bombs wasn't be initalized");
         }
         return totalBombs;
@@ -40,7 +40,7 @@ public class ConfigField {
         ConfigField.length = length;
     }
 
-    public static void setTotalBombs(int totalBombs){
+    public static void setTotalBombs(int totalBombs) {
         if (!isCorrectBombsNumber(totalBombs)) {
             throw new IllegalArgumentException("Number of bombs is incorrect with number of columns and rows");
         }

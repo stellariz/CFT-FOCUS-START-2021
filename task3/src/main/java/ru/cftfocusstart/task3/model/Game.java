@@ -12,7 +12,7 @@ public class Game {
     public Game() {
         log.debug("Configuration field");
         ConfigField.setSizeOfField(9, 9);
-        ConfigField.setTotalBombs(16);
+        ConfigField.setTotalBombs(10);
         field = new Field();
         this.gameState = GameState.PLAYING;
         this.gameType = GameType.NOVICE;
@@ -41,10 +41,8 @@ public class Game {
     }
 
     public void restartGame() {
+        gameState = GameState.PLAYING;
+        field.setGameState(gameState);
         field.generateNewField();
-    }
-
-    public void startNewGame(int totalBombs) {
-        ConfigField.setTotalBombs(totalBombs);
     }
 }

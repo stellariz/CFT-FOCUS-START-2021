@@ -30,6 +30,7 @@ public class Application {
 
         settingsWindow.setGameTypeListener(newGameTypeListener);
 
+
         mainWindow.createGameField();
         mainWindow.setVisible(true);
     }
