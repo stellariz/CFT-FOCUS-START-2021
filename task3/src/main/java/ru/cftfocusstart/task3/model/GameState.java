@@ -1,7 +1,6 @@
 package ru.cftfocusstart.task3.model;
 
-enum GameState {
-    PREGAME,
+public enum GameState {
     PLAYING,
     WINNING,
     LOSING

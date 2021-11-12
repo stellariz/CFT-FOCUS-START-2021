@@ -104,7 +104,7 @@ public class MainWindow extends JFrame {
         cellButtons = new JButton[ConfigField.getWidth()][ConfigField.getLength()];
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setPreferredSize(new Dimension(20 * ConfigField.getWidth(), 20 * ConfigField.getLength()));
-        buttonsPanel.setLayout(new GridLayout(ConfigField.getLength(), ConfigField.getWidth(), 0, 0));
+        buttonsPanel.setLayout(new GridLayout(ConfigField.getWidth(), ConfigField.getLength(), 0, 0));
 
         for (int row = 0; row < ConfigField.getWidth(); row++) {
             for (int col = 0; col < ConfigField.getLength(); col++) {
@@ -121,6 +121,7 @@ public class MainWindow extends JFrame {
                                 listener.onMouseClick(x, y, ButtonType.LEFT_BUTTON);
                                 break;
                             case MouseEvent.BUTTON2:
+                                setCellListener(new MiddleClickCellEventListener(field));
                                 listener.onMouseClick(x, y, ButtonType.RIGHT_BUTTON);
                                 break;
                             case MouseEvent.BUTTON3:
@@ -195,9 +196,5 @@ public class MainWindow extends JFrame {
         gbc.weightx = 0.1;
         mainLayout.setConstraints(label, gbc);
         contentPane.add(label);
-    }
-
-    public void updateBombCounter(){
-        bombsCounterLabel.setText(String.valueOf(field.getBombsWithFlags()));
     }
 }

@@ -1,20 +1,28 @@
 package ru.cftfocusstart.task3.model;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.cftfocusstart.task3.view.FieldListener;
+import ru.cftfocusstart.task3.view.FieldEventListener;
+import ru.cftfocusstart.task3.view.GameStateListener;
 
+import java.util.List;
 import java.util.Random;
 
 @Slf4j
 public class Field {
     private CellMatrix cellMatrix;
+
+    private FieldEventListener fieldListener;
+    private GameStateListener gameStateListener;
+
+    private GameState gameState;
+
     private final int totalBombs;
-    private FieldListener fieldListener;
     private int totalFlags;
+    private int numberOfOpenCells;
 
     public Field(int totalBombs) {
         if (!isCorrectBombsNumber(totalBombs)) {
-            throw new IllegalArgumentException("Number of bomber incorrect with number of columns and rows");
+            throw new IllegalArgumentException("Number of bombs is incorrect with number of columns and rows");
         }
         this.totalBombs = totalBombs;
         initField();
@@ -22,8 +30,6 @@ public class Field {
 
     private void initField() {
         cellMatrix = new CellMatrix();
-        log.debug("Generating bombs");
-        generateBombs();
     }
 
     public Cell getCell(int x, int y) {
@@ -34,28 +40,52 @@ public class Field {
         return totalBombs;
     }
 
+    public int getBombsWithFlags() {
+        return totalBombs - totalFlags;
+    }
+
+    public void setFieldListener(FieldEventListener fieldListener) {
+        this.fieldListener = fieldListener;
+    }
+
+    public void setGameStateListener(GameStateListener gameStateListener) {
+        this.gameStateListener = gameStateListener;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
     private boolean isCorrectBombsNumber(int totalBombs) {
         return totalBombs <= ConfigField.getLength() * ConfigField.getWidth() && totalBombs > 0;
     }
 
-    private void generateBombs() {
+    private void generateBombsExcludingCell(Cell firstOpenedCell) {
+        log.debug("Generating bombs");
         Random random = new Random();
         for (int i = 0; i < totalBombs; ++i) {
             while (true) {
                 int x = random.nextInt(ConfigField.getLength());
                 int y = random.nextInt(ConfigField.getWidth());
                 Cell chosenCell = getCell(x, y);
-                if (chosenCell.getCellState() != CellState.BOMB) {
+                if (chosenCell != firstOpenedCell && chosenCell.getCellState() != CellState.BOMB) {
                     plantBomb(chosenCell);
                     break;
                 }
             }
         }
+        for (int j = 0; j < ConfigField.getWidth(); ++j) {
+            for (int i = 0; i < ConfigField.getLength(); ++i) {
+                System.out.print(getCell(i, j).getCellState() + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 
     private void plantBomb(Cell bombCell) {
         bombCell.setCellState(CellState.BOMB);
-        for (Cell cell : cellMatrix.getCellsAroundWithoutBombs(bombCell)) {
+        for (Cell cell : cellMatrix.getCellsAround(bombCell)) {
             if (cell.getCellState() != CellState.BOMB) {
                 cell.setCellState(cell.getCellState().getNextState());
             }
@@ -63,38 +93,80 @@ public class Field {
     }
 
     public void markCell(Cell cell) {
-        if (cell.getViewCellState() == ViewCellState.CLOSED && totalFlags < totalBombs) {
-            cell.setViewCellState(ViewCellState.FLAGGED);
-            totalFlags++;
-            fieldListener.updateMarkCellView(cell);
+        if (gameState == GameState.PLAYING) {
+            if (cell.getViewCellState() == ViewCellState.CLOSED && totalFlags < totalBombs) {
+                cell.setViewCellState(ViewCellState.FLAGGED);
+                ++totalFlags;
+                fieldListener.updateMarkCellView(cell);
+            }
+            if (checkWinCondition()) {
+                log.debug("You won!");
+                gameStateListener.winningGame();
+            }
         }
     }
 
     public void unmarkCell(Cell cell) {
-        if (cell.getViewCellState() == ViewCellState.FLAGGED) {
-            cell.setViewCellState(ViewCellState.CLOSED);
-            totalFlags--;
-            fieldListener.updateUnmarkCellView(cell);
+        if (gameState == GameState.PLAYING) {
+            if (cell.getViewCellState() == ViewCellState.FLAGGED) {
+                cell.setViewCellState(ViewCellState.CLOSED);
+                --totalFlags;
+                fieldListener.updateUnmarkCellView(cell);
+            }
         }
     }
 
-    public void openCell(Cell cell) {
-        if (cell.getViewCellState() == ViewCellState.CLOSED) {
-            cell.setViewCellState(ViewCellState.OPENED);
-            fieldListener.openCell(cell);
-            if (cell.getCellState() == CellState.ZERO) {
-                for (Cell curCell : cellMatrix.getCellsAroundWithoutBombs(cell)) {
-                    openCell(curCell);
+    public void openCell(Cell openedCell) {
+        if (gameState == GameState.PLAYING) {
+            if (numberOfOpenCells == 0) {
+                generateBombsExcludingCell(openedCell);
+            }
+            recursivelyOpenCellsAround(openedCell);
+            if (checkWinCondition()) {
+                log.debug("You won!");
+                gameStateListener.winningGame();
+            }
+        }
+    }
+
+    private void recursivelyOpenCellsAround(Cell openedCell) {
+        if (gameState == GameState.PLAYING) {
+            if (openedCell.getViewCellState() == ViewCellState.CLOSED) {
+                openedCell.setViewCellState(ViewCellState.OPENED);
+                ++numberOfOpenCells;
+                fieldListener.viewOpenCell(openedCell);
+                if (openedCell.getCellState() == CellState.ZERO) {
+                    for (Cell curCell : cellMatrix.getCellsAround(openedCell)) {
+                        recursivelyOpenCellsAround(curCell);
+                    }
+                } else if (openedCell.getCellState() == CellState.BOMB) {
+                    log.debug("BOOM!");
+                    gameStateListener.losingGame();
                 }
             }
         }
     }
 
-    public void setFieldListener(FieldListener fieldListener) {
-        this.fieldListener = fieldListener;
+    public void openCellsAroundNumber(Cell cell) {
+        if (gameState == GameState.PLAYING) {
+            if (cell.getViewCellState() == ViewCellState.OPENED) {
+                int flagsCounterAroundCell = 0;
+                List<Cell> cellsAround = cellMatrix.getCellsAround(cell);
+                for (Cell curCell : cellsAround) {
+                    if (curCell.getViewCellState() == ViewCellState.FLAGGED) {
+                        ++flagsCounterAroundCell;
+                    }
+                }
+                if (cell.getCellState().getValue() == flagsCounterAroundCell) {
+                    for (Cell curCell : cellsAround) {
+                        openCell(curCell);
+                    }
+                }
+            }
+        }
     }
 
-    public int getBombsWithFlags() {
-        return totalBombs - totalFlags;
+    private boolean checkWinCondition() {
+        return numberOfOpenCells + totalBombs == ConfigField.getWidth() * ConfigField.getLength();
     }
 }

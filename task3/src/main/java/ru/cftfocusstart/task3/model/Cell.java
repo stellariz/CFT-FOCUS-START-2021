@@ -3,6 +3,7 @@ package ru.cftfocusstart.task3.model;
 public class Cell {
     private final int x;
     private final int y;
+
     private CellState cellState;
     private ViewCellState viewCellState;
 

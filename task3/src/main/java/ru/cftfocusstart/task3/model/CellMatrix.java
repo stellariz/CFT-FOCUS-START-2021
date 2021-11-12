@@ -25,15 +25,12 @@ public class CellMatrix {
         matrix[x][y].setCellState(cellState);
     }
 
-    public List<Cell> getCellsAroundWithoutBombs(Cell centerCell) {
+    public List<Cell> getCellsAround(Cell centerCell) {
         List<Cell> list = new ArrayList<>();
         for (int j = centerCell.getY() - 1; j <= centerCell.getY() + 1; ++j) {
             for (int i = centerCell.getX() - 1; i <= centerCell.getX() + 1; ++i) {
                 if (checkInRange(i,j)) {
-                    Cell curCell = getCell(i, j);
-                    if (curCell.getCellState() != CellState.BOMB) {
-                        list.add(curCell);
-                    }
+                    list.add(getCell(i,j));
                 }
             }
         }

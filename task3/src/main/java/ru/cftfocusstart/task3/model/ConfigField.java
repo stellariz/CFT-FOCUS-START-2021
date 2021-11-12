@@ -1,7 +1,6 @@
 package ru.cftfocusstart.task3.model;
 
 public class ConfigField {
-
     private static int length;
     private static int width;
 
@@ -22,14 +21,14 @@ public class ConfigField {
         return width;
     }
 
-    public static void setSizeOfField(int length, int width) {
+    public static void setSizeOfField(int width, int length) {
         if (width <= 0) {
             throw new IllegalArgumentException("Incorrect width of field");
         }
         if (length <= 0) {
             throw new IllegalArgumentException("Incorrect length of field");
         }
-        ConfigField.length = length;
         ConfigField.width = width;
+        ConfigField.length = length;
     }
 }

@@ -3,7 +3,6 @@ package ru.cftfocusstart.task3.view;
 import ru.cftfocusstart.task3.model.Field;
 
 public class LeftClickCellEventListener implements CellEventListener {
-
     private final Field field;
 
     public LeftClickCellEventListener(Field field) {

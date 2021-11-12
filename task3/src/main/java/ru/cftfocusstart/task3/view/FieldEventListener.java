@@ -2,31 +2,29 @@ package ru.cftfocusstart.task3.view;
 
 import ru.cftfocusstart.task3.model.Cell;
 import ru.cftfocusstart.task3.model.Field;
-import ru.cftfocusstart.task3.model.Game;
 
-public class FieldListener {
+public class FieldEventListener {
     private final MainWindow mainWindow;
-    // пусть game подпишется на изменения в field - при нажатии на мину будем дёргать listener
-    // который будет завершать игру
-    //private Game game;
+    private final Field field;
 
-    public FieldListener(MainWindow mainWindow) {
+    public FieldEventListener(Field field, MainWindow mainWindow) {
+        this.field = field;
         this.mainWindow = mainWindow;
     }
 
     public void updateMarkCellView(Cell markedCell) {
-        mainWindow.updateBombCounter();
+        mainWindow.setBombsCount(field.getBombsWithFlags());
         mainWindow.setCellImage(markedCell.getX(), markedCell.getY(), GameImage.MARKED);
     }
 
     public void updateUnmarkCellView(Cell unmarkedCell) {
-        mainWindow.updateBombCounter();
+        mainWindow.setBombsCount(field.getBombsWithFlags());
         mainWindow.setCellImage(unmarkedCell.getX(), unmarkedCell.getY(), GameImage.CLOSED);
     }
 
-    public void openCell(Cell openedCell) {
+    public void viewOpenCell(Cell openedCell) {
         GameImage imageIcon;
-        switch (openedCell.getCellState()){
+        switch (openedCell.getCellState()) {
             case ZERO:
                 imageIcon = GameImage.EMPTY;
                 break;
@@ -55,12 +53,12 @@ public class FieldListener {
                 imageIcon = GameImage.NUM_8;
                 break;
             case BOMB:
-                imageIcon = GameImage.BOMB_ICON;
+                imageIcon = GameImage.BOMB;
                 break;
             default:
                 assert false;
                 imageIcon = GameImage.EMPTY;
         }
-        mainWindow.setCellImage(openedCell.getX(),openedCell.getY(), imageIcon);
+        mainWindow.setCellImage(openedCell.getX(), openedCell.getY(), imageIcon);
     }
 }
