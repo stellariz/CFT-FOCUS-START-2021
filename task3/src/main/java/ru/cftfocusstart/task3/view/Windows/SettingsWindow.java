@@ -1,7 +1,7 @@
 package ru.cftfocusstart.task3.view.Windows;
 
 import ru.cftfocusstart.task3.Game.GameType;
-import ru.cftfocusstart.task3.view.GameState.GameTypeListener;
+import ru.cftfocusstart.task3.view.GameRestart.GameTypeListener;
 
 import javax.swing.*;
 import java.awt.*;

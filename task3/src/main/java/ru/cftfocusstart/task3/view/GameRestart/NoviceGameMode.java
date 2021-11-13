@@ -5,17 +5,13 @@ import ru.cftfocusstart.task3.Game.GameType;
 import ru.cftfocusstart.task3.model.Field.ConfigField;
 import ru.cftfocusstart.task3.view.Windows.MainWindow;
 
-public class GameNoviceModeCreator extends NewGameModeCreator implements GameRestarter {
+public class NoviceGameMode extends GameMode {
 
-    public GameNoviceModeCreator(Game game, MainWindow mainWindow) {
+    public NoviceGameMode(Game game, MainWindow mainWindow) {
         super(game, mainWindow);
-    }
-
-    @Override
-    public void restartGame() {
         ConfigField.setSizeOfField(9, 9);
         ConfigField.setTotalBombs(10);
-        game.setGameType(GameType.NOVICE);
-        super.updateView();
+        gameType = GameType.NOVICE;
+        updateView();
     }
 }

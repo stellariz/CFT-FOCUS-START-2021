@@ -23,10 +23,6 @@ public class CellMatrix {
         return matrix[y][x];
     }
 
-    public void setCellState(int x, int y, CellState cellState) {
-        matrix[x][y].setCellState(cellState);
-    }
-
     public List<Cell> getCellsAround(Cell centerCell) {
         List<Cell> list = new ArrayList<>();
         for (int j = centerCell.getY() - 1; j <= centerCell.getY() + 1; ++j) {
@@ -43,4 +39,4 @@ public class CellMatrix {
         return x >= 0 && x < ConfigField.getLength() &&
                 y >= 0 && y < ConfigField.getWidth();
     }
-}
+ }

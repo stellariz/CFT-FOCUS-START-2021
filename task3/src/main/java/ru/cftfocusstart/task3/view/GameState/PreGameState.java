@@ -4,19 +4,19 @@ import ru.cftfocusstart.task3.Game.Game;
 import ru.cftfocusstart.task3.Game.GameState;
 import ru.cftfocusstart.task3.view.Windows.MainWindow;
 
-public class WinningGameState implements GameStateListener {
+public class PreGameState implements GameStateListener {
     private final Game game;
     private final MainWindow mainWindow;
 
-    public WinningGameState(Game game, MainWindow mainWindow) {
+    public PreGameState(Game game, MainWindow mainWindow) {
         this.game = game;
         this.mainWindow = mainWindow;
-        game.setGameState(GameState.WINNING);
+        game.createNewField();
+        game.setGameState(GameState.PREGAME);
     }
 
     @Override
     public void onChangingGameState() {
-        mainWindow.closeCells();
-        game.updateGameState(new PreGameState(game, mainWindow));
+        game.updateGameState(new PlayingGameState(game, mainWindow));
     }
 }

@@ -24,6 +24,10 @@ public class FieldEventListener {
         mainWindow.setCellImage(unmarkedCell.getX(), unmarkedCell.getY(), GameImage.CLOSED);
     }
 
+    public void resetFlags() {
+        mainWindow.setBombsCount(field.getBombsWithFlags());
+    }
+
     public void viewOpenCell(Cell openedCell) {
         GameImage imageIcon;
         switch (openedCell.getCellState()) {

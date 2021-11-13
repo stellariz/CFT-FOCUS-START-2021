@@ -1,20 +1,28 @@
 package ru.cftfocusstart.task3.view.GameRestart;
 
 import ru.cftfocusstart.task3.Game.Game;
+import ru.cftfocusstart.task3.Game.GameType;
+import ru.cftfocusstart.task3.view.GameState.PreGameState;
 import ru.cftfocusstart.task3.view.Windows.MainWindow;
 
-public abstract class NewGameModeCreator {
+public abstract class GameMode {
     protected final Game game;
     protected final MainWindow mainWindow;
+    protected GameType gameType;
 
-    public NewGameModeCreator(Game game, MainWindow mainWindow) {
+    public GameMode(Game game, MainWindow mainWindow) {
         this.game = game;
         this.mainWindow = mainWindow;
+        game.updateGameState(new PreGameState(game, mainWindow));
     }
 
     protected void updateView() {
         mainWindow.createGameField();
         mainWindow.repaint();
         mainWindow.pack();
+    }
+
+    public GameType getGameType() {
+        return gameType;
     }
 }
