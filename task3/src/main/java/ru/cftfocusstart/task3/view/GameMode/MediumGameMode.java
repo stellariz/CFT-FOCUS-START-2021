@@ -1,4 +1,4 @@
-package ru.cftfocusstart.task3.view.GameRestart;
+package ru.cftfocusstart.task3.view.GameMode;
 
 import ru.cftfocusstart.task3.Game.Game;
 import ru.cftfocusstart.task3.Game.GameType;

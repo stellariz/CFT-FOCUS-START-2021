@@ -18,9 +18,9 @@ public class RightClickCellEventListener implements CellEventListener {
         switch (buttonType) {
             case MIDDLE_BUTTON:
                 if (cell.getViewCellState() == ViewCellState.FLAGGED) {
-                    field.unmarkCell(cell);
+                    field.unmarkCellWithCurState(cell);
                 } else {
-                    field.markCell(cell);
+                    field.markCellWithCurState(cell);
                 }
                 break;
             case RIGHT_BUTTON:

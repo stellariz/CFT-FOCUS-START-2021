@@ -109,7 +109,7 @@ public class MainWindow extends JFrame {
     private JPanel createButtonsPanel() {
         cellButtons = new JButton[ConfigField.getWidth()][ConfigField.getLength()];
         JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setPreferredSize(new Dimension(20 * ConfigField.getWidth(), 20 * ConfigField.getLength()));
+        buttonsPanel.setPreferredSize(new Dimension(20 * ConfigField.getLength(), 20 * ConfigField.getWidth()));
         buttonsPanel.setLayout(new GridLayout(ConfigField.getWidth(), ConfigField.getLength(), 0, 0));
 
         for (int row = 0; row < ConfigField.getWidth(); row++) {

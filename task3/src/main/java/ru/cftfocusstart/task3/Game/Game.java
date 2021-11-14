@@ -4,8 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import ru.cftfocusstart.task3.model.Field.ConfigField;
 import ru.cftfocusstart.task3.model.Field.Field;
 import ru.cftfocusstart.task3.view.ClickProcessing.FieldEventListener;
-import ru.cftfocusstart.task3.view.GameRestart.GameMode;
-import ru.cftfocusstart.task3.view.GameState.GameStateListener;
+import ru.cftfocusstart.task3.view.GameMode.GameMode;
+import ru.cftfocusstart.task3.model.Field.GameStateInterface;
 
 @Slf4j
 public class Game {
@@ -27,16 +27,12 @@ public class Game {
 
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
-        field.setGameState(gameState);
     }
 
     public GameType getGameType() {
         return gameMode.getGameType();
     }
 
-    public void updateGameState(GameStateListener gameStateListener) {
-        field.setGameStateListener(gameStateListener);
-    }
 
     public void createNewField() {
         field.generateNewField();

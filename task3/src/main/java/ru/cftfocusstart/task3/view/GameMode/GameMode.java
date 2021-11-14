@@ -1,8 +1,8 @@
-package ru.cftfocusstart.task3.view.GameRestart;
+package ru.cftfocusstart.task3.view.GameMode;
 
 import ru.cftfocusstart.task3.Game.Game;
 import ru.cftfocusstart.task3.Game.GameType;
-import ru.cftfocusstart.task3.view.GameState.PreGameState;
+import ru.cftfocusstart.task3.model.Field.PreGameState;
 import ru.cftfocusstart.task3.view.Windows.MainWindow;
 
 public abstract class GameMode {
@@ -13,7 +13,7 @@ public abstract class GameMode {
     public GameMode(Game game, MainWindow mainWindow) {
         this.game = game;
         this.mainWindow = mainWindow;
-        game.updateGameState(new PreGameState(game, mainWindow));
+        game.getField().setNewGameState(new PreGameState(game, mainWindow));
     }
 
     protected void updateView() {

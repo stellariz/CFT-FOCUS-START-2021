@@ -15,7 +15,7 @@ public class MiddleClickCellEventListener implements CellEventListener {
         Cell cell = field.getCell(x, y);
         switch (buttonType) {
             case RIGHT_BUTTON:
-                field.openCellsAroundNumber(cell);
+                field.openCellsAroundWithCurState(cell);
             case MIDDLE_BUTTON:
             case LEFT_BUTTON:
                 break;
