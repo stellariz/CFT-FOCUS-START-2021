@@ -14,17 +14,18 @@ public class PlayingGameState implements GameStateInterface {
     public PlayingGameState(Game game, MainWindow mainWindow) {
         this.game = game;
         this.mainWindow = mainWindow;
-        game.setGameState(GameState.PLAYING);
+        game.updateGameState(GameState.PLAYING);
     }
 
     @Override
     public void onChangingGameState() {
         if (!game.isFieldExploded()) {
-            WinningGameState winningGameState = new WinningGameState(game, mainWindow);
-            game.getField().setNewGameState(winningGameState);
             WinWindow winWindow = new WinWindow(mainWindow);
+            WinningGameState winningGameState = new WinningGameState(game, mainWindow);
             winWindow.setNewGameListener(e -> winningGameState.onChangingGameState());
             winWindow.setVisible(true);
+            game.getField().setNewGameState(winningGameState);
+            winningGameState.checkForRecord();
         } else {
             LosingGameState losingGameState = new LosingGameState(game, mainWindow);
             game.getField().setNewGameState(losingGameState);

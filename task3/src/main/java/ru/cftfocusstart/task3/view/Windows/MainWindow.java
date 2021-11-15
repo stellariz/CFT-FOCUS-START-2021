@@ -86,7 +86,12 @@ public class MainWindow extends JFrame {
     }
 
     public void setBombsCount(int bombsCount) {
+        bombsCounterLabel.removeAll();
         bombsCounterLabel.setText(String.valueOf(bombsCount));
+    }
+
+    public void resetBombsCount() {
+        bombsCounterLabel.setText("0");
     }
 
     public void setTimerValue(int value) {

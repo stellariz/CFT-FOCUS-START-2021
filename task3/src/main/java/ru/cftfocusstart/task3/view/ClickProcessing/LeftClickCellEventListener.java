@@ -11,6 +11,6 @@ public class LeftClickCellEventListener implements CellEventListener {
 
     @Override
     public void onMouseClick(int x, int y, ButtonType buttonType) {
-        field.openCellWithCurState(field.getCell(x, y));
+        field.getGameState().openCell(field.getCell(x, y));
     }
 }

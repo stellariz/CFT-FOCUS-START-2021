@@ -26,7 +26,6 @@ public class RecordsWindow extends JDialog {
         setResizable(false);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
     }
 
     public void setNameListener(RecordNameListener nameListener) {
@@ -37,7 +36,6 @@ public class RecordsWindow extends JDialog {
         JButton button = new JButton("OK");
         button.addActionListener(e -> {
             dispose();
-
             if (nameListener != null) {
                 nameListener.onRecordNameEntered(nameField.getText());
             }

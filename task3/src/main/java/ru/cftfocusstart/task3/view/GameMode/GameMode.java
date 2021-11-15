@@ -14,10 +14,10 @@ public abstract class GameMode {
         this.game = game;
         this.mainWindow = mainWindow;
         game.getField().setNewGameState(new PreGameState(game, mainWindow));
+        updateView();
     }
 
-    protected void updateView() {
-        mainWindow.createGameField();
+    private void updateView() {
         mainWindow.repaint();
         mainWindow.pack();
     }

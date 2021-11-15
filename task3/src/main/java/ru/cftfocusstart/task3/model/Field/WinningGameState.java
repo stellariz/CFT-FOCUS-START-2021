@@ -4,6 +4,7 @@ import ru.cftfocusstart.task3.Game.Game;
 import ru.cftfocusstart.task3.Game.GameState;
 import ru.cftfocusstart.task3.model.Cell.Cell;
 import ru.cftfocusstart.task3.view.Windows.MainWindow;
+import ru.cftfocusstart.task3.view.Windows.RecordsWindow;
 
 public class WinningGameState implements GameStateInterface {
     private final Game game;
@@ -12,7 +13,15 @@ public class WinningGameState implements GameStateInterface {
     public WinningGameState(Game game, MainWindow mainWindow) {
         this.game = game;
         this.mainWindow = mainWindow;
-        game.setGameState(GameState.WINNING);
+        game.updateGameState(GameState.WINNING);
+    }
+
+    public void checkForRecord(){
+        if (game.isNewRecord()){
+            RecordsWindow recordsWindow = new RecordsWindow(mainWindow);
+            recordsWindow.setNameListener(game.getRecordNameListener());
+            recordsWindow.setVisible(true);
+        }
     }
 
     @Override
@@ -23,21 +32,17 @@ public class WinningGameState implements GameStateInterface {
 
     @Override
     public void openCellsAroundNumber(Cell cell) {
-
     }
 
     @Override
     public void openCell(Cell cell) {
-
     }
 
     @Override
     public void markCell(Cell cell) {
-
     }
 
     @Override
     public void unmarkCell(Cell cell) {
-
     }
 }

@@ -1,10 +1,13 @@
 package ru.cftfocusstart.task3.model.Cell;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.cftfocusstart.task3.model.Field.ConfigField;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+@Slf4j
 public class CellMatrix {
     private final Cell[][] matrix;
 
@@ -35,8 +38,40 @@ public class CellMatrix {
         return list;
     }
 
+    public void generateBombsExcludingCell(Cell firstOpenedCell) {
+        log.debug("Generating bombs");
+        Random random = new Random();
+        for (int i = 0; i < ConfigField.getTotalBombs(); ++i) {
+            while (true) {
+                int x = random.nextInt(ConfigField.getLength());
+                int y = random.nextInt(ConfigField.getWidth());
+                Cell chosenCell = getCell(x, y);
+                if (chosenCell != firstOpenedCell && chosenCell.getCellState() != CellState.BOMB) {
+                    plantBomb(chosenCell);
+                    break;
+                }
+            }
+        }
+        for (int j = 0; j < ConfigField.getWidth(); ++j) {
+            for (int i = 0; i < ConfigField.getLength(); ++i) {
+                System.out.print(getCell(i, j).getCellState() + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    private void plantBomb(Cell bombCell) {
+        bombCell.setCellState(CellState.BOMB);
+        for (Cell cell : getCellsAround(bombCell)) {
+            if (cell.getCellState() != CellState.BOMB) {
+                cell.setCellState(cell.getCellState().getNextState());
+            }
+        }
+    }
+
     private boolean checkInRange(int x, int y) {
         return x >= 0 && x < ConfigField.getLength() &&
                 y >= 0 && y < ConfigField.getWidth();
     }
- }
+}

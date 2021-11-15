@@ -12,7 +12,7 @@ public class LosingGameState implements GameStateInterface {
     public LosingGameState(Game game, MainWindow mainWindow) {
         this.game = game;
         this.mainWindow = mainWindow;
-        game.setGameState(GameState.LOSING);
+        game.updateGameState(GameState.LOSING);
     }
 
     @Override
@@ -23,21 +23,17 @@ public class LosingGameState implements GameStateInterface {
 
     @Override
     public void openCellsAroundNumber(Cell cell) {
-
     }
 
     @Override
     public void openCell(Cell cell) {
-
     }
 
     @Override
     public void markCell(Cell cell) {
-
     }
 
     @Override
     public void unmarkCell(Cell cell) {
-
     }
 }

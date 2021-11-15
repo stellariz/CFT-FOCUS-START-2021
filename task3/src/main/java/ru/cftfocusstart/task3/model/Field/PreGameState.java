@@ -13,7 +13,8 @@ public class PreGameState implements GameStateInterface {
         this.game = game;
         this.mainWindow = mainWindow;
         game.createNewField();
-        game.setGameState(GameState.PREGAME);
+        mainWindow.createGameField();
+        game.updateGameState(GameState.PREGAME);
     }
 
     @Override
@@ -23,12 +24,11 @@ public class PreGameState implements GameStateInterface {
 
     @Override
     public void openCellsAroundNumber(Cell cell) {
-
     }
 
     @Override
     public void openCell(Cell cell) {
-        game.getField().generateBombsExcludingCell(cell);
+        game.getField().generateBombs(cell);
         game.getField().openCell(cell);
         onChangingGameState();
     }
