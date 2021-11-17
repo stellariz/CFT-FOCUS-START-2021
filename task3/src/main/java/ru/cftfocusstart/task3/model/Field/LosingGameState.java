@@ -13,9 +13,6 @@ public class LosingGameState implements GameState {
         this.game = game;
         this.mainWindow = mainWindow;
         game.getGameTimer().stopTimer();
-        LoseWindow loseWindow = new LoseWindow(mainWindow);
-        loseWindow.setNewGameListener(e -> onChangingGameState());
-        loseWindow.setVisible(true);
     }
 
     @Override
@@ -38,5 +35,11 @@ public class LosingGameState implements GameState {
 
     @Override
     public void unmarkCell(Cell cell) {
+    }
+
+    public void createWindow() {
+        LoseWindow loseWindow = new LoseWindow(mainWindow);
+        loseWindow.setNewGameListener(e -> onChangingGameState());
+        loseWindow.setVisible(true);
     }
 }

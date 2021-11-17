@@ -17,9 +17,14 @@ public class PlayingGameState implements GameState {
     @Override
     public void onChangingGameState() {
         if (!game.isFieldExploded()) {
-            game.getField().setNewGameState(new WinningGameState(game, mainWindow));
+            WinningGameState winningGameState = new WinningGameState(game, mainWindow);
+            game.getField().setNewGameState(winningGameState);
+            winningGameState.createWindow();
         } else {
-            game.getField().setNewGameState(new LosingGameState(game, mainWindow));
+            LosingGameState losingGameState = new LosingGameState(game, mainWindow);
+            game.getField().setNewGameState(losingGameState);
+            losingGameState.createWindow();
+
         }
     }
 

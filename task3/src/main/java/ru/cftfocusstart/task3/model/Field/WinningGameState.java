@@ -14,10 +14,6 @@ public class WinningGameState implements GameState {
         this.game = game;
         this.mainWindow = mainWindow;
         game.getGameTimer().stopTimer();
-        WinWindow winWindow = new WinWindow(mainWindow);
-        winWindow.setNewGameListener(e -> onChangingGameState());
-        winWindow.setVisible(true);
-        checkForRecord();
     }
 
     private void checkForRecord() {
@@ -48,5 +44,12 @@ public class WinningGameState implements GameState {
 
     @Override
     public void unmarkCell(Cell cell) {
+    }
+
+    public void createWindow() {
+        WinWindow winWindow = new WinWindow(mainWindow);
+        winWindow.setNewGameListener(e -> onChangingGameState());
+        winWindow.setVisible(true);
+        checkForRecord();
     }
 }
