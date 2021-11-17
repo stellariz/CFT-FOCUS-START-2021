@@ -5,7 +5,6 @@ import ru.cftfocusstart.task3.model.Field.Field;
 import ru.cftfocusstart.task3.model.Cell.ViewCellState;
 
 public class RightClickCellEventListener implements CellEventListener {
-
     private final Field field;
 
     public RightClickCellEventListener(Field field) {

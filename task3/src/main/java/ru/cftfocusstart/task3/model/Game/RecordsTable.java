@@ -65,6 +65,7 @@ public class RecordsTable {
                 updateRecordsTableFromFile(scanner.next(), scanner.next(), scanner.nextInt());
             }
         } catch (FileNotFoundException e) {
+            log.error("File with records wasn't found", e);
             throw new IllegalArgumentException("File with records wasn't found");
         }
     }
@@ -77,6 +78,7 @@ public class RecordsTable {
                     .collect(Collectors.joining(System.lineSeparator()));
             printWriter.print(newTable);
         } catch (FileNotFoundException e) {
+            log.error("File with records wasn't found", e);
             throw new IllegalArgumentException("File with records wasn't found");
         }
     }

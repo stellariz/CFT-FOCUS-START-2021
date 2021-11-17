@@ -61,6 +61,7 @@ public class FieldEventListener {
                 imageIcon = GameImage.BOMB;
                 break;
             default:
+                assert false;
                 imageIcon = GameImage.EMPTY;
         }
         mainWindow.setCellImage(openedCell.getX(), openedCell.getY(), imageIcon);

@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class GameTimer {
     private final Timer timer;
-    private TimeListener timeListener;
+    private TimerListener timeListener;
 
     private int seconds;
 
@@ -17,7 +17,7 @@ public class GameTimer {
         });
     }
 
-    public void setTimeListener(TimeListener timeListener) {
+    public void setTimeListener(TimerListener timeListener) {
         this.timeListener = timeListener;
     }
 

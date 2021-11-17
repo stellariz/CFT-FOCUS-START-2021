@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.cftfocusstart.task3.model.Game.Game;
 import ru.cftfocusstart.task3.model.Game.GameType;
 import ru.cftfocusstart.task3.model.Game.GameTimer;
-import ru.cftfocusstart.task3.model.Game.TimeListener;
+import ru.cftfocusstart.task3.model.Game.TimerListener;
 import ru.cftfocusstart.task3.model.Field.FieldEventListener;
 import ru.cftfocusstart.task3.view.GameMode.NewGameTypeListener;
 import ru.cftfocusstart.task3.view.GameMode.NoviceGameMode;
@@ -32,7 +32,7 @@ public class Application {
         recordsTable.setRecordsListener(recordsViewListener);
 
         GameTimer gameTimer = new GameTimer();
-        TimeListener timeListener = new TimeListener(gameTimer, mainWindow);
+        TimerListener timeListener = new TimerListener(gameTimer, mainWindow);
         gameTimer.setTimeListener(timeListener);
 
         game.setRecordsTable(recordsTable);
