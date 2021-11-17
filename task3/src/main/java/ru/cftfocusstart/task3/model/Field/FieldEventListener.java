@@ -1,7 +1,6 @@
-package ru.cftfocusstart.task3.view.ClickProcessing;
+package ru.cftfocusstart.task3.model.Field;
 
 import ru.cftfocusstart.task3.model.Cell.Cell;
-import ru.cftfocusstart.task3.model.Field.Field;
 import ru.cftfocusstart.task3.view.GameImages.GameImage;
 import ru.cftfocusstart.task3.view.Windows.MainWindow;
 
@@ -14,12 +13,12 @@ public class FieldEventListener {
         this.mainWindow = mainWindow;
     }
 
-    public void updateMarkCellView(Cell markedCell) {
+    public void updateMarkedCellView(Cell markedCell) {
         mainWindow.setBombsCount(field.getBombsWithFlags());
         mainWindow.setCellImage(markedCell.getX(), markedCell.getY(), GameImage.MARKED);
     }
 
-    public void updateUnmarkCellView(Cell unmarkedCell) {
+    public void updateUnmarkedCellView(Cell unmarkedCell) {
         mainWindow.setBombsCount(field.getBombsWithFlags());
         mainWindow.setCellImage(unmarkedCell.getX(), unmarkedCell.getY(), GameImage.CLOSED);
     }
@@ -28,7 +27,7 @@ public class FieldEventListener {
         mainWindow.setBombsCount(field.getBombsWithFlags());
     }
 
-    public void viewOpenCell(Cell openedCell) {
+    public void updateOpenedCellView(Cell openedCell) {
         GameImage imageIcon;
         switch (openedCell.getCellState()) {
             case ZERO:
@@ -62,7 +61,6 @@ public class FieldEventListener {
                 imageIcon = GameImage.BOMB;
                 break;
             default:
-                assert false;
                 imageIcon = GameImage.EMPTY;
         }
         mainWindow.setCellImage(openedCell.getX(), openedCell.getY(), imageIcon);

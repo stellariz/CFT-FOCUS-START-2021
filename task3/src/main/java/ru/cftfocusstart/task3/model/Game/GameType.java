@@ -1,4 +1,4 @@
-package ru.cftfocusstart.task3.Game;
+package ru.cftfocusstart.task3.model.Game;
 
 public enum GameType {
     NOVICE,

@@ -24,7 +24,7 @@ public class ConfigField {
 
     public static int getTotalBombs() {
         if (totalBombs == 0) {
-            throw new IllegalArgumentException("Number of bombs wasn't be initalized");
+            throw new IllegalArgumentException("Number of bombs wasn't be initialized");
         }
         return totalBombs;
     }

@@ -5,7 +5,6 @@ import ru.cftfocusstart.task3.model.Cell.Cell;
 import ru.cftfocusstart.task3.model.Cell.CellMatrix;
 import ru.cftfocusstart.task3.model.Cell.CellState;
 import ru.cftfocusstart.task3.model.Cell.ViewCellState;
-import ru.cftfocusstart.task3.view.ClickProcessing.FieldEventListener;
 
 import java.util.List;
 
@@ -14,15 +13,11 @@ public class Field {
     private CellMatrix cellMatrix;
 
     private FieldEventListener fieldListener;
-    private GameStateInterface gameState;
+    private GameState gameState;
 
     private int totalFlags;
     private int numberOfOpenCells;
     private boolean isExploded;
-
-    public Field() {
-        cellMatrix = new CellMatrix();
-    }
 
     public void generateNewField() {
         cellMatrix = new CellMatrix();
@@ -36,7 +31,7 @@ public class Field {
         return ConfigField.getTotalBombs() - totalFlags;
     }
 
-    public GameStateInterface getGameState() {
+    public GameState getGameState() {
         return gameState;
     }
 
@@ -48,7 +43,7 @@ public class Field {
         this.fieldListener = fieldListener;
     }
 
-    public void setNewGameState(GameStateInterface gameState) {
+    public void setNewGameState(GameState gameState) {
         this.gameState = gameState;
     }
 
@@ -68,22 +63,25 @@ public class Field {
     }
 
     public void generateBombs(Cell firstOpenedCell) {
+        log.debug("Generating bombs");
         cellMatrix.generateBombsExcludingCell(firstOpenedCell);
     }
 
     void markCell(Cell cell) {
         if (cell.getViewCellState() == ViewCellState.CLOSED && totalFlags < ConfigField.getTotalBombs()) {
+            log.debug("Marked cell " + cell.getX() + " " + cell.getY());
             cell.setViewCellState(ViewCellState.FLAGGED);
             ++totalFlags;
-            fieldListener.updateMarkCellView(cell);
+            fieldListener.updateMarkedCellView(cell);
         }
     }
 
     void unmarkCell(Cell cell) {
         if (cell.getViewCellState() == ViewCellState.FLAGGED) {
+            log.debug("Unmarked cell " + cell.getX() + " " + cell.getY());
             cell.setViewCellState(ViewCellState.CLOSED);
             --totalFlags;
-            fieldListener.updateUnmarkCellView(cell);
+            fieldListener.updateUnmarkedCellView(cell);
         }
     }
 
@@ -97,17 +95,21 @@ public class Field {
 
     private void recursivelyOpenCellsAroundEmptyCell(Cell openedCell) {
         if (openedCell.getViewCellState() == ViewCellState.CLOSED) {
-            openedCell.setViewCellState(ViewCellState.OPENED);
-            ++numberOfOpenCells;
-            fieldListener.viewOpenCell(openedCell);
-            if (openedCell.getCellState() == CellState.ZERO) {
-                for (Cell curCell : cellMatrix.getCellsAround(openedCell)) {
-                    recursivelyOpenCellsAroundEmptyCell(curCell);
-                }
-            } else if (openedCell.getCellState() == CellState.BOMB) {
+            log.debug("Opened cell " + openedCell.getX() + " " + openedCell.getY());
+            if (openedCell.getCellState() == CellState.BOMB) {
                 log.debug("BOOM!");
+                fieldListener.updateOpenedCellView(openedCell);
                 isExploded = true;
                 gameState.onChangingGameState();
+            } else {
+                openedCell.setViewCellState(ViewCellState.OPENED);
+                ++numberOfOpenCells;
+                fieldListener.updateOpenedCellView(openedCell);
+                if (openedCell.getCellState() == CellState.ZERO) {
+                    for (Cell curCell : cellMatrix.getCellsAround(openedCell)) {
+                        recursivelyOpenCellsAroundEmptyCell(curCell);
+                    }
+                }
             }
         }
     }

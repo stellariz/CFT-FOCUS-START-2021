@@ -1,4 +1,4 @@
-package ru.cftfocusstart.task3.model.Timer;
+package ru.cftfocusstart.task3.model.Game;
 
 import javax.swing.*;
 
@@ -11,7 +11,9 @@ public class GameTimer {
     public GameTimer() {
         timer = new Timer(1000, e -> {
             ++seconds;
-            timeListener.updateTimerInView();
+            if (timeListener != null) {
+                timeListener.updateTimerInView();
+            }
         });
     }
 

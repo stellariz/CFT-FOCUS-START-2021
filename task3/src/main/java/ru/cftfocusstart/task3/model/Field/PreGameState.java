@@ -1,11 +1,10 @@
 package ru.cftfocusstart.task3.model.Field;
 
-import ru.cftfocusstart.task3.Game.Game;
-import ru.cftfocusstart.task3.Game.GameState;
+import ru.cftfocusstart.task3.model.Game.Game;
 import ru.cftfocusstart.task3.model.Cell.Cell;
 import ru.cftfocusstart.task3.view.Windows.MainWindow;
 
-public class PreGameState implements GameStateInterface {
+public class PreGameState implements GameState {
     private final Game game;
     private final MainWindow mainWindow;
 
@@ -14,7 +13,8 @@ public class PreGameState implements GameStateInterface {
         this.mainWindow = mainWindow;
         game.createNewField();
         mainWindow.createGameField();
-        game.updateGameState(GameState.PREGAME);
+        game.getGameTimer().resetTimer();
+        game.getRecordsTable().initTable();
     }
 
     @Override
@@ -41,6 +41,5 @@ public class PreGameState implements GameStateInterface {
     @Override
     public void unmarkCell(Cell cell) {
         game.getField().unmarkCell(cell);
-
     }
 }

@@ -1,6 +1,6 @@
 package ru.cftfocusstart.task3.view.Windows;
 
-import ru.cftfocusstart.task3.view.RecordNameListener;
+import ru.cftfocusstart.task3.model.Game.RecordNameListener;
 
 import javax.swing.*;
 import java.awt.*;

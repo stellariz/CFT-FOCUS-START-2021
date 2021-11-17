@@ -1,13 +1,11 @@
 package ru.cftfocusstart.task3.model.Cell;
 
-import lombok.extern.slf4j.Slf4j;
 import ru.cftfocusstart.task3.model.Field.ConfigField;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@Slf4j
 public class CellMatrix {
     private final Cell[][] matrix;
 
@@ -39,7 +37,6 @@ public class CellMatrix {
     }
 
     public void generateBombsExcludingCell(Cell firstOpenedCell) {
-        log.debug("Generating bombs");
         Random random = new Random();
         for (int i = 0; i < ConfigField.getTotalBombs(); ++i) {
             while (true) {
@@ -52,13 +49,6 @@ public class CellMatrix {
                 }
             }
         }
-        for (int j = 0; j < ConfigField.getWidth(); ++j) {
-            for (int i = 0; i < ConfigField.getLength(); ++i) {
-                System.out.print(getCell(i, j).getCellState() + " ");
-            }
-            System.out.println();
-        }
-        System.out.println();
     }
 
     private void plantBomb(Cell bombCell) {
