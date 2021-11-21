@@ -1,18 +1,15 @@
 package ru.cftfocusstart.task5;
 
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@AllArgsConstructor
 public class Consumer implements Runnable {
     private final int id;
-    private int consumerTime = 500;
     private final Storage storage;
-
-    public Consumer(int id, Storage storage) {
-        this.id = id;
-        this.storage = storage;
-    }
+    private final int consumerTime;
 
     @Override
     public void run() {
@@ -23,9 +20,10 @@ public class Consumer implements Runnable {
 
     private void consume() {
         try {
-            Resource res = storage.remove();
+            Resource resource = storage.remove();
+            log.info("Removed element with id={}. Current size queue is: {}", resource.getId(), storage.getSize());
             Thread.sleep(consumerTime);
-            log.info("Consumer with id={} consumed resource with id={}", id, res.getId());
+            log.info("Consumer with id={} consumed resource with id={}", id, resource.getId());
         } catch (InterruptedException ignored) {
         }
     }

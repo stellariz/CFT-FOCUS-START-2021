@@ -1,18 +1,37 @@
 package ru.cftfocusstart.task5;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 public class Application {
-    //TODO: вынести константы в properties
-    private final static int CONSUMERS_NUM = 1000;
-    private final static int PRODUCES_NUM = 20;
-    private final static int STORAGE_SIZE = 10;
+    private static final int consumerCount;
+    private static final int producerCount;
+    private static final int consumerTime;
+    private static final int producerTime;
+    private static final int storageSize;
+
+    static {
+        try (InputStream is = Application.class.getClassLoader().getResourceAsStream("app.properties")) {
+            Properties properties = new Properties();
+            properties.load(is);
+            consumerCount = Integer.parseInt(properties.getProperty("CONSUMERS_COUNT"));
+            producerCount = Integer.parseInt(properties.getProperty("PRODUCERS_COUNT"));
+            consumerTime = Integer.parseInt(properties.getProperty("CONSUMER_TIME"));
+            producerTime = Integer.parseInt(properties.getProperty("PRODUCER_TIME"));
+            storageSize = Integer.parseInt(properties.getProperty("STORAGE_SIZE"));
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Incorrect properties file");
+        }
+    }
 
     public static void main(String[] args) {
-        Storage storage = new Storage(STORAGE_SIZE);
-        for (int i = 0; i < PRODUCES_NUM; ++i) {
-            new Thread(new Producer(i, storage)).start();
+        Storage storage = new Storage(storageSize);
+        for (int i = 0; i < producerCount; ++i) {
+            new Thread(new Producer(i, storage, producerTime)).start();
         }
-        for (int i = 0; i < CONSUMERS_NUM; ++i) {
-            new Thread(new Consumer(i, storage)).start();
+        for (int i = 0; i < consumerCount; ++i) {
+            new Thread(new Consumer(i, storage, consumerTime)).start();
         }
     }
 }

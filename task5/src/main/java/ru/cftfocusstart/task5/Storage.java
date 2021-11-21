@@ -18,9 +18,8 @@ public class Storage {
             log.info("Thread's sleeping");
             wait();
         }
-        log.info("Thread wakes up");
+        log.info("Thread puts element with id={} in queue", resource.getId());
         queue[size++] = resource;
-        log.info("Added element. Current size queue is: {}", size);
         notifyAll();
     }
 
@@ -29,9 +28,8 @@ public class Storage {
             log.info("Thread's is sleeping");
             wait();
         }
-        log.info("Thread wakes up");
+        log.info("Thread gets element with id={} from queue", queue[size - 1].getId());
         Resource resource = queue[--size];
-        log.info("Removed element. Current size queue is: {}", size);
         notifyAll();
         return resource;
     }
@@ -42,5 +40,9 @@ public class Storage {
 
     public boolean isEmpty() {
         return size == 0;
+    }
+
+    public int getSize() {
+        return size;
     }
 }
