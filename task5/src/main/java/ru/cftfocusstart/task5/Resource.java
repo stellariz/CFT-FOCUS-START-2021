@@ -1,15 +1,14 @@
 package ru.cftfocusstart.task5;
 
 public class Resource {
-    private int id;
+    private final int id;
     volatile private static int resourceCounter;
+    private static final Object lock = new Object();
 
     public Resource() {
-        generateId();
-    }
-
-    private synchronized void generateId() {
-        id = resourceCounter++;
+        synchronized (lock) {
+            this.id = resourceCounter++;
+        }
     }
 
     public int getId() {

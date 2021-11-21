@@ -18,8 +18,8 @@ public class Storage {
             log.info("Thread's sleeping");
             wait();
         }
-        log.info("Thread puts element with id={} in queue", resource.getId());
         queue[size++] = resource;
+        log.info("Thread puts element with id={} in queue", resource.getId());
         notifyAll();
     }
 
@@ -28,8 +28,8 @@ public class Storage {
             log.info("Thread's is sleeping");
             wait();
         }
-        log.info("Thread gets element with id={} from queue", queue[size - 1].getId());
         Resource resource = queue[--size];
+        log.info("Thread gets element with id={} from queue", resource.getId());
         notifyAll();
         return resource;
     }
