@@ -18,7 +18,7 @@ public class Application {
             for (int i = 0; i < THREADS_NUM; ++i) {
                 Task task = new Task(i, THREADS_NUM, iterNum);
                 partialSums[i] = CompletableFuture.runAsync(task)
-                        .thenApplyAsync((r) -> totalValue.getAndAccumulate(task.getResultValue(), Double::sum));
+                        .thenApply(r -> totalValue.getAndAccumulate(task.getResultValue(), Double::sum));
             }
             CompletableFuture.allOf(partialSums).join();
             System.out.println("Sum of serial is: " + totalValue.get());
