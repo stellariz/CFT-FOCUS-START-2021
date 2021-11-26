@@ -28,6 +28,21 @@ public class Application {
         }
     }
 
+    public static void main(String[] args) {
+        try {
+            validateInputData();
+            Storage storage = new Storage(storageSize);
+            for (int i = 0; i < producerCount; ++i) {
+                new Thread(new Producer(i, storage, producerTime)).start();
+            }
+            for (int i = 0; i < consumerCount; ++i) {
+                new Thread(new Consumer(i, storage, consumerTime)).start();
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
     private static void validateInputData() {
         if (consumerCount <= 0) {
             throw new IllegalArgumentException("Consumer count can't be less than or equal to zero");
@@ -43,21 +58,6 @@ public class Application {
         }
         if (storageSize <= 0) {
             throw new IllegalArgumentException("Storage size can't be less than or equal to zero");
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-            validateInputData();
-            Storage storage = new Storage(storageSize);
-            for (int i = 0; i < producerCount; ++i) {
-                new Thread(new Producer(i, storage, producerTime)).start();
-            }
-            for (int i = 0; i < consumerCount; ++i) {
-                new Thread(new Consumer(i, storage, consumerTime)).start();
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
         }
     }
 }

@@ -25,7 +25,7 @@ public class Storage {
 
     synchronized public Resource remove() throws InterruptedException {
         while (isEmpty()) {
-            log.info("Thread's is sleeping");
+            log.info("Thread's sleeping");
             wait();
         }
         Resource resource = queue[--size];
