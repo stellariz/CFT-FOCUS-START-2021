@@ -3,10 +3,29 @@ package ru.cftfocusstart.task4;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 public class Application {
-    private static final int THREADS_NUM = 3;
+    private static final int THREADS_NUM = 10;
+
+    public static void main(String[] args) {
+        try {
+            int iterNum = readIterNum();
+            AtomicReference<Double> totalValue = new AtomicReference<>(0.0);
+            CompletableFuture<?>[] partialSums = new CompletableFuture[THREADS_NUM];
+            for (int i = 0; i < THREADS_NUM; ++i) {
+                Task task = new Task(i, THREADS_NUM, iterNum);
+                partialSums[i] = CompletableFuture.runAsync(task)
+                        .thenApplyAsync((r) -> totalValue.getAndAccumulate(task.getResultValue(), Double::sum));
+            }
+            CompletableFuture.allOf(partialSums).join();
+            System.out.println("Sum of serial is: " + totalValue.get());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
 
     private static int readIterNum() {
         System.out.print("Enter the number of iterations: ");
@@ -25,26 +44,5 @@ public class Application {
             }
         }
         throw new IllegalArgumentException("Error in reading number of iterations");
-    }
-
-    public static void main(String[] args) {
-        try {
-            int iterNum = readIterNum();
-            Task[] tasks = new Task[THREADS_NUM];
-            Thread[] threads = new Thread[THREADS_NUM];
-            for (int i = 0; i < THREADS_NUM; ++i) {
-                tasks[i] = new Task(i, THREADS_NUM, iterNum);
-                threads[i] = new Thread(tasks[i]);
-                threads[i].start();
-            }
-            double totalValue = 0.0;
-            for (int i = 0; i < THREADS_NUM; ++i) {
-                threads[i].join();
-                totalValue += tasks[i].getResultValue();
-            }
-            System.out.println("Sum of serial is: " + totalValue);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
     }
 }
