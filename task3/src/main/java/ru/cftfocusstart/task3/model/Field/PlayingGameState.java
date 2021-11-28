@@ -2,29 +2,21 @@ package ru.cftfocusstart.task3.model.Field;
 
 import ru.cftfocusstart.task3.model.Cell.Cell;
 import ru.cftfocusstart.task3.model.Game.Game;
-import ru.cftfocusstart.task3.view.Windows.MainWindow;
 
 public class PlayingGameState implements GameState {
     private final Game game;
-    private final MainWindow mainWindow;
 
-    public PlayingGameState(Game game, MainWindow mainWindow) {
+    public PlayingGameState(Game game) {
         this.game = game;
-        this.mainWindow = mainWindow;
         game.getGameTimer().startTimer();
     }
 
     @Override
     public void onChangingGameState() {
         if (!game.isFieldExploded()) {
-            WinningGameState winningGameState = new WinningGameState(game, mainWindow);
-            game.getField().setNewGameState(winningGameState);
-            winningGameState.createWindow();
+            game.setGameState(new WinningGameState(game));
         } else {
-            LosingGameState losingGameState = new LosingGameState(game, mainWindow);
-            game.getField().setNewGameState(losingGameState);
-            losingGameState.createWindow();
-
+            game.setGameState(new LosingGameState(game));
         }
     }
 
@@ -46,5 +38,10 @@ public class PlayingGameState implements GameState {
     @Override
     public void unmarkCell(Cell cell) {
         game.getField().unmarkCell(cell);
+    }
+
+    @Override
+    public String toString() {
+        return "PlayingGameState";
     }
 }

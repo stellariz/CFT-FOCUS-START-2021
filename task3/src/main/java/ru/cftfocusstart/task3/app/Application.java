@@ -1,52 +1,53 @@
 package ru.cftfocusstart.task3.app;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.cftfocusstart.task3.model.Game.Game;
-import ru.cftfocusstart.task3.model.Game.GameType;
-import ru.cftfocusstart.task3.model.Game.GameTimer;
-import ru.cftfocusstart.task3.model.Game.TimerListener;
 import ru.cftfocusstart.task3.model.Field.FieldEventListener;
-import ru.cftfocusstart.task3.view.GameMode.NewGameTypeListener;
-import ru.cftfocusstart.task3.view.GameMode.NoviceGameMode;
-import ru.cftfocusstart.task3.model.Game.RecordsTable;
-import ru.cftfocusstart.task3.model.Game.RecordsListener;
-import ru.cftfocusstart.task3.view.Windows.HighScoresWindow;
+import ru.cftfocusstart.task3.model.Game.*;
+import ru.cftfocusstart.task3.model.GameMode.NewGameTypeListener;
+import ru.cftfocusstart.task3.model.GameMode.NoviceGameMode;
+import ru.cftfocusstart.task3.view.View;
 import ru.cftfocusstart.task3.view.Windows.MainWindow;
-import ru.cftfocusstart.task3.view.Windows.SettingsWindow;
 
 @Slf4j
 public class Application {
     public static void main(String[] args) {
         log.debug("Starting game");
         Game game = new Game();
+        RecordsListener recordsViewListener = new RecordsListener(game);
 
-        log.debug("Creating windows");
-        MainWindow mainWindow = new MainWindow(game.getField());
-        SettingsWindow settingsWindow = new SettingsWindow(mainWindow);
-        HighScoresWindow highScoresWindow = new HighScoresWindow(mainWindow);
+        View view = new View(new MainWindow(game.getField()));
 
-        NewGameTypeListener newGameTypeListener = new NewGameTypeListener(game, mainWindow);
+        GameEventManager gameStateManager = new GameEventManager("PreGameState",
+                "PlayingGameState",
+                "LosingGameState",
+                "WinningGameState",
+                "NewWinner");
+        PreGameListener preGameListener = new PreGameListener(view);
+        PlayingGameStateListener playingGameStateListener = new PlayingGameStateListener();
+        LosingGameStateListener losingGameStateListener = new LosingGameStateListener(view);
+        WinningGameStateListener winningGameStateListener = new WinningGameStateListener(view);
+        WinnerListener winnerListener = new WinnerListener(view, recordsViewListener);
+        gameStateManager.subscribe("PreGameState", preGameListener);
+        gameStateManager.subscribe("PlayingGameState", playingGameStateListener);
+        gameStateManager.subscribe("LosingGameState", losingGameStateListener);
+        gameStateManager.subscribe("WinningGameState", winningGameStateListener);
+        gameStateManager.subscribe("NewWinner", winnerListener);
 
+        NewGameTypeListener newGameTypeListener = new NewGameTypeListener(game);
+        view.setNewGameListener(newGameTypeListener);
+
+        TableWinnerUpdater tableWinnerUpdater = new TableWinnerUpdater(view);
         RecordsTable recordsTable = new RecordsTable("task3/src/main/resources/records.txt");
-        RecordsListener recordsViewListener = new RecordsListener(game, highScoresWindow, recordsTable);
-        recordsTable.setRecordsListener(recordsViewListener);
+        recordsTable.setTableEventListener(tableWinnerUpdater);
 
         GameTimer gameTimer = new GameTimer();
-        TimerListener timeListener = new TimerListener(gameTimer, mainWindow);
+        TimerListener timeListener = new TimerListener(gameTimer, view.getMainWindow());
         gameTimer.setTimeListener(timeListener);
 
+        game.setFieldListener(new FieldEventListener(game.getField(), view.getMainWindow()));
         game.setRecordsTable(recordsTable);
+        game.setEventManager(gameStateManager);
+        game.setGameMode(new NoviceGameMode(game));
         game.setGameTimer(gameTimer);
-        game.setGameMode(new NoviceGameMode(game, mainWindow));
-        game.setFieldListener(new FieldEventListener(game.getField(), mainWindow));
-
-        mainWindow.setNewGameMenuAction(e -> newGameTypeListener.onGameTypeChanged(GameType.NOVICE));
-        mainWindow.setSettingsMenuAction(e -> settingsWindow.setVisible(true));
-        mainWindow.setHighScoresMenuAction(e -> highScoresWindow.setVisible(true));
-        mainWindow.setExitMenuAction(e -> mainWindow.dispose());
-
-        settingsWindow.setGameTypeListener(newGameTypeListener);
-
-        mainWindow.setVisible(true);
     }
 }

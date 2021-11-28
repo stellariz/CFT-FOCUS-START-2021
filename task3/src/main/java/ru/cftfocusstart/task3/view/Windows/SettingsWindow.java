@@ -1,7 +1,7 @@
 package ru.cftfocusstart.task3.view.Windows;
 
 import ru.cftfocusstart.task3.model.Game.GameType;
-import ru.cftfocusstart.task3.view.GameMode.GameTypeListener;
+import ru.cftfocusstart.task3.model.GameMode.GameTypeListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -79,7 +79,6 @@ public class SettingsWindow extends JDialog {
         okButton.setPreferredSize(new Dimension(80, 25));
         okButton.addActionListener(e -> {
             dispose();
-
             if (gameTypeListener != null) {
                 gameTypeListener.onGameTypeChanged(gameType);
             }

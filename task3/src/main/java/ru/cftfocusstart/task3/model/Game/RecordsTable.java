@@ -16,7 +16,7 @@ public class RecordsTable {
     private final Map<GameType, Player> tableOfRecords = new HashMap<>(3);
     private final File recordsFile;
 
-    private RecordsListener recordsListener;
+    private TableEventListener tableEventListener;
 
     public RecordsTable(String fileNameWithRecords) {
         recordsFile = new File(fileNameWithRecords);
@@ -30,7 +30,7 @@ public class RecordsTable {
 
     public void updateRecord(GameType gameType, String name, int newRecord) {
         tableOfRecords.replace(gameType, new Player(name, newRecord));
-        recordsListener.updateRecord(gameType, tableOfRecords.get(gameType));
+        tableEventListener.onUpdateTable(gameType, new Player(name, newRecord));
     }
 
     public int getScoreByType(GameType gameType) {
@@ -38,18 +38,19 @@ public class RecordsTable {
     }
 
     private void updateRecordsTableFromFile(String mode, String name, int score) {
+        Player winner = new Player(name, score);
         switch (mode) {
             case "NOVICE":
-                tableOfRecords.put(GameType.NOVICE, new Player(name, score));
-                recordsListener.updateRecord(GameType.NOVICE, tableOfRecords.get(GameType.NOVICE));
+                tableOfRecords.put(GameType.NOVICE, winner);
+                tableEventListener.onUpdateTable(GameType.NOVICE, winner);
                 break;
             case "MEDIUM":
-                tableOfRecords.put(GameType.MEDIUM, new Player(name, score));
-                recordsListener.updateRecord(GameType.MEDIUM, tableOfRecords.get(GameType.MEDIUM));
+                tableOfRecords.put(GameType.MEDIUM, winner);
+                tableEventListener.onUpdateTable(GameType.MEDIUM, winner);
                 break;
             case "EXPERT":
-                tableOfRecords.put(GameType.EXPERT, new Player(name, score));
-                recordsListener.updateRecord(GameType.EXPERT, tableOfRecords.get(GameType.EXPERT));
+                tableOfRecords.put(GameType.EXPERT, winner);
+                tableEventListener.onUpdateTable(GameType.EXPERT, winner);
                 break;
             default:
                 throw new IllegalArgumentException("Incorrect file");
@@ -83,11 +84,7 @@ public class RecordsTable {
         }
     }
 
-    public void setRecordsListener(RecordsListener recordsListener) {
-        this.recordsListener = recordsListener;
-    }
-
-    public RecordNameListener getRecordsListener() {
-        return recordsListener;
+    public void setTableEventListener(TableEventListener tableEventListener) {
+        this.tableEventListener = tableEventListener;
     }
 }

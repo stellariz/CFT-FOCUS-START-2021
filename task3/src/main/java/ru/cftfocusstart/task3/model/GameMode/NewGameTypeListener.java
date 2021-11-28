@@ -1,17 +1,14 @@
-package ru.cftfocusstart.task3.view.GameMode;
+package ru.cftfocusstart.task3.model.GameMode;
 
+import ru.cftfocusstart.task3.model.Field.ConfigField;
 import ru.cftfocusstart.task3.model.Game.Game;
 import ru.cftfocusstart.task3.model.Game.GameType;
-import ru.cftfocusstart.task3.model.Field.ConfigField;
-import ru.cftfocusstart.task3.view.Windows.MainWindow;
 
 public class NewGameTypeListener implements GameTypeListener {
     private final Game game;
-    private final MainWindow mainWindow;
 
-    public NewGameTypeListener(Game game, MainWindow mainWindow) {
+    public NewGameTypeListener(Game game) {
         this.game = game;
-        this.mainWindow = mainWindow;
     }
 
     @Override
@@ -20,18 +17,23 @@ public class NewGameTypeListener implements GameTypeListener {
             case NOVICE:
                 ConfigField.setSizeOfField(9, 9);
                 ConfigField.setTotalBombs(10);
-                game.setGameMode(new NoviceGameMode(game, mainWindow));
+                game.setGameMode(new NoviceGameMode(game));
                 break;
             case MEDIUM:
                 ConfigField.setSizeOfField(16, 16);
                 ConfigField.setTotalBombs(40);
-                game.setGameMode(new MediumGameMode(game, mainWindow));
+                game.setGameMode(new MediumGameMode(game));
                 break;
             case EXPERT:
                 ConfigField.setSizeOfField(16, 30);
                 ConfigField.setTotalBombs(99);
-                game.setGameMode(new HardGameMode(game, mainWindow));
+                game.setGameMode(new HardGameMode(game));
                 break;
         }
+    }
+
+    @Override
+    public void restartGame() {
+        onGameTypeChanged(game.getGameType());
     }
 }

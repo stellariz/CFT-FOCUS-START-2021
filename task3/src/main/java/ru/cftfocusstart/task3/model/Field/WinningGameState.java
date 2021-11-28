@@ -1,33 +1,20 @@
 package ru.cftfocusstart.task3.model.Field;
 
-import ru.cftfocusstart.task3.model.Game.Game;
 import ru.cftfocusstart.task3.model.Cell.Cell;
-import ru.cftfocusstart.task3.view.Windows.MainWindow;
-import ru.cftfocusstart.task3.view.Windows.RecordsWindow;
-import ru.cftfocusstart.task3.view.Windows.WinWindow;
+import ru.cftfocusstart.task3.model.Game.Game;
 
 public class WinningGameState implements GameState {
     private final Game game;
-    private final MainWindow mainWindow;
 
-    public WinningGameState(Game game, MainWindow mainWindow) {
+    public WinningGameState(Game game) {
         this.game = game;
-        this.mainWindow = mainWindow;
         game.getGameTimer().stopTimer();
-    }
-
-    private void checkForRecord() {
-        if (game.isNewRecord()) {
-            RecordsWindow recordsWindow = new RecordsWindow(mainWindow);
-            recordsWindow.setNameListener(game.getRecordsTable().getRecordsListener());
-            recordsWindow.setVisible(true);
-        }
+        game.isNewRecord();
     }
 
     @Override
     public void onChangingGameState() {
-        mainWindow.closeCells();
-        game.getField().setNewGameState(new PreGameState(game, mainWindow));
+        game.setGameState(new PreGameState(game));
     }
 
     @Override
@@ -46,10 +33,8 @@ public class WinningGameState implements GameState {
     public void unmarkCell(Cell cell) {
     }
 
-    public void createWindow() {
-        WinWindow winWindow = new WinWindow(mainWindow);
-        winWindow.setNewGameListener(e -> onChangingGameState());
-        winWindow.setVisible(true);
-        checkForRecord();
+    @Override
+    public String toString() {
+        return "WinningGameState";
     }
 }

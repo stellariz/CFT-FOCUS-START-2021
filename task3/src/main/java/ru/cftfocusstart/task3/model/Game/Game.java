@@ -4,19 +4,22 @@ import lombok.extern.slf4j.Slf4j;
 import ru.cftfocusstart.task3.model.Field.ConfigField;
 import ru.cftfocusstart.task3.model.Field.Field;
 import ru.cftfocusstart.task3.model.Field.FieldEventListener;
-import ru.cftfocusstart.task3.view.GameMode.GameMode;
+import ru.cftfocusstart.task3.model.Field.GameState;
+import ru.cftfocusstart.task3.model.GameMode.GameMode;
 
 @Slf4j
 public class Game {
     private GameMode gameMode;
+    private GameState gameState;
     private final Field field;
     private GameTimer gameTimer;
     private RecordsTable recordsTable;
+    private GameEventManager eventManager;
 
     public Game() {
         log.debug("Configure field");
         ConfigField.setSizeOfField(9, 9);
-        ConfigField.setTotalBombs(10);
+        ConfigField.setTotalBombs(3);
         field = new Field();
     }
 
@@ -37,6 +40,12 @@ public class Game {
 
     public void setGameMode(GameMode gameMode) {
         this.gameMode = gameMode;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+        field.setNewGameState(gameState);
+        eventManager.notify(gameState.toString());
     }
 
     public boolean isFieldExploded() {
@@ -63,11 +72,22 @@ public class Game {
         return gameTimer.getSeconds();
     }
 
-    public boolean isNewRecord() {
-        return recordsTable.getScoreByType(getGameType()) > getGameDuration();
+    public void isNewRecord() {
+        if (recordsTable.getScoreByType(getGameType()) > getGameDuration()){
+            eventManager.notify("NewWinner");
+        }
+    }
+
+    public void updateRecord(Player player) {
+        recordsTable.updateRecord(getGameType(), player.getName(), player.getTimeRecord());
+        recordsTable.uploadFile();
     }
 
     public RecordsTable getRecordsTable() {
         return recordsTable;
+    }
+
+    public void setEventManager(GameEventManager eventManager) {
+        this.eventManager = eventManager;
     }
 }
