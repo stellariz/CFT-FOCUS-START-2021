@@ -8,7 +8,7 @@ public class PlayingGameState implements GameState {
 
     public PlayingGameState(Game game) {
         this.game = game;
-        game.getGameTimer().startTimer();
+        game.startTimer();
     }
 
     @Override

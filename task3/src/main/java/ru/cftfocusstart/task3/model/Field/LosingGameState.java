@@ -8,7 +8,7 @@ public class LosingGameState implements GameState {
 
     public LosingGameState(Game game) {
         this.game = game;
-        game.getGameTimer().stopTimer();
+        game.stopTimer();
     }
 
     @Override

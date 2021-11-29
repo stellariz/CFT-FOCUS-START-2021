@@ -1,4 +1,4 @@
-package ru.cftfocusstart.task3.model.Game;
+package ru.cftfocusstart.task3.view.GameEventListeners;
 
 import ru.cftfocusstart.task3.view.View;
 

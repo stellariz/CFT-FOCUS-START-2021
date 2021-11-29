@@ -8,7 +8,7 @@ public class WinningGameState implements GameState {
 
     public WinningGameState(Game game) {
         this.game = game;
-        game.getGameTimer().stopTimer();
+        game.stopTimer();
         game.isNewRecord();
     }
 

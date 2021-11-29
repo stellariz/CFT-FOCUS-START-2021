@@ -4,10 +4,10 @@ import ru.cftfocusstart.task3.model.Field.ConfigField;
 import ru.cftfocusstart.task3.model.Game.Game;
 import ru.cftfocusstart.task3.model.Game.GameType;
 
-public class NewGameTypeListener implements GameTypeListener {
+public class NewGameCreator implements GameTypeListener {
     private final Game game;
 
-    public NewGameTypeListener(Game game) {
+    public NewGameCreator(Game game) {
         this.game = game;
     }
 

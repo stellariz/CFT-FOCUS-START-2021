@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.cftfocusstart.task3.model.Game.GameType;
 import ru.cftfocusstart.task3.model.Game.Player;
 import ru.cftfocusstart.task3.model.Game.RecordsListener;
-import ru.cftfocusstart.task3.model.GameMode.NewGameTypeListener;
+import ru.cftfocusstart.task3.model.GameMode.GameTypeListener;
 import ru.cftfocusstart.task3.view.Windows.*;
 
 @Slf4j
@@ -16,7 +16,7 @@ public class View {
     private final WinWindow winWindow;
     private final RecordsWindow recordsWindow;
 
-    private NewGameTypeListener newGameListener;
+    private GameTypeListener gameCreator;
 
     public View(MainWindow mainWindow) {
         log.debug("Creating windows");
@@ -39,7 +39,7 @@ public class View {
         LoseWindow loseWindow = new LoseWindow(mainWindow);
         loseWindow.setNewGameListener(e -> {
             redrawField();
-            newGameListener.restartGame();
+            gameCreator.restartGame();
         });
         loseWindow.setVisible(true);
     }
@@ -48,7 +48,7 @@ public class View {
         WinWindow winWindow = new WinWindow(mainWindow);
         winWindow.setNewGameListener(e -> {
             redrawField();
-            newGameListener.restartGame();
+            gameCreator.restartGame();
         });
         winWindow.setVisible(true);
     }
@@ -67,10 +67,10 @@ public class View {
         mainWindow.closeCells();
     }
 
-    public void setNewGameListener(NewGameTypeListener newGameListener) {
-        this.newGameListener = newGameListener;
-        mainWindow.setNewGameMenuAction(e -> newGameListener.restartGame());
-        settingsWindow.setGameTypeListener(newGameListener);
+    public void setNewGameListener(GameTypeListener gameTypeListener) {
+        this.gameCreator = gameTypeListener;
+        mainWindow.setNewGameMenuAction(e -> gameTypeListener.restartGame());
+        settingsWindow.setGameTypeListener(gameTypeListener);
     }
 
     public MainWindow getMainWindow() {

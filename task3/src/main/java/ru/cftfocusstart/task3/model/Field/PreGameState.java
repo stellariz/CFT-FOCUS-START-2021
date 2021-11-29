@@ -8,8 +8,11 @@ public class PreGameState implements GameState {
 
     public PreGameState(Game game) {
         this.game = game;
+        game.resetTimer();
         game.createNewField();
-        game.getRecordsTable().initTable();
+        if (game.getRecordsTable().getTableOfRecords() == null) {
+            game.getRecordsTable().initTable();
+        }
     }
 
     @Override

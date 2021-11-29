@@ -1,5 +1,7 @@
 package ru.cftfocusstart.task3.model.Game;
 
+import ru.cftfocusstart.task3.view.GameEventListeners.GameEventListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +11,7 @@ public class GameEventManager {
     Map<String, List<GameEventListener>> listeners = new HashMap<>();
 
     public GameEventManager(String... events) {
-        for (var event : events) {
+        for (String event : events) {
             this.listeners.put(event, new ArrayList<>());
         }
     }

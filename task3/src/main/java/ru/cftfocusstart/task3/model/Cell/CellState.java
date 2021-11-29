@@ -10,9 +10,8 @@ public enum CellState {
     SIX,
     SEVEN,
     EIGHT,
-    BOMB
+    BOMB,
     ;
-
 
     public CellState getNextState() {
         return CellState.values()[this.ordinal() + 1];

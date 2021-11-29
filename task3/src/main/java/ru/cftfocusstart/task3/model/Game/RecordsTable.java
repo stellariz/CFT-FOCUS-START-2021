@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class RecordsTable {
-    private final Map<GameType, Player> tableOfRecords = new HashMap<>(3);
+    private Map<GameType, Player> tableOfRecords;
     private final File recordsFile;
 
     private TableEventListener tableEventListener;
@@ -28,13 +28,19 @@ public class RecordsTable {
         }
     }
 
-    public void updateRecord(GameType gameType, String name, int newRecord) {
-        tableOfRecords.replace(gameType, new Player(name, newRecord));
-        tableEventListener.onUpdateTable(gameType, new Player(name, newRecord));
-    }
-
-    public int getScoreByType(GameType gameType) {
-        return tableOfRecords.get(gameType).getTimeRecord();
+    public void initTable() {
+        tableOfRecords = new HashMap<>(3);
+        tableOfRecords.put(GameType.NOVICE, new Player("Unknown", 999));
+        tableOfRecords.put(GameType.MEDIUM, new Player("Unknown", 999));
+        tableOfRecords.put(GameType.EXPERT, new Player("Unknown", 999));
+        try (Scanner scanner = new Scanner(recordsFile)) {
+            while (scanner.hasNextLine()) {
+                updateRecordsTableFromFile(scanner.next(), scanner.next(), scanner.nextInt());
+            }
+        } catch (FileNotFoundException e) {
+            log.error("File with records wasn't found", e);
+            throw new IllegalArgumentException("File with records wasn't found");
+        }
     }
 
     private void updateRecordsTableFromFile(String mode, String name, int score) {
@@ -57,20 +63,6 @@ public class RecordsTable {
         }
     }
 
-    public void initTable() {
-        tableOfRecords.put(GameType.NOVICE, new Player("Unknown", 999));
-        tableOfRecords.put(GameType.MEDIUM, new Player("Unknown", 999));
-        tableOfRecords.put(GameType.EXPERT, new Player("Unknown", 999));
-        try (Scanner scanner = new Scanner(recordsFile)) {
-            while (scanner.hasNextLine()) {
-                updateRecordsTableFromFile(scanner.next(), scanner.next(), scanner.nextInt());
-            }
-        } catch (FileNotFoundException e) {
-            log.error("File with records wasn't found", e);
-            throw new IllegalArgumentException("File with records wasn't found");
-        }
-    }
-
     public void uploadFile() {
         try (PrintWriter printWriter = new PrintWriter(recordsFile)) {
             String newTable = tableOfRecords.entrySet()
@@ -82,6 +74,19 @@ public class RecordsTable {
             log.error("File with records wasn't found", e);
             throw new IllegalArgumentException("File with records wasn't found");
         }
+    }
+
+    public void updateRecord(GameType gameType, String name, int newRecord) {
+        tableOfRecords.replace(gameType, new Player(name, newRecord));
+        tableEventListener.onUpdateTable(gameType, new Player(name, newRecord));
+    }
+
+    public int getScoreByType(GameType gameType) {
+        return tableOfRecords.get(gameType).getTimeRecord();
+    }
+
+    public Map<GameType, Player> getTableOfRecords() {
+        return tableOfRecords;
     }
 
     public void setTableEventListener(TableEventListener tableEventListener) {

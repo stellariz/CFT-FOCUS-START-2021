@@ -10,9 +10,8 @@ import ru.cftfocusstart.task3.model.GameMode.GameMode;
 @Slf4j
 public class Game {
     private GameMode gameMode;
-    private GameState gameState;
     private final Field field;
-    private GameTimer gameTimer;
+    private TimerController timerController;
     private RecordsTable recordsTable;
     private GameEventManager eventManager;
 
@@ -23,6 +22,38 @@ public class Game {
         field = new Field();
     }
 
+    public void createNewField() {
+        field.generateNewField();
+        field.setNumberOfOpenCells(0);
+        field.setExploded(false);
+        field.resetTotalFlags();
+    }
+
+    public void setGameState(GameState gameState) {
+        field.setNewGameState(gameState);
+        eventManager.notify(gameState.toString());
+    }
+
+    public void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
+
+    public void setFieldListener(FieldEventListener fieldListener) {
+        field.setFieldListener(fieldListener);
+    }
+
+    public void setEventManager(GameEventManager eventManager) {
+        this.eventManager = eventManager;
+    }
+
+    public void setTimerController(TimerController timerController) {
+        this.timerController = timerController;
+    }
+
+    public void setRecordsTable(RecordsTable recordsTable) {
+        this.recordsTable = recordsTable;
+    }
+
     public Field getField() {
         return field;
     }
@@ -31,49 +62,34 @@ public class Game {
         return gameMode.getGameType();
     }
 
-    public void createNewField() {
-        field.generateNewField();
-        field.setNumberOfOpenCells(0);
-        field.setExploded(false);
-        field.resetTotalFlags();
+    public int getGameDuration() {
+        return timerController.getTime();
     }
 
-    public void setGameMode(GameMode gameMode) {
-        this.gameMode = gameMode;
-    }
-
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-        field.setNewGameState(gameState);
-        eventManager.notify(gameState.toString());
+    public RecordsTable getRecordsTable() {
+        return recordsTable;
     }
 
     public boolean isFieldExploded() {
         return field.isExploded();
     }
 
-    public void setFieldListener(FieldEventListener fieldListener) {
-        field.setFieldListener(fieldListener);
+    public void startTimer() {
+        timerController.startTimer();
     }
 
-    public void setGameTimer(GameTimer gameTimer) {
-        this.gameTimer = gameTimer;
+    public void stopTimer() {
+        timerController.stopTimer();
     }
 
-    public void setRecordsTable(RecordsTable recordsTable) {
-        this.recordsTable = recordsTable;
-    }
-
-    public GameTimer getGameTimer() {
-        return gameTimer;
-    }
-
-    public int getGameDuration() {
-        return gameTimer.getSeconds();
+    public void resetTimer() {
+        if (timerController != null) {
+            timerController.resetTimer();
+        }
     }
 
     public void isNewRecord() {
-        if (recordsTable.getScoreByType(getGameType()) > getGameDuration()){
+        if (recordsTable.getScoreByType(getGameType()) > getGameDuration()) {
             eventManager.notify("NewWinner");
         }
     }
@@ -81,13 +97,5 @@ public class Game {
     public void updateRecord(Player player) {
         recordsTable.updateRecord(getGameType(), player.getName(), player.getTimeRecord());
         recordsTable.uploadFile();
-    }
-
-    public RecordsTable getRecordsTable() {
-        return recordsTable;
-    }
-
-    public void setEventManager(GameEventManager eventManager) {
-        this.eventManager = eventManager;
     }
 }
