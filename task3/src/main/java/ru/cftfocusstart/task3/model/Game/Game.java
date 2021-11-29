@@ -11,8 +11,9 @@ import ru.cftfocusstart.task3.model.GameMode.GameMode;
 public class Game {
     private GameMode gameMode;
     private final Field field;
-    private TimerController timerController;
     private RecordsTable recordsTable;
+
+    private TimerController timerController;
     private GameEventManager eventManager;
 
     public Game() {

@@ -19,42 +19,6 @@ public class Field {
     private int numberOfOpenCells;
     private boolean isExploded;
 
-    public void generateNewField() {
-        cellMatrix = new CellMatrix();
-    }
-
-    public Cell getCell(int x, int y) {
-        return cellMatrix.getCell(x, y);
-    }
-
-    public int getBombsWithFlags() {
-        return ConfigField.getTotalBombs() - totalFlags;
-    }
-
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public boolean isExploded() {
-        return isExploded;
-    }
-
-    public void setFieldListener(FieldEventListener fieldListener) {
-        this.fieldListener = fieldListener;
-    }
-
-    public void setNewGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-
-    public void setNumberOfOpenCells(int numberOfOpenCells) {
-        this.numberOfOpenCells = numberOfOpenCells;
-    }
-
-    public void setExploded(boolean exploded) {
-        isExploded = exploded;
-    }
-
     public void resetTotalFlags() {
         if (totalFlags != 0) {
             this.totalFlags = 0;
@@ -135,5 +99,41 @@ public class Field {
         log.debug(String.valueOf(isExploded));
         log.debug(String.valueOf(numberOfOpenCells));
         return numberOfOpenCells + ConfigField.getTotalBombs() == ConfigField.getWidth() * ConfigField.getLength();
+    }
+
+    public void generateNewField() {
+        cellMatrix = new CellMatrix();
+    }
+
+    public Cell getCell(int x, int y) {
+        return cellMatrix.getCell(x, y);
+    }
+
+    public int getBombsWithFlags() {
+        return ConfigField.getTotalBombs() - totalFlags;
+    }
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public boolean isExploded() {
+        return isExploded;
+    }
+
+    public void setFieldListener(FieldEventListener fieldListener) {
+        this.fieldListener = fieldListener;
+    }
+
+    public void setNewGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    public void setNumberOfOpenCells(int numberOfOpenCells) {
+        this.numberOfOpenCells = numberOfOpenCells;
+    }
+
+    public void setExploded(boolean exploded) {
+        isExploded = exploded;
     }
 }
