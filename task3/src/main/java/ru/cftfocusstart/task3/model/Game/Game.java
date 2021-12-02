@@ -19,7 +19,7 @@ public class Game {
     public Game() {
         log.debug("Configure field");
         ConfigField.setSizeOfField(9, 9);
-        ConfigField.setTotalBombs(3);
+        ConfigField.setTotalBombs(10);
         field = new Field();
     }
 
