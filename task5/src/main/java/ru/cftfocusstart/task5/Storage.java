@@ -15,23 +15,20 @@ public class Storage {
 
     synchronized public void put(Resource resource) throws InterruptedException {
         while (isFull()) {
-            log.info("Thread's sleeping");
             wait();
         }
         queue[size++] = resource;
-        log.info("Thread puts element with id={} in queue", resource.getId());
+        log.info("Element with id = {} added in queue. Current size queue is: {}", resource.getId(), getSize());
         notifyAll();
     }
 
-    synchronized public Resource remove() throws InterruptedException {
+    synchronized public void remove() throws InterruptedException {
         while (isEmpty()) {
-            log.info("Thread's sleeping");
             wait();
         }
         Resource resource = queue[--size];
-        log.info("Thread gets element with id={} from queue", resource.getId());
+        log.info("Element with id = {} removed from queue. Current size queue is: {}", resource.getId(), getSize());
         notifyAll();
-        return resource;
     }
 
     public boolean isFull() {

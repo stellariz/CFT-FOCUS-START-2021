@@ -18,11 +18,11 @@ public class Application {
         try (InputStream is = Application.class.getClassLoader().getResourceAsStream("app.properties")) {
             Properties properties = new Properties();
             properties.load(is);
-            consumerCount = Integer.parseInt(properties.getProperty("CONSUMERS_COUNT"));
-            producerCount = Integer.parseInt(properties.getProperty("PRODUCERS_COUNT"));
-            consumerTime = Integer.parseInt(properties.getProperty("CONSUMER_TIME"));
-            producerTime = Integer.parseInt(properties.getProperty("PRODUCER_TIME"));
-            storageSize = Integer.parseInt(properties.getProperty("STORAGE_SIZE"));
+            consumerCount = Integer.parseInt(properties.getProperty(PropertiesName.CONSUMERS_COUNT.getPropertyName()));
+            producerCount = Integer.parseInt(properties.getProperty(PropertiesName.PRODUCERS_COUNT.getPropertyName()));
+            consumerTime = Integer.parseInt(properties.getProperty(PropertiesName.CONSUMER_TIME.getPropertyName()));
+            producerTime = Integer.parseInt(properties.getProperty(PropertiesName.PRODUCER_TIME.getPropertyName()));
+            storageSize = Integer.parseInt(properties.getProperty(PropertiesName.STORAGE_SIZE.getPropertyName()));
         } catch (IOException e) {
             throw new IllegalArgumentException("Incorrect properties file", e);
         }

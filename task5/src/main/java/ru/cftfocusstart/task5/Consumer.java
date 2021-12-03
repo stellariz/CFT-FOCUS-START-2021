@@ -20,11 +20,11 @@ public class Consumer implements Runnable {
 
     private void consume() {
         try {
-            Resource resource = storage.remove();
-            log.info("Removed element with id={}. Current size queue is: {}", resource.getId(), storage.getSize());
+            storage.remove();
+            log.info("Thread with id = {} consumed element from queue", id);
             Thread.sleep(consumerTime);
-            log.info("Consumer with id={} consumed resource with id={}", id, resource.getId());
-        } catch (InterruptedException ignored) {
+        } catch (InterruptedException e) {
+            throw new IllegalArgumentException("Thread was interrupted" + e.getMessage(), e);
         }
     }
 }

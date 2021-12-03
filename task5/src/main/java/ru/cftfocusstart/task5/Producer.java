@@ -20,12 +20,11 @@ public class Producer implements Runnable {
 
     private void produce() {
         try {
+            storage.put(new Resource());
+            log.info("Thread with id = {} produced element and put it in queue", id);
             Thread.sleep(producerTime);
-            Resource resource = new Resource();
-            log.info("Producer with id={} produced resource with id={}", id, resource.getId());
-            storage.put(resource);
-            log.info("Added element with id={}. Current size queue is: {}", resource.getId(), storage.getSize());
-        } catch (InterruptedException ignored) {
+        } catch (InterruptedException e) {
+            throw new IllegalArgumentException("Thread was interrupted" + e.getMessage(), e);
         }
     }
 }
