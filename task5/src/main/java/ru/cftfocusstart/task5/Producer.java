@@ -24,7 +24,8 @@ public class Producer implements Runnable {
             log.info("Thread with id = {} produced element and put it in queue", id);
             Thread.sleep(producerTime);
         } catch (InterruptedException e) {
-            throw new IllegalArgumentException("Thread was interrupted" + e.getMessage(), e);
+            log.info("Thread was interrupted");
+            Thread.currentThread().interrupt();
         }
     }
 }

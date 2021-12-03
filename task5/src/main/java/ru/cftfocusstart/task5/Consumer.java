@@ -24,7 +24,8 @@ public class Consumer implements Runnable {
             log.info("Thread with id = {} consumed element from queue", id);
             Thread.sleep(consumerTime);
         } catch (InterruptedException e) {
-            throw new IllegalArgumentException("Thread was interrupted" + e.getMessage(), e);
+            log.info("Thread was interrupted");
+            Thread.currentThread().interrupt();
         }
     }
 }
