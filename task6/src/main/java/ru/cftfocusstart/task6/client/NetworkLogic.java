@@ -14,12 +14,8 @@ public class NetworkLogic {
     private Socket serverSocket;
     private ChatUpdater chatUpdater;
 
-    public void sendMessageOnServer(String text, MessageType messageType) {
+    public void sendMessageOnServer(Message message) {
         try {
-            Message message = new Message();
-            message.setNickName(client.getNickName());
-            message.setText(text);
-            message.setMessageType(messageType);
             IOTools.writeInSocket(serverSocket.getOutputStream(), message);
         } catch (IOException e) {
         }
@@ -40,12 +36,16 @@ public class NetworkLogic {
                     }
                 }
             } catch (IOException e) {
-
+                log.error(e.getMessage(), e);
             }
         }
     }
 
-    public void checkNickNameOnServer(String nick) {
+    public void badConnectionToServer(){
+        chatUpdater.onReceiveUnsuccessfulConnection();
+    }
+
+    public void checkNicknameOnServer(String nick) {
         if (serverSocket != null) {
             Message message = new Message();
             message.setMessageType(MessageType.GREETING);
@@ -68,7 +68,7 @@ public class NetworkLogic {
             chatUpdater.onSuccessfulConnection();
         } catch (IOException e) {
             log.error("Failed to connect to server: " + e.getMessage(), e);
-            chatUpdater.onReceiveUnsuccessfulConnection();
+            badConnectionToServer();
         }
     }
 
@@ -86,5 +86,9 @@ public class NetworkLogic {
 
     public void setChatUpdater(ChatUpdater chatUpdater) {
         this.chatUpdater = chatUpdater;
+    }
+
+    public Client getClient() {
+        return client;
     }
 }

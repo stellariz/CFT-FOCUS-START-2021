@@ -95,7 +95,7 @@ public class ChatWindow extends JFrame {
     }
 
     public void updateChat(Message message) {
-        chatBox.append("<" + message.getNickName() + ">:  " + message.getText()
+        chatBox.append("<" + message.getNickName() + " " + message.getDate() +  " >:  " + message.getText()
                 + System.lineSeparator());
     }
 }

@@ -7,5 +7,5 @@ public class Message {
     private String nickName;
     private String text;
     private MessageType messageType;
-    // private Date date;
+    private String date;
 }

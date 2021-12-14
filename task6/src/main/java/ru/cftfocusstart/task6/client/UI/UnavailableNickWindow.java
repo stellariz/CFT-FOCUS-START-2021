@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 public class UnavailableNickWindow extends JDialog {
 
-    private ActionListener exitListener;
+    private ActionListener okListener;
 
     public UnavailableNickWindow(JFrame owner) {
         super(owner, "Oops", true);
@@ -25,12 +25,12 @@ public class UnavailableNickWindow extends JDialog {
         setLocationRelativeTo(null);
     }
 
-    public void setExitListener(ActionListener exitListener) {
-        this.exitListener = exitListener;
+    public void setOkListener(ActionListener okListener) {
+        this.okListener = okListener;
     }
 
     private JLabel createDisconnectLabel(GridBagLayout layout) {
-        JLabel label = new JLabel("User with this nick already exists. Please, try another nick.");
+        JLabel label = new JLabel("User with this nick already exists. Please, try enter another nick.");
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.NONE;
@@ -43,14 +43,14 @@ public class UnavailableNickWindow extends JDialog {
     }
 
     private JButton createExitButton(GridBagLayout layout) {
-        JButton exitButton = new JButton("OK");
-        exitButton.setPreferredSize(new Dimension(100, 25));
+        JButton okButton = new JButton("OK");
+        okButton.setPreferredSize(new Dimension(100, 25));
 
-        exitButton.addActionListener(e -> {
+        okButton.addActionListener(e -> {
             dispose();
 
-            if (exitListener != null) {
-                exitListener.actionPerformed(e);
+            if (okListener != null) {
+                okListener.actionPerformed(e);
             }
         });
 
@@ -62,8 +62,8 @@ public class UnavailableNickWindow extends JDialog {
         gbc.gridheight = 1;
         gbc.weightx = 0.5;
         gbc.insets = new Insets(15, 5, 0, 0);
-        layout.setConstraints(exitButton, gbc);
+        layout.setConstraints(okButton, gbc);
 
-        return exitButton;
+        return okButton;
     }
 }

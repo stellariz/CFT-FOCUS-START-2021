@@ -2,7 +2,6 @@ package ru.cftfocusstart.task6.client;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.cftfocusstart.task6.client.Message.MessageCreator;
-import ru.cftfocusstart.task6.client.UI.ChatWindow;
 import ru.cftfocusstart.task6.client.UI.ConnectionCreator;
 import ru.cftfocusstart.task6.client.UI.UserNameUpdater;
 import ru.cftfocusstart.task6.client.UI.View;
@@ -17,9 +16,6 @@ public class Client {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
-    }
-
-    public void startClient() {
     }
 
     public static void main(String[] args) {

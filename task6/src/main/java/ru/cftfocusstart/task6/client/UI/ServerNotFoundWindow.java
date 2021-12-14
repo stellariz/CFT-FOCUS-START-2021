@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class ServerNotFoundWindow extends JDialog {
-    private ActionListener exitListener;
+    private ActionListener okListener;
 
     public ServerNotFoundWindow(JFrame owner) {
         super(owner, "Oops", true);
@@ -24,8 +24,8 @@ public class ServerNotFoundWindow extends JDialog {
         setLocationRelativeTo(null);
     }
 
-    public void setExitListener(ActionListener exitListener) {
-        this.exitListener = exitListener;
+    public void setOkListener(ActionListener okListener) {
+        this.okListener = okListener;
     }
 
     private JLabel createNotFoundLabel(GridBagLayout layout) {
@@ -48,8 +48,8 @@ public class ServerNotFoundWindow extends JDialog {
         exitButton.addActionListener(e -> {
             dispose();
 
-            if (exitListener != null) {
-                exitListener.actionPerformed(e);
+            if (okListener != null) {
+                okListener.actionPerformed(e);
             }
         });
 

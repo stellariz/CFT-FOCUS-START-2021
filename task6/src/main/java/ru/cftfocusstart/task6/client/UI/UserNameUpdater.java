@@ -11,6 +11,6 @@ public class UserNameUpdater implements NameListener {
 
     @Override
     public void onNameEntered(String nickname) {
-        networkLogic.checkNickNameOnServer(nickname);
+        networkLogic.checkNicknameOnServer(nickname);
     }
 }

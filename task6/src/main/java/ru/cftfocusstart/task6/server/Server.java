@@ -1,6 +1,7 @@
 package ru.cftfocusstart.task6.server;
 
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import ru.cftfocusstart.task6.client.ChatUser;
 import ru.cftfocusstart.task6.client.Message.Message;
 import ru.cftfocusstart.task6.client.Message.MessageType;
@@ -96,7 +97,9 @@ public class Server {
         synchronized (this.clients) {
             chatUserStream = this.clients.values().stream();
         }
-        return chatUserStream.anyMatch(user -> Objects.equals(user.getUserName(), newUserName)) ||
+        return  newUserName.isEmpty() ||
+                newUserName.isBlank() ||
+                chatUserStream.anyMatch(user -> Objects.equals(user.getUserName(), newUserName)) ||
                 reservedNames.contains(newUserName);
     }
 
@@ -106,6 +109,7 @@ public class Server {
                 Message msg = new Message();
                 msg.setNickName("SERVER");
                 msg.setText(nickName + " connected to chat!");
+                msg.setDate(new DateTime().toString("dd-mm-yyyy, hh:mm:ss"));
                 msg.setMessageType(MessageType.GREETING);
                 IOTools.writeInSocket(client.getOutputStream(), msg);
             } catch (IOException e) {
@@ -123,6 +127,7 @@ public class Server {
                 Message msg = new Message();
                 msg.setNickName("SERVER");
                 msg.setText(nickName + " disconnected from chat");
+                msg.setDate(new DateTime().toString("dd-mm-yyyy, hh:mm:ss"));
                 msg.setMessageType(MessageType.TEXT);
                 IOTools.writeInSocket(client.getOutputStream(), msg);
             } catch (IOException e) {
@@ -151,12 +156,9 @@ public class Server {
             } catch (IOException e) {
                 String disconnectedUser = this.clients.get(client).getUserName();
                 log.error("Can't send message to user {}" + disconnectedUser);
-                Set<Socket> leftUsers;
                 synchronized (this.clients) {
                     this.clients.remove(client);
-                    leftUsers = this.clients.keySet();
                 }
-                broadcastDisconnectMessage(leftUsers, disconnectedUser);
             }
         }
     }

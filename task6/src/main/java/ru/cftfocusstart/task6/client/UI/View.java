@@ -20,6 +20,12 @@ public class View {
         this.serverNotFoundWindow = new ServerNotFoundWindow(null);
         this.serverInfoWindow = new ServerInfoWindow(null);
         this.nameWindow = new NameWindow(null);
+        setScenarioWindows();
+    }
+
+    private void setScenarioWindows(){
+        unavailableNickWindow.setOkListener(e->showNameWindow());
+        serverNotFoundWindow.setOkListener(e->showServerInfoWindow());
     }
 
     public void showChatWindow() {
@@ -38,15 +44,15 @@ public class View {
         serverInfoWindow.setVisible(true);
     }
 
-    public void showNameWindow(){
+    public void showNameWindow() {
         nameWindow.setVisible(true);
     }
 
-    public void setConnectionListener(ConnectionListener connectionListener){
+    public void setConnectionListener(ConnectionListener connectionListener) {
         serverInfoWindow.setConnectionListener(connectionListener);
     }
 
-    public void setSendMessageListener(SendMessageListener sendMessageListener){
+    public void setSendMessageListener(SendMessageListener sendMessageListener) {
         chatWindow.setSendMessageListener(sendMessageListener);
         chatWindow.addWindowListener(new WindowAdapter() {
             @Override
@@ -56,12 +62,11 @@ public class View {
         });
     }
 
-    public void setNameListener(NameListener nameListener){
+    public void setNameListener(NameListener nameListener) {
         nameWindow.setNameListener(nameListener);
     }
 
-    public void updateChatWindow(Message message){
+    public void updateChatWindow(Message message) {
         chatWindow.updateChat(message);
     }
-
 }

@@ -20,7 +20,7 @@ public class ViewListener implements ChatUpdater {
 
     @Override
     public void onReceiveUnsuccessfulConnection() {
-        log.error("error!");
+        view.showServerNotFoundWindow();
     }
 
     @Override
