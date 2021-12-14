@@ -3,6 +3,9 @@ package ru.cftfocusstart.task6.client.UI;
 import lombok.extern.slf4j.Slf4j;
 import ru.cftfocusstart.task6.client.Message.Message;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 @Slf4j
 public class View {
     private final ChatWindow chatWindow;
@@ -45,6 +48,12 @@ public class View {
 
     public void setSendMessageListener(SendMessageListener sendMessageListener){
         chatWindow.setSendMessageListener(sendMessageListener);
+        chatWindow.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                sendMessageListener.onClickClose();
+            }
+        });
     }
 
     public void setNameListener(NameListener nameListener){

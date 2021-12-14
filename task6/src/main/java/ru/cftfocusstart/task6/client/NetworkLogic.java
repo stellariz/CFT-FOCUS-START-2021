@@ -14,12 +14,12 @@ public class NetworkLogic {
     private Socket serverSocket;
     private ChatUpdater chatUpdater;
 
-    public void sendMessageOnServer(String text) {
+    public void sendMessageOnServer(String text, MessageType messageType) {
         try {
             Message message = new Message();
             message.setNickName(client.getNickName());
             message.setText(text);
-            message.setMessageType(MessageType.TEXT);
+            message.setMessageType(messageType);
             IOTools.writeInSocket(serverSocket.getOutputStream(), message);
         } catch (IOException e) {
         }

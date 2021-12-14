@@ -1,54 +1,52 @@
 package ru.cftfocusstart.task6.server;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import ru.cftfocusstart.task6.client.ChatUser;
 import ru.cftfocusstart.task6.client.Message.Message;
 import ru.cftfocusstart.task6.client.Message.MessageType;
 import ru.cftfocusstart.task6.common.IOTools;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
+import java.util.stream.Stream;
 
 @Slf4j
 public class Server {
-    private static final int port = 8080;
+    private static final int port;
 
-    private final Map<Socket, String> clients;
-    private Thread clientProcessingThread;
+    private final Map<Socket, ChatUser> clients;
+    private final Set<String> reservedNames;
 
-//    static {
-//        try (InputStream is = Server.class.getClassLoader().getResourceAsStream("server.properties")) {
-//            Properties properties = new Properties();
-//            properties.load(is);
-//            port = Integer.parseInt(properties.getProperty("port"));
-//        } catch (IOException e) {
-//            throw new IllegalArgumentException("Incorrect properties file", e);
-//        }
-//    }
+    static {
+        try (InputStream is = Server.class.getClassLoader().getResourceAsStream("server.properties")) {
+            Properties properties = new Properties();
+            properties.load(is);
+            port = Integer.parseInt(properties.getProperty("port"));
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Incorrect properties file", e);
+        }
+    }
 
     private void startServer() {
-        clientProcessingThread = new Thread(this::processClients);
+        Thread clientProcessingThread = new Thread(this::processClients);
         clientProcessingThread.setDaemon(true);
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            //System.out.println(serverSocket.getInetAddress().getCanonicalHostName());
             clientProcessingThread.start();
 
             while (true) {
                 Socket socket = serverSocket.accept();
 
                 synchronized (clients) {
-                    clients.put(socket, null);
+                    clients.put(socket, new ChatUser());
                 }
             }
 
         } catch (IOException e) {
-            log.info("Server's crashed" + e.getMessage(), e);
+            log.error("Server's crashed" + e.getMessage(), e);
             throw new IllegalArgumentException(e);
         }
     }
@@ -64,26 +62,42 @@ public class Server {
                     Message msg;
                     if ((msg = IOTools.readFromSocket(client.getInputStream())) != null) {
                         if (msg.getMessageType() == MessageType.GREETING) {
-                            if (this.clients.containsValue(msg.getNickName())) {
+                            if (doesUserNameAvailable(msg.getNickName())) {
                                 sendUnsuccessfulConnection(client);
                             } else {
                                 synchronized (this.clients) {
-                                    this.clients.put(client, msg.getNickName());
+                                    this.clients.put(client, new ChatUser(msg.getNickName()));
                                 }
                                 broadcastGreetingMessage(clients, msg.getNickName());
                             }
-                        } else {
+                        } else if (msg.getMessageType() == MessageType.TEXT) {
                             sendUserMessage(clients, msg);
+                        } else if (msg.getMessageType() == MessageType.DISCONNECT) {
+                            Set<Socket> leftUsers;
+                            synchronized (this.clients) {
+                                this.clients.remove(client);
+                                leftUsers = this.clients.keySet();
+                            }
+                            broadcastDisconnectMessage(leftUsers, msg.getNickName());
                         }
                     }
                 } catch (IOException e) {
-                    log.info("Can't read message" + e.getMessage());
+                    log.error("Can't read message" + e.getMessage());
                     synchronized (this.clients) {
                         this.clients.remove(client);
                     }
                 }
             }
         }
+    }
+
+    private boolean doesUserNameAvailable(String newUserName) {
+        Stream<ChatUser> chatUserStream;
+        synchronized (this.clients) {
+            chatUserStream = this.clients.values().stream();
+        }
+        return chatUserStream.anyMatch(user -> Objects.equals(user.getUserName(), newUserName)) ||
+                reservedNames.contains(newUserName);
     }
 
     private void broadcastGreetingMessage(Set<Socket> clients, String nickName) {
@@ -95,7 +109,24 @@ public class Server {
                 msg.setMessageType(MessageType.GREETING);
                 IOTools.writeInSocket(client.getOutputStream(), msg);
             } catch (IOException e) {
-                log.info("Can't send greeting message: " + e.getMessage());
+                log.error("Can't send greeting message: " + e.getMessage());
+                synchronized (this.clients) {
+                    this.clients.remove(client);
+                }
+            }
+        }
+    }
+
+    private void broadcastDisconnectMessage(Set<Socket> clients, String nickName) {
+        for (Socket client : clients) {
+            try {
+                Message msg = new Message();
+                msg.setNickName("SERVER");
+                msg.setText(nickName + " disconnected from chat");
+                msg.setMessageType(MessageType.TEXT);
+                IOTools.writeInSocket(client.getOutputStream(), msg);
+            } catch (IOException e) {
+                log.error("Can't send greeting message: " + e.getMessage());
                 synchronized (this.clients) {
                     this.clients.remove(client);
                 }
@@ -109,7 +140,7 @@ public class Server {
             msg.setMessageType(MessageType.UNAVAILABLE_NICK);
             IOTools.writeInSocket(client.getOutputStream(), msg);
         } catch (IOException e) {
-            log.info("Can't send message about unsuccessful connection" + e.getMessage());
+            log.error("Can't send message about unsuccessful connection" + e.getMessage());
         }
     }
 
@@ -118,16 +149,23 @@ public class Server {
             try {
                 IOTools.writeInSocket(client.getOutputStream(), msg);
             } catch (IOException e) {
-                log.info("Can't send message to user {}" + this.clients.get(client));
+                String disconnectedUser = this.clients.get(client).getUserName();
+                log.error("Can't send message to user {}" + disconnectedUser);
+                Set<Socket> leftUsers;
                 synchronized (this.clients) {
                     this.clients.remove(client);
+                    leftUsers = this.clients.keySet();
                 }
+                broadcastDisconnectMessage(leftUsers, disconnectedUser);
             }
         }
     }
 
+
     public Server() {
         clients = new LinkedHashMap<>();
+        reservedNames = new HashSet<>();
+        reservedNames.add("SERVER");
     }
 
     public static void main(String[] args) {

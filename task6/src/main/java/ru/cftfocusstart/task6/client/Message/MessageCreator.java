@@ -12,6 +12,11 @@ public class MessageCreator implements SendMessageListener {
 
     @Override
     public void onClickSend(String text) {
-        networkLogic.sendMessageOnServer(text);
+        networkLogic.sendMessageOnServer(text, MessageType.TEXT);
+    }
+
+    @Override
+    public void onClickClose() {
+        networkLogic.sendMessageOnServer(null, MessageType.DISCONNECT);
     }
 }
