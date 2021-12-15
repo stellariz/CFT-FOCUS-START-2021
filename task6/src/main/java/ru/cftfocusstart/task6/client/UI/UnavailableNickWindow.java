@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class UnavailableNickWindow extends JDialog {
-
     private ActionListener okListener;
 
     public UnavailableNickWindow(JFrame owner) {
@@ -30,7 +29,7 @@ public class UnavailableNickWindow extends JDialog {
     }
 
     private JLabel createDisconnectLabel(GridBagLayout layout) {
-        JLabel label = new JLabel("User with this nick already exists. Please, try enter another nick.");
+        JLabel label = new JLabel("<html>Nickname's incorrect or user with this nick already exists. <br/> Please, try again.</html>");
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.NONE;

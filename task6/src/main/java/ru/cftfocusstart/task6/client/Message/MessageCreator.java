@@ -1,11 +1,12 @@
 package ru.cftfocusstart.task6.client.Message;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import ru.cftfocusstart.task6.client.NetworkLogic;
 import ru.cftfocusstart.task6.client.UI.SendMessageListener;
 
 public class MessageCreator implements SendMessageListener {
-    private final String patternOfDate = "dd-mm-yyyy, hh:mm:ss";
+    private final String patternOfDate = "dd-MM-yyyy, hh:mm:ss";
     private final NetworkLogic networkLogic;
 
     public MessageCreator(NetworkLogic networkLogic) {
@@ -17,7 +18,7 @@ public class MessageCreator implements SendMessageListener {
         Message message = new Message();
         message.setNickName(networkLogic.getClient().getNickName());
         message.setText(text);
-        message.setDate(new DateTime().toString(patternOfDate));
+        message.setDate(new DateTime(DateTimeZone.UTC).toString(patternOfDate));
         message.setMessageType(MessageType.TEXT);
         networkLogic.sendMessageOnServer(message);
     }
@@ -26,8 +27,9 @@ public class MessageCreator implements SendMessageListener {
     public void onClickClose() {
         Message message = new Message();
         message.setNickName(networkLogic.getClient().getNickName());
-        message.setDate(new DateTime().toString(patternOfDate));
+        message.setDate(new DateTime(DateTimeZone.UTC).toString(patternOfDate));
         message.setMessageType(MessageType.DISCONNECT);
         networkLogic.sendMessageOnServer(message);
+        networkLogic.closeConnection();
     }
 }

@@ -1,10 +1,12 @@
 package ru.cftfocusstart.task6.client.UI;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.cftfocusstart.task6.client.ChatUser;
 import ru.cftfocusstart.task6.client.Message.Message;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 @Slf4j
 public class View {
@@ -13,6 +15,7 @@ public class View {
     private final ServerNotFoundWindow serverNotFoundWindow;
     private final ServerInfoWindow serverInfoWindow;
     private final NameWindow nameWindow;
+    private final UsersOnlineWindow usersOnlineWindow;
 
     public View() {
         this.chatWindow = new ChatWindow();
@@ -20,12 +23,18 @@ public class View {
         this.serverNotFoundWindow = new ServerNotFoundWindow(null);
         this.serverInfoWindow = new ServerInfoWindow(null);
         this.nameWindow = new NameWindow(null);
+        this.usersOnlineWindow = new UsersOnlineWindow(null);
         setScenarioWindows();
     }
 
-    private void setScenarioWindows(){
-        unavailableNickWindow.setOkListener(e->showNameWindow());
-        serverNotFoundWindow.setOkListener(e->showServerInfoWindow());
+    private void setScenarioWindows() {
+        chatWindow.setUsersOnlineAction(e -> showUsersOnlineWindow());
+        unavailableNickWindow.setOkListener(e -> showNameWindow());
+        serverNotFoundWindow.setOkListener(e -> showServerInfoWindow());
+    }
+
+    public void showUsersOnlineWindow() {
+        usersOnlineWindow.setVisible(true);
     }
 
     public void showChatWindow() {
@@ -68,5 +77,17 @@ public class View {
 
     public void updateChatWindow(Message message) {
         chatWindow.updateChat(message);
+    }
+
+    public void addNewUserInList(ChatUser chatUser) {
+        usersOnlineWindow.addUserInList(chatUser.getUserName());
+    }
+
+    public void removeUserFromList(ChatUser chatUser) {
+        usersOnlineWindow.removeUserFromList(chatUser.getUserName());
+    }
+
+    public void loadUsers(List<ChatUser> chatUserList){
+        usersOnlineWindow.loadUserList(chatUserList);
     }
 }

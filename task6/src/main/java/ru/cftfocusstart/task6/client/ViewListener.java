@@ -1,7 +1,6 @@
 package ru.cftfocusstart.task6.client;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.cftfocusstart.task6.client.UI.ChatWindow;
 import ru.cftfocusstart.task6.client.Message.Message;
 import ru.cftfocusstart.task6.client.UI.View;
 
@@ -33,8 +32,22 @@ public class ViewListener implements ChatUpdater {
         view.showNameWindow();
     }
 
+
     @Override
-    public void onReceiveAvailableNick() {
+    public void onReceiveNewUser(Message message) {
+        view.addNewUserInList(message.getChatUser());
+        view.updateChatWindow(message);
+    }
+
+    @Override
+    public void onReceiveUserDisconnected(Message message) {
+        view.removeUserFromList(message.getChatUser());
+        view.updateChatWindow(message);
+    }
+
+    @Override
+    public void onReceiveGreetingFromServer(Message message) {
+        view.loadUsers(message.getChatUserList());
         view.showChatWindow();
     }
 }

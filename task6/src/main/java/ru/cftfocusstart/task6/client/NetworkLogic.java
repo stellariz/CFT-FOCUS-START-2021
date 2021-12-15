@@ -7,6 +7,7 @@ import ru.cftfocusstart.task6.common.IOTools;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Objects;
 
 @Slf4j
 public class NetworkLogic {
@@ -26,11 +27,19 @@ public class NetworkLogic {
             try {
                 Message msg;
                 if ((msg = IOTools.readFromSocket(serverSocket.getInputStream())) != null) {
+                    // TODO: change on switch
                     if (msg.getMessageType() == MessageType.GREETING){
-                        chatUpdater.onReceiveAvailableNick();
-                        chatUpdater.onReceiveMessage(msg);
+                        chatUpdater.onReceiveGreetingFromServer(msg);
+                    } else if (msg.getMessageType() == MessageType.NEW_USER){
+                        if (Objects.equals(msg.getChatUser().getUserName(), client.getNickName())) {
+                            chatUpdater.onReceiveMessage(msg);
+                        } else {
+                            chatUpdater.onReceiveNewUser(msg);
+                        }
                     } else if (msg.getMessageType() == MessageType.UNAVAILABLE_NICK) {
                         chatUpdater.onReceiveUnavailableNick();
+                    } else if (msg.getMessageType() == MessageType.DISCONNECT){
+                        chatUpdater.onReceiveUserDisconnected(msg);
                     } else {
                         chatUpdater.onReceiveMessage(msg);
                     }

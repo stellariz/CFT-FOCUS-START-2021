@@ -11,5 +11,9 @@ public interface ChatUpdater {
 
     void onSuccessfulConnection();
 
-    void onReceiveAvailableNick();
+    void onReceiveNewUser(Message message);
+
+    void onReceiveUserDisconnected(Message message);
+
+    void onReceiveGreetingFromServer(Message message);
 }

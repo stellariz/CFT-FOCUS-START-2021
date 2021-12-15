@@ -5,6 +5,7 @@ import ru.cftfocusstart.task6.client.Message.Message;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 /*
 Состоит из:
@@ -15,11 +16,11 @@ import java.awt.*;
  */
 @Slf4j
 public class ChatWindow extends JFrame {
-
     private SendMessageListener sendMessageListener;
     private JTextField messageBox;
     private JTextArea chatBox;
     private JButton sendMessage;
+    private JMenuItem usersOnline;
 
     public ChatWindow() {
         super("Chat");
@@ -45,6 +46,7 @@ public class ChatWindow extends JFrame {
         mainPanel.add(BorderLayout.SOUTH, southPanel);
 
         add(mainPanel);
+        createMenu();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
@@ -56,9 +58,12 @@ public class ChatWindow extends JFrame {
         this.sendMessageListener = sendMessageListener;
     }
 
+    public void setUsersOnlineAction(ActionListener actionListener){
+        usersOnline.addActionListener(actionListener);
+    }
+
     private void addSendMessageButton(JPanel southPanel) {
         sendMessage = new JButton("Send Message");
-        // TODO: change listener - it should send on server also
         sendMessage.addActionListener(e -> {
             if (messageBox.getText().length() >= 1) {
                 sendMessageListener.onClickSend(messageBox.getText());
@@ -76,10 +81,15 @@ public class ChatWindow extends JFrame {
         right.weighty = 1.0;
 
         southPanel.add(sendMessage, right);
-
     }
 
-    //private JTable createListOfUsers();
+    private void createMenu() {
+        JMenuBar jMenuBar = new JMenuBar();
+        JMenu users = new JMenu("Chat info");
+        users.add(usersOnline = new JMenuItem("Online users"));
+        jMenuBar.add(users);
+        setJMenuBar(jMenuBar);
+    }
 
     private void addTextArea(JPanel southPanel) {
         messageBox = new JTextField(70);
@@ -95,7 +105,7 @@ public class ChatWindow extends JFrame {
     }
 
     public void updateChat(Message message) {
-        chatBox.append("<" + message.getNickName() + " " + message.getDate() +  " >:  " + message.getText()
+        chatBox.append("<" + message.getNickName() + ">(" + message.getDate() + ") : " + message.getText()
                 + System.lineSeparator());
     }
 }
