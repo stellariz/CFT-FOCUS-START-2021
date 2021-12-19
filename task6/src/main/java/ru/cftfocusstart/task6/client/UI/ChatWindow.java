@@ -7,19 +7,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-/*
-Состоит из:
-1. Панель сообщений чата
-2. Панель ввода сообщения
-3. Панель участников чата
-4. Кнопка отправить
- */
 @Slf4j
 public class ChatWindow extends JFrame {
     private SendMessageListener sendMessageListener;
     private JTextField messageBox;
-    private JTextArea chatBox;
-    private JButton sendMessage;
+    private final JTextArea chatBox;
     private JMenuItem usersOnline;
 
     public ChatWindow() {
@@ -58,12 +50,17 @@ public class ChatWindow extends JFrame {
         this.sendMessageListener = sendMessageListener;
     }
 
-    public void setUsersOnlineAction(ActionListener actionListener){
+    public void setUsersOnlineAction(ActionListener actionListener) {
         usersOnline.addActionListener(actionListener);
     }
 
+    public void updateChat(Message message) {
+        chatBox.append("<" + message.getNickName() + ">(" + message.getDate() + ") : " + message.getText()
+                + System.lineSeparator());
+    }
+
     private void addSendMessageButton(JPanel southPanel) {
-        sendMessage = new JButton("Send Message");
+        JButton sendMessage = new JButton("Send Message");
         sendMessage.addActionListener(e -> {
             if (messageBox.getText().length() >= 1) {
                 sendMessageListener.onClickSend(messageBox.getText());
@@ -102,10 +99,5 @@ public class ChatWindow extends JFrame {
         left.weighty = 1.0;
 
         southPanel.add(messageBox, left);
-    }
-
-    public void updateChat(Message message) {
-        chatBox.append("<" + message.getNickName() + ">(" + message.getDate() + ") : " + message.getText()
-                + System.lineSeparator());
     }
 }

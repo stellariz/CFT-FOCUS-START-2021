@@ -32,6 +32,16 @@ public class Server {
         }
     }
 
+    public static void main(String[] args) {
+        new Server().startServer();
+    }
+
+    public Server() {
+        clients = new LinkedHashMap<>();
+        reservedNames = new HashSet<>();
+        reservedNames.add("SERVER");
+    }
+
     private void startServer() {
         Thread clientProcessingThread = new Thread(this::processClients);
         clientProcessingThread.setDaemon(true);
@@ -46,9 +56,8 @@ public class Server {
                     clients.put(socket, new ChatUser());
                 }
             }
-
         } catch (IOException e) {
-            log.error("Server's crashed" + e.getMessage(), e);
+            log.error("Server's crashed: {}", e.getMessage(), e);
             throw new IllegalArgumentException(e);
         }
     }
@@ -63,29 +72,36 @@ public class Server {
                 try {
                     Message msg;
                     if ((msg = IOTools.readFromSocket(client.getInputStream())) != null) {
-                        if (msg.getMessageType() == MessageType.GREETING) {
-                            if (doesUserNameAvailable(msg.getNickName())) {
-                                sendUnsuccessfulConnection(client);
-                            } else {
+                        switch (msg.getMessageType()) {
+                            case GREETING:
+                                if (doesUserNameAvailable(msg.getNickName())) {
+                                    sendUnsuccessfulConnection(client);
+                                } else {
+                                    ChatUser chatUser = new ChatUser(msg.getNickName());
+                                    this.clients.put(client, chatUser);
+                                    sendUserGreetingMessage(client, chatUser);
+                                    broadcastNewUserMessage(clients, chatUser);
+                                }
+                                break;
+                            case TEXT:
+                                sendUserMessage(clients, msg);
+                                break;
+                            case DISCONNECT:
+                                Set<Socket> leftUsers;
                                 ChatUser chatUser = new ChatUser(msg.getNickName());
-                                this.clients.put(client, chatUser);
-                                sendUserGreetingMessage(client, chatUser);
-                                broadcastNewUserMessage(clients, chatUser);
-                            }
-                        } else if (msg.getMessageType() == MessageType.TEXT) {
-                            sendUserMessage(clients, msg);
-                        } else if (msg.getMessageType() == MessageType.DISCONNECT) {
-                            Set<Socket> leftUsers;
-                            ChatUser chatUser = new ChatUser(msg.getNickName());
-                            synchronized (this.clients) {
-                                this.clients.remove(client);
-                                leftUsers = this.clients.keySet();
-                            }
-                            broadcastDisconnectMessage(leftUsers, chatUser);
+                                synchronized (this.clients) {
+                                    this.clients.remove(client);
+                                    leftUsers = this.clients.keySet();
+                                }
+                                broadcastDisconnectMessage(leftUsers, chatUser);
+                                break;
+                            default:
+                                // игнорируем сообщения других типов от пользователей
+                                break;
                         }
                     }
                 } catch (IOException e) {
-                    log.error("Can't read message" + e.getMessage());
+                    log.error("Can't read message from user: {}", e.getMessage(), e);
                     synchronized (this.clients) {
                         this.clients.remove(client);
                     }
@@ -96,14 +112,16 @@ public class Server {
 
     private void sendUserGreetingMessage(Socket client, ChatUser chatUser) {
         try {
-            Message msg = new Message();
-            msg.setMessageType(MessageType.GREETING);
-            msg.setNickName("SERVER");
-            msg.setText(chatUser.getUserName() + " connected to chat!");
-            msg.setDate(new DateTime(DateTimeZone.UTC).toString("dd-MM-yyyy, hh:mm:ss"));
+            Message msg = generateMessageFromServer(chatUser.getUserName() + " connected to chat!",
+                    MessageType.GREETING);
+            // передаём список онлайн юзеров новому пользователю
             msg.setChatUserList(new ArrayList<>(clients.values()));
             IOTools.writeInSocket(client.getOutputStream(), msg);
         } catch (IOException e) {
+            log.error("Can't send greeting message: {}", e.getMessage(), e);
+            synchronized (this.clients) {
+                this.clients.remove(client);
+            }
         }
     }
 
@@ -121,15 +139,12 @@ public class Server {
     private void broadcastNewUserMessage(Set<Socket> clients, ChatUser chatUser) {
         for (Socket client : clients) {
             try {
-                Message msg = new Message();
-                msg.setNickName("SERVER");
-                msg.setText(chatUser.getUserName() + " connected to chat!");
-                msg.setDate(new DateTime(DateTimeZone.UTC).toString("dd-MM-yyyy, hh:mm:ss"));
-                msg.setMessageType(MessageType.NEW_USER);
+                Message msg = generateMessageFromServer(chatUser.getUserName() + " connected to chat!",
+                        MessageType.NEW_USER);
                 msg.setChatUser(chatUser);
                 IOTools.writeInSocket(client.getOutputStream(), msg);
             } catch (IOException e) {
-                log.error("Can't send new user message: " + e.getMessage());
+                log.error("Can't send new user message: {}", e.getMessage(), e);
                 synchronized (this.clients) {
                     this.clients.remove(client);
                 }
@@ -140,15 +155,12 @@ public class Server {
     private void broadcastDisconnectMessage(Set<Socket> clients, ChatUser chatUser) {
         for (Socket client : clients) {
             try {
-                Message msg = new Message();
-                msg.setNickName("SERVER");
-                msg.setText(chatUser.getUserName() + " disconnected from chat");
-                msg.setDate(new DateTime(DateTimeZone.UTC).toString("dd-MM-yyyy, hh:mm:ss"));
-                msg.setMessageType(MessageType.DISCONNECT);
+                Message msg = generateMessageFromServer(chatUser.getUserName() + " disconnected from chat",
+                        MessageType.DISCONNECT);
                 msg.setChatUser(chatUser);
                 IOTools.writeInSocket(client.getOutputStream(), msg);
             } catch (IOException e) {
-                log.error("Can't send greeting message: " + e.getMessage());
+                log.error("Can't send disconnect message: {}", e.getMessage(), e);
                 synchronized (this.clients) {
                     this.clients.remove(client);
                 }
@@ -162,7 +174,10 @@ public class Server {
             msg.setMessageType(MessageType.UNAVAILABLE_NICK);
             IOTools.writeInSocket(client.getOutputStream(), msg);
         } catch (IOException e) {
-            log.error("Can't send message about unsuccessful connection" + e.getMessage());
+            log.error("Can't send message about unsuccessful connection: {}", e.getMessage(), e);
+            synchronized (this.clients) {
+                this.clients.remove(client);
+            }
         }
     }
 
@@ -171,8 +186,7 @@ public class Server {
             try {
                 IOTools.writeInSocket(client.getOutputStream(), msg);
             } catch (IOException e) {
-                String disconnectedUser = this.clients.get(client).getUserName();
-                log.error("Can't send message to user {}" + disconnectedUser);
+                log.error("Can't send message to user: {}", e.getMessage(), e);
                 synchronized (this.clients) {
                     this.clients.remove(client);
                 }
@@ -180,14 +194,12 @@ public class Server {
         }
     }
 
-
-    public Server() {
-        clients = new LinkedHashMap<>();
-        reservedNames = new HashSet<>();
-        reservedNames.add("SERVER");
-    }
-
-    public static void main(String[] args) {
-        new Server().startServer();
+    private Message generateMessageFromServer(String text, MessageType messageType) {
+        Message message = new Message();
+        message.setNickName("SERVER");
+        message.setMessageType(messageType);
+        message.setText(text);
+        message.setDate(new DateTime(DateTimeZone.UTC).toString("dd-MM-yyyy, hh:mm:ss"));
+        return message;
     }
 }

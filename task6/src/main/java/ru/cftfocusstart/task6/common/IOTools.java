@@ -7,8 +7,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 
 public class IOTools {
+    private static final int MAX_MESSAGE_SIZE = 500;
+    private static final ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
 
     private IOTools() {
     }
@@ -17,12 +20,12 @@ public class IOTools {
         int available = socketInputStream.available();
         if (available > 0) {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            byte[] bytes = new byte[1024];
-            for (; (available = socketInputStream.available()) > 0; ) {
-                socketInputStream.read(bytes, 0, available);
-                byteArrayOutputStream.write(bytes);
+            while ((available = socketInputStream.available()) > 0) {
+                socketInputStream.read(byteBuffer.array(), 0, available);
+                byteArrayOutputStream.write(byteBuffer.array());
             }
             byte[] result = byteArrayOutputStream.toByteArray();
+            byteBuffer.clear();
             return new ObjectMapper().readValue(result, Message.class);
         }
         return null;
@@ -32,5 +35,9 @@ public class IOTools {
         byte[] bytes = new ObjectMapper().writeValueAsBytes(msg);
         socketOutputStream.write(bytes);
         socketOutputStream.flush();
+    }
+
+    public static int getMaxMessageSize() {
+        return MAX_MESSAGE_SIZE;
     }
 }

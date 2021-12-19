@@ -35,6 +35,10 @@ public class ServerInfoWindow extends JDialog {
         setLocationRelativeTo(null);
     }
 
+    public void setConnectionListener(ConnectionListener connectListener) {
+        this.connectListener = connectListener;
+    }
+
     private JButton createConnectButton() {
         JButton button = new JButton("Connect");
         button.addActionListener(e -> {
@@ -45,10 +49,4 @@ public class ServerInfoWindow extends JDialog {
         });
         return button;
     }
-
-    public void setConnectionListener(ConnectionListener connectListener) {
-        this.connectListener = connectListener;
-    }
-
-
 }

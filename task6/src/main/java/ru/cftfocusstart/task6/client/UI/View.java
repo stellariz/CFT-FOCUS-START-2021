@@ -10,6 +10,7 @@ import java.util.List;
 
 @Slf4j
 public class View {
+    private final BigMessageWindow bigMessageWindow;
     private final ChatWindow chatWindow;
     private final UnavailableNickWindow unavailableNickWindow;
     private final ServerNotFoundWindow serverNotFoundWindow;
@@ -24,6 +25,7 @@ public class View {
         this.serverInfoWindow = new ServerInfoWindow(null);
         this.nameWindow = new NameWindow(null);
         this.usersOnlineWindow = new UsersOnlineWindow(null);
+        this.bigMessageWindow = new BigMessageWindow(null);
         setScenarioWindows();
     }
 
@@ -79,6 +81,10 @@ public class View {
         chatWindow.updateChat(message);
     }
 
+    public void showBigMessageWindow() {
+        bigMessageWindow.setVisible(true);
+    }
+
     public void addNewUserInList(ChatUser chatUser) {
         usersOnlineWindow.addUserInList(chatUser.getUserName());
     }
@@ -87,7 +93,7 @@ public class View {
         usersOnlineWindow.removeUserFromList(chatUser.getUserName());
     }
 
-    public void loadUsers(List<ChatUser> chatUserList){
+    public void loadUsers(List<ChatUser> chatUserList) {
         usersOnlineWindow.loadUserList(chatUserList);
     }
 }

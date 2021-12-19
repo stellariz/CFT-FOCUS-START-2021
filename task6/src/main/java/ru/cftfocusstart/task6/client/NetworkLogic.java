@@ -17,8 +17,14 @@ public class NetworkLogic {
 
     public void sendMessageOnServer(Message message) {
         try {
-            IOTools.writeInSocket(serverSocket.getOutputStream(), message);
+            if (message.getText() != null && message.getText().length() > IOTools.getMaxMessageSize()) {
+                chatUpdater.onBigMessage();
+            } else {
+                IOTools.writeInSocket(serverSocket.getOutputStream(), message);
+            }
         } catch (IOException e) {
+            closeConnection();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -27,44 +33,53 @@ public class NetworkLogic {
             try {
                 Message msg;
                 if ((msg = IOTools.readFromSocket(serverSocket.getInputStream())) != null) {
-                    // TODO: change on switch
-                    if (msg.getMessageType() == MessageType.GREETING){
-                        chatUpdater.onReceiveGreetingFromServer(msg);
-                    } else if (msg.getMessageType() == MessageType.NEW_USER){
-                        if (Objects.equals(msg.getChatUser().getUserName(), client.getNickName())) {
+                    switch (msg.getMessageType()) {
+                        case GREETING:
+                            chatUpdater.onReceiveGreetingFromServer(msg);
+                            break;
+                        case NEW_USER:
+                            if (Objects.equals(msg.getChatUser().getUserName(), client.getNickName())) {
+                                chatUpdater.onReceiveMessage(msg);
+                            } else {
+                                chatUpdater.onReceiveNewUser(msg);
+                            }
+                            break;
+                        case UNAVAILABLE_NICK:
+                            chatUpdater.onReceiveUnavailableNick();
+                            break;
+                        case TEXT:
                             chatUpdater.onReceiveMessage(msg);
-                        } else {
-                            chatUpdater.onReceiveNewUser(msg);
-                        }
-                    } else if (msg.getMessageType() == MessageType.UNAVAILABLE_NICK) {
-                        chatUpdater.onReceiveUnavailableNick();
-                    } else if (msg.getMessageType() == MessageType.DISCONNECT){
-                        chatUpdater.onReceiveUserDisconnected(msg);
-                    } else {
-                        chatUpdater.onReceiveMessage(msg);
+                            break;
+                        case DISCONNECT:
+                            chatUpdater.onReceiveUserDisconnected(msg);
+                            break;
+                        default:
+                            log.info("Unknown message type");
                     }
                 }
             } catch (IOException e) {
+                closeConnection();
                 log.error(e.getMessage(), e);
             }
         }
     }
 
-    public void badConnectionToServer(){
+    public void badConnectionToServer() {
         chatUpdater.onReceiveUnsuccessfulConnection();
     }
 
     public void checkNicknameOnServer(String nick) {
-        if (serverSocket != null) {
-            Message message = new Message();
-            message.setMessageType(MessageType.GREETING);
-            message.setNickName(nick);
-            client.setNickName(nick);
-            try  {
+        try {
+            if (serverSocket != null) {
+                Message message = new Message();
+                message.setMessageType(MessageType.GREETING);
+                message.setNickName(nick);
+                client.setNickName(nick);
                 IOTools.writeInSocket(serverSocket.getOutputStream(), message);
-            } catch (IOException e) {
-                log.error("Failed to check nick on server: " + e.getMessage(), e);
             }
+        } catch (IOException e) {
+            closeConnection();
+            log.error("Failed to check nick on server: {}", e.getMessage(), e);
         }
     }
 
@@ -76,16 +91,20 @@ public class NetworkLogic {
             tmp.start();
             chatUpdater.onSuccessfulConnection();
         } catch (IOException e) {
-            log.error("Failed to connect to server: " + e.getMessage(), e);
+            log.error("Failed to connect to server: {}", e.getMessage(), e);
+            closeConnection();
             badConnectionToServer();
         }
     }
 
     public void closeConnection() {
         try {
-            serverSocket.close();
+            if (!serverSocket.isClosed()) {
+                serverSocket.close();
+            }
         } catch (IOException e) {
-
+            log.error(e.getMessage(), e);
+            throw new RuntimeException(e);
         }
     }
 

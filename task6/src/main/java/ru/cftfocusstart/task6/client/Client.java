@@ -10,14 +10,6 @@ import ru.cftfocusstart.task6.client.UI.View;
 public class Client {
     private String nickName;
 
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
     public static void main(String[] args) {
         NetworkLogic networkLogic = new NetworkLogic(new Client());
         ConnectionCreator connectionCreator = new ConnectionCreator(networkLogic);
@@ -32,5 +24,13 @@ public class Client {
         view.setSendMessageListener(messageCreator);
 
         view.showServerInfoWindow();
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 }

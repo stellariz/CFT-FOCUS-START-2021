@@ -2,6 +2,53 @@ plugins {
     id 'java'
 }
 
+task clientJar(type: Jar) {
+    baseName 'ChatClient'
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes 'Main-Class': 'ru.cftfocusstart.task6.client.Client'
+        version '1.0'
+    }
+
+    from (sourceSets.main.output) {
+        include "ru/cft/focusstart/task6/client/**"
+        include "ru/cft/focusstart/task6/common/**"
+        include "log4j2.xml"
+    }
+    from {
+        configurations.runtimeClasspath.filter { it.exists() }.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+
+task serverJar(type: Jar) {
+    baseName 'ChatServer'
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes 'Main-Class': 'ru.cftfocusstart.task6.server.Server'
+        version '1.0'
+    }
+
+    from sourceSets.main.output
+    from {
+        configurations.runtimeClasspath.filter { it.exists() }.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    exclude "ru.cftfocusstart.task6.client/**"
+}
+
+artifacts {
+    archives clientJar
+    archives serverJar
+}
+
+jar {
+    actions = []
+}
+
 group 'org.example'
 version '1.0-SNAPSHOT'
 
@@ -24,7 +71,6 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
 }
-
 
 
 test {

@@ -9,7 +9,6 @@ import java.util.List;
 public class UsersOnlineWindow extends JDialog {
     private final JPanel midPanel;
     private DefaultListModel<String> defaultListModel;
-    private JList<String> jlist;
 
     public UsersOnlineWindow(JFrame owner) {
         super(owner, "Users online", true);
@@ -26,7 +25,7 @@ public class UsersOnlineWindow extends JDialog {
 
     private void initListOfUsers() {
         defaultListModel = new DefaultListModel<>();
-        jlist = new JList<>(defaultListModel);
+        JList<String> jlist = new JList<>(defaultListModel);
         JScrollPane jScrollPane = new JScrollPane(jlist);
         jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jScrollPane.setPreferredSize(new Dimension(150, 180));
