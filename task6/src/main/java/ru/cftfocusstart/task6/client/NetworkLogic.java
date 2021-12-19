@@ -29,7 +29,7 @@ public class NetworkLogic {
     }
 
     public void receiveMessagesFromServer() {
-        while (true) {
+        while (!serverSocket.isClosed()) {
             try {
                 Message msg;
                 if ((msg = IOTools.readFromSocket(serverSocket.getInputStream())) != null) {

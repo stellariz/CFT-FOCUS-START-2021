@@ -15,14 +15,13 @@ task clientJar(type: Jar) {
     from (sourceSets.main.output) {
         include "ru/cftfocusstart/task6/client/**"
         include "ru/cftfocusstart/task6/common/**"
-        include "logback.xml"
-
+        include "log4j2.xml"
     }
-
     from {
         configurations.runtimeClasspath.filter { it.exists() }.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
+
 
 task serverJar(type: Jar) {
     baseName 'Server'
@@ -38,6 +37,16 @@ task serverJar(type: Jar) {
     from {
         configurations.runtimeClasspath.filter { it.exists() }.collect { it.isDirectory() ? it : zipTree(it) }
     }
+    exclude "ru.cftfocusstart.task6.client/**"
+}
+
+artifacts {
+    archives clientJar
+    archives serverJar
+}
+
+jar {
+    actions = []
 }
 
 group 'org.example'
