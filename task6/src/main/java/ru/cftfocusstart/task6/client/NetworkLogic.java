@@ -99,7 +99,7 @@ public class NetworkLogic {
 
     public void closeConnection() {
         try {
-            if (!serverSocket.isClosed()) {
+            if (serverSocket != null && !serverSocket.isClosed()) {
                 serverSocket.close();
             }
         } catch (IOException e) {
