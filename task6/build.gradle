@@ -1,0 +1,78 @@
+plugins {
+    id 'java'
+}
+
+task clientJar(type: Jar) {
+    baseName 'Client'
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes 'Main-Class': 'ru.cftfocusstart.task6.client.Client'
+        version '1.0'
+    }
+
+    from (sourceSets.main.output) {
+        include "ru/cftfocusstart/task6/client/**"
+        include "ru/cftfocusstart/task6/common/**"
+        include "log4j2.xml"
+    }
+    from {
+        configurations.runtimeClasspath.filter { it.exists() }.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+
+task serverJar(type: Jar) {
+    baseName 'Server'
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes 'Main-Class': 'ru.cftfocusstart.task6.server.Server'
+        version '1.0'
+    }
+
+    from sourceSets.main.output
+    from {
+        configurations.runtimeClasspath.filter { it.exists() }.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    exclude "ru.cftfocusstart.task6.client/**"
+}
+
+artifacts {
+    archives clientJar
+    archives serverJar
+}
+
+jar {
+    actions = []
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.0.1'
+
+    implementation group: 'joda-time', name: 'joda-time', version: '2.10.13'
+
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.0-alpha1'
+    implementation 'org.apache.logging.log4j:log4j-slf4j18-impl:2.14.1'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+}
+
+
+test {
+    useJUnitPlatform()
+}
